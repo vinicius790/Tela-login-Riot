@@ -1,0 +1,21 @@
+body {
+    background-color: #161616;
+    color: white;
+}
+
+.logo {
+  height: 40px;
+  width: 40px;
+  margin-right: 10px;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.h1 {
+ font-family: Arial;
+}
