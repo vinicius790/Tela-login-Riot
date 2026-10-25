@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Riot Games — Portal de Autenticação</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 45 45'><path fill='%23EB0029' d='M14.5 0C6.5 0 0 6.5 0 14.5v16C0 38.5 6.5 45 14.5 45h16c8 0 14.5-6.5 14.5-14.5v-16C45 6.5 38.5 0 30.5 0h-16zm2.2 9.5h11.6c3.9 0 7 3.1 7 7s-3.1 7-7 7H16.7v9.5H12V9.5h4.7zm0 4.7v4.7h6.9c1.3 0 2.3-1 2.3-2.3s-1-2.3-2.3-2.3h-6.9z'/></svg>">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#EB0029">
+  <meta name="description" content="Portal oficial e responsivo de autenticação Riot Games com temas dinâmicos, Web Audio e 2FA.">
   
   <link rel="stylesheet" href="GH.css">
   <link rel="stylesheet" href="styles/animations.css">
@@ -19,7 +22,7 @@
       right: 24px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       z-index: 100;
     }
 
@@ -204,7 +207,6 @@
       margin-top: 25px;
     }
 
-    /* Ajuste para SVG dos botões sociais */
     .icons__button svg {
       width: 20px;
       height: 20px;
@@ -213,8 +215,12 @@
 </head>
 <body>
 
-  <!-- Barra de Ferramentas Superior (Idioma, Tema, Áudio, Tela Cheia) -->
+  <!-- Barra de Ferramentas Superior (Idioma, Tema, Áudio, Tela Cheia, Demo Fill) -->
   <header class="top-controls" role="region" aria-label="Preferências do usuário">
+    <button type="button" class="control-btn" id="btnDemoFill" title="Auto-preencher credenciais de teste (player1 / password123)" style="background: rgba(235, 0, 41, 0.25); border-color: #EB0029; color: #FFF; font-weight: bold;">
+      <span>⚡ Demo Fill</span>
+    </button>
+
     <button type="button" class="control-btn" onclick="toggleFullscreen()" title="Tela cheia (F11)">
       <span>⛶</span>
     </button>
@@ -386,5 +392,46 @@
   <script src="js/mock-auth.js"></script>
   <script src="js/auth.js"></script>
   <script src="Durateston.js"></script>
+
+  <script>
+    // Eventos de Autopreenchimento de Teste (Demo Fill)
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnDemo = document.getElementById('btnDemoFill');
+      if (btnDemo) {
+        btnDemo.addEventListener('click', () => {
+          const u = document.getElementById('usernameInput');
+          const p = document.getElementById('passwordInput');
+          if (u && p) {
+            u.value = 'player1';
+            p.value = 'password123';
+            u.dispatchEvent(new Event('input', { bubbles: true }));
+            p.dispatchEvent(new Event('input', { bubbles: true }));
+            if (window.showRiotToast) window.showRiotToast('Credenciais Demo preenchidas! Código 2FA: 123456', 'info');
+            if (window.riotAudio) window.riotAudio.play('click');
+          }
+        });
+      }
+
+      // Eventos de Autenticação Social Simulada
+      ['btnAuthFacebook', 'btnAuthGoogle', 'btnAuthApple', 'btnAuthXbox'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const provider = id.replace('btnAuth', '');
+            const u = document.getElementById('usernameInput');
+            const p = document.getElementById('passwordInput');
+            if (u && p) {
+              u.value = `${provider.toLowerCase()}.user`;
+              p.value = 'password123';
+              u.dispatchEvent(new Event('input', { bubbles: true }));
+              p.dispatchEvent(new Event('input', { bubbles: true }));
+              if (window.showRiotToast) window.showRiotToast(`Autenticação (${provider}) vinculada com sucesso!`, 'success');
+              if (window.riotAudio) window.riotAudio.play('success');
+            }
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>

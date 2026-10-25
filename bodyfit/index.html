@@ -4,59 +4,203 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bodyfit — Sua Evolução Fitness</title>
+    <title>Bodyfit — Plataforma de Performance & Saúde</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%2300FF88' d='M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 5.57 14.14 14.14 5.57 17.71 9.14 16.29 10.57 17.71 12l2.86 2.86z'/></svg>">
     <link rel="stylesheet" href="Termogenico.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .calc-card {
+            background: #1C1C22;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .calc-card:hover {
+            transform: translateY(-4px);
+            border-color: #00FF88;
+        }
+
+        .calc-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            flex: 1;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: #9CA3AF;
+            margin-bottom: 4px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 9px 12px;
+            background: #111116;
+            border: 1px solid #374151;
+            color: #FFF;
+            border-radius: 6px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 6px;
+        }
+
+        .btn-calc:hover {
+            opacity: 0.9;
+        }
+
+        .result-box {
+            margin-top: 14px;
+            padding: 10px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 0.95rem;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
        <img class="logo" src="Logo.png" alt="Bodyfit Logo"> 
        <h1>Bodyfit</h1>
-       <nav style="margin-left: auto; display: flex; gap: 20px;">
-           <a href="#calc" style="color: #00ff88; text-decoration: none; font-weight: bold;">Calculadora</a>
-           <a href="#planos" style="color: #00ff88; text-decoration: none; font-weight: bold;">Planos</a>
-           <a href="../index.html" style="color: #aaa; text-decoration: none;">← Voltar à Riot</a>
+       <nav style="margin-left: auto; display: flex; align-items: center; gap: 20px;">
+           <a href="#calc" style="color: #00FF88; text-decoration: none; font-weight: bold;">Calculadoras</a>
+           <a href="#planos" style="color: #00FF88; text-decoration: none; font-weight: bold;">Planos</a>
+           <a href="../index.html" style="color: #9CA3AF; text-decoration: none; font-size: 0.9rem;">← Voltar ao Riot Client</a>
        </nav>
     </header>
 
-    <main style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
-        <section style="text-align: center; margin-bottom: 50px;">
-            <h2 style="font-size: 2.5rem; margin-bottom: 15px; color: #00ff88;">Transforme Seu Corpo</h2>
-            <p style="color: #aaa; font-size: 1.1rem;">Treinos avançados, nutrição de alta performance e acompanhamento completo para atingir seus objetivos.</p>
+    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+        <section style="text-align: center; margin-bottom: 45px;">
+            <h2 style="font-size: 2.6rem; margin-bottom: 12px; color: #00FF88;">Potencialize Seus Resultados</h2>
+            <p style="color: #9CA3AF; font-size: 1.1rem; max-width: 650px; margin: 0 auto;">
+                Ferramentas biométricas gratuitas de alta precisão para controle de peso, hidratação celular e meta calórica diária.
+            </p>
         </section>
 
-        <section id="calc" style="background: #222; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,255,136,0.1); margin-bottom: 40px;">
-            <h3 style="color: #00ff88; margin-bottom: 20px;"><i class="fa-solid fa-calculator"></i> Calculadora de IMC</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                <div>
-                    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Peso (kg)</label>
-                    <input type="number" id="peso" placeholder="Ex: 75" style="width: 100%; padding: 10px; background: #111; border: 1px solid #444; color: white; border-radius: 6px;">
+        <!-- Grade de Calculadoras Fitness -->
+        <section id="calc" class="calc-grid">
+            <!-- 1. Calculadora de IMC -->
+            <div class="calc-card">
+                <h3 style="color: #00FF88;"><i class="fa-solid fa-calculator"></i> Índice de Massa Corporal</h3>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="peso">Peso (kg)</label>
+                        <input type="number" id="peso" placeholder="75">
+                    </div>
+                    <div class="input-group">
+                        <label for="altura">Altura (m)</label>
+                        <input type="number" step="0.01" id="altura" placeholder="1.75">
+                    </div>
                 </div>
-                <div>
-                    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Altura (m)</label>
-                    <input type="number" step="0.01" id="altura" placeholder="Ex: 1.75" style="width: 100%; padding: 10px; background: #111; border: 1px solid #444; color: white; border-radius: 6px;">
-                </div>
+                <button type="button" class="btn-calc" onclick="calcularIMC()" style="background: #00FF88; color: #111;">Calcular IMC</button>
+                <div id="resultado-imc" class="result-box">Aguardando dados...</div>
             </div>
-            <button onclick="calcularIMC()" style="background: #00ff88; color: #161616; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%;">Calcular IMC</button>
-            <div id="resultado-imc" style="margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.2rem; color: #00ff88;"></div>
+
+            <!-- 2. Calculadora de Ingestão de Água -->
+            <div class="calc-card">
+                <h3 style="color: #38BDF8;"><i class="fa-solid fa-droplet"></i> Meta de Hidratação</h3>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="peso-agua">Seu Peso (kg)</label>
+                        <input type="number" id="peso-agua" placeholder="70">
+                    </div>
+                </div>
+                <button type="button" class="btn-calc" onclick="calcularAgua()" style="background: #38BDF8; color: #111;">Calcular Ingestão</button>
+                <div id="resultado-agua" class="result-box">Aguardando dados...</div>
+            </div>
+
+            <!-- 3. Taxa Metabólica Basal (TMB) -->
+            <div class="calc-card">
+                <h3 style="color: #C084FC;"><i class="fa-solid fa-fire-flame-curved"></i> Taxa Metabólica (TMB)</h3>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="tmb-peso">Peso (kg)</label>
+                        <input type="number" id="tmb-peso" placeholder="75">
+                    </div>
+                    <div class="input-group">
+                        <label for="tmb-altura">Altura (cm)</label>
+                        <input type="number" id="tmb-altura" placeholder="175">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="tmb-idade">Idade</label>
+                        <input type="number" id="tmb-idade" placeholder="25">
+                    </div>
+                    <div class="input-group">
+                        <label for="tmb-sexo">Sexo</label>
+                        <select id="tmb-sexo">
+                            <option value="m">Masculino</option>
+                            <option value="f">Feminino</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button" class="btn-calc" onclick="calcularTMB()" style="background: #C084FC; color: #111;">Calcular Calorias</button>
+                <div id="resultado-tmb" class="result-box">Aguardando dados...</div>
+            </div>
         </section>
 
-        <section id="planos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-            <div style="background: #222; padding: 25px; border-radius: 12px; border-top: 4px solid #00ff88;">
-                <h3>Hipertrofia</h3>
-                <p style="color: #aaa; margin: 15px 0;">Foco em ganho de massa muscular com treinos progressivos.</p>
-                <span style="font-size: 1.5rem; font-weight: bold; color: #00ff88;">PRO</span>
+        <!-- Planos de Treinamento -->
+        <section id="planos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+            <div style="background: #1C1C22; padding: 25px; border-radius: 12px; border-top: 4px solid #00FF88;">
+                <h3 style="color:#FFF;">Hipertrofia Muscular</h3>
+                <p style="color: #9CA3AF; margin: 15px 0; font-size: 0.92rem;">Treinos com sobrecarga progressiva, periodização de força e recuperação otimizada.</p>
+                <span style="font-size: 1.25rem; font-weight: bold; color: #00FF88;">PROGRAMA PRO</span>
             </div>
-            <div style="background: #222; padding: 25px; border-radius: 12px; border-top: 4px solid #00ff88;">
-                <h3>Definição</h3>
-                <p style="color: #aaa; margin: 15px 0;">Queima de gordura acelerada e preservação da massa magra.</p>
-                <span style="font-size: 1.5rem; font-weight: bold; color: #00ff88;">ELITE</span>
+            <div style="background: #1C1C22; padding: 25px; border-radius: 12px; border-top: 4px solid #38BDF8;">
+                <h3 style="color:#FFF;">Definição & Cutting</h3>
+                <p style="color: #9CA3AF; margin: 15px 0; font-size: 0.92rem;">Protocolos de déficit calórico inteligente preservando 100% da sua massa magra.</p>
+                <span style="font-size: 1.25rem; font-weight: bold; color: #38BDF8;">PROGRAMA ELITE</span>
+            </div>
+            <div style="background: #1C1C22; padding: 25px; border-radius: 12px; border-top: 4px solid #C084FC;">
+                <h3 style="color:#FFF;">Longevidade & Saúde</h3>
+                <p style="color: #9CA3AF; margin: 15px 0; font-size: 0.92rem;">Foco em flexibilidade, saúde cardiovascular, postura e bem-estar integral.</p>
+                <span style="font-size: 1.25rem; font-weight: bold; color: #C084FC;">PROGRAMA VITAL</span>
             </div>
         </section>
     </main>
 
-    <footer style="text-align: center; padding: 20px; color: #666; font-size: 0.9rem; margin-top: 60px; border-top: 1px solid #222;">
-        &copy; 2026 Bodyfit. Todos os direitos reservados.
+    <footer style="text-align: center; padding: 24px; color: #6B7280; font-size: 0.85rem; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.06);">
+        &copy; 2026 Bodyfit Health Systems • Módulo Integrado
     </footer>
 
     <script src="Creatina.js"></script>

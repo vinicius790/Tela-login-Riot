@@ -25,7 +25,7 @@ class ThemeSwitcher {
         }
     }
 
-    applyTheme(themeName) {
+    applyTheme(themeName, playAudio = false) {
         if (!this.supportedThemes.includes(themeName)) {
             themeName = this.defaultTheme;
         }
@@ -33,17 +33,21 @@ class ThemeSwitcher {
         document.documentElement.setAttribute('data-theme', themeName);
         localStorage.setItem(this.storageKey, themeName);
 
+        if (playAudio && window.riotAudio) {
+            window.riotAudio.play('whoosh');
+        }
+
         // Dispatch custom event for components to listen if needed
         window.dispatchEvent(new CustomEvent('riotThemeChanged', { detail: { theme: themeName } }));
     }
 
     setupUI() {
-        const selector = document.getElementById('theme-selector') || document.querySelector('[data-theme-selector]');
+        const selector = document.getElementById('themeSelector') || document.getElementById('theme-selector') || document.querySelector('[data-theme-selector]');
         if (selector) {
             if (selector.tagName === 'SELECT') {
                 selector.value = document.documentElement.getAttribute('data-theme') || this.defaultTheme;
                 selector.addEventListener('change', (e) => {
-                    this.applyTheme(e.target.value);
+                    this.applyTheme(e.target.value, true);
                 });
             } else {
                 // If it's a container of buttons/icons

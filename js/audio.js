@@ -232,6 +232,48 @@ class RiotAudioEngine {
         });
     }
 
+    play(type) {
+        if (!type) return this.playClick();
+        switch (type.toLowerCase()) {
+            case 'click': return this.playClick();
+            case 'focus': return this.playFocus();
+            case 'hover': return this.playHover();
+            case 'success': return this.playSuccess();
+            case 'error': return this.playError();
+            case 'whoosh': return this.playWhoosh();
+            default: return this.playClick();
+        }
+    }
+
+    playWhoosh() {
+        if (this.muted) return;
+        this.initContext();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(450, now);
+        osc.frequency.exponentialRampToValueAtTime(150, now + 0.25);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1200, now);
+        filter.frequency.linearRampToValueAtTime(200, now + 0.25);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.25);
+    }
+
     playError() {
         if (this.muted) return;
         this.initContext();
