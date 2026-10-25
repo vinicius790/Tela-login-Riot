@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodyfit — Sua Evolução Fitness</title>
+    <link rel="stylesheet" href="Termogenico.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+       <img class="logo" src="Logo.png" alt="Bodyfit Logo"> 
+       <h1>Bodyfit</h1>
+       <nav style="margin-left: auto; display: flex; gap: 20px;">
+           <a href="#calc" style="color: #00ff88; text-decoration: none; font-weight: bold;">Calculadora</a>
+           <a href="#planos" style="color: #00ff88; text-decoration: none; font-weight: bold;">Planos</a>
+           <a href="../index.html" style="color: #aaa; text-decoration: none;">← Voltar à Riot</a>
+       </nav>
+    </header>
+
+    <main style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+        <section style="text-align: center; margin-bottom: 50px;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 15px; color: #00ff88;">Transforme Seu Corpo</h2>
+            <p style="color: #aaa; font-size: 1.1rem;">Treinos avançados, nutrição de alta performance e acompanhamento completo para atingir seus objetivos.</p>
+        </section>
+
+        <section id="calc" style="background: #222; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,255,136,0.1); margin-bottom: 40px;">
+            <h3 style="color: #00ff88; margin-bottom: 20px;"><i class="fa-solid fa-calculator"></i> Calculadora de IMC</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Peso (kg)</label>
+                    <input type="number" id="peso" placeholder="Ex: 75" style="width: 100%; padding: 10px; background: #111; border: 1px solid #444; color: white; border-radius: 6px;">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Altura (m)</label>
+                    <input type="number" step="0.01" id="altura" placeholder="Ex: 1.75" style="width: 100%; padding: 10px; background: #111; border: 1px solid #444; color: white; border-radius: 6px;">
+                </div>
+            </div>
+            <button onclick="calcularIMC()" style="background: #00ff88; color: #161616; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%;">Calcular IMC</button>
+            <div id="resultado-imc" style="margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.2rem; color: #00ff88;"></div>
+        </section>
+
+        <section id="planos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div style="background: #222; padding: 25px; border-radius: 12px; border-top: 4px solid #00ff88;">
+                <h3>Hipertrofia</h3>
+                <p style="color: #aaa; margin: 15px 0;">Foco em ganho de massa muscular com treinos progressivos.</p>
+                <span style="font-size: 1.5rem; font-weight: bold; color: #00ff88;">PRO</span>
+            </div>
+            <div style="background: #222; padding: 25px; border-radius: 12px; border-top: 4px solid #00ff88;">
+                <h3>Definição</h3>
+                <p style="color: #aaa; margin: 15px 0;">Queima de gordura acelerada e preservação da massa magra.</p>
+                <span style="font-size: 1.5rem; font-weight: bold; color: #00ff88;">ELITE</span>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align: center; padding: 20px; color: #666; font-size: 0.9rem; margin-top: 60px; border-top: 1px solid #222;">
+        &copy; 2026 Bodyfit. Todos os direitos reservados.
+    </footer>
+
+    <script src="Creatina.js"></script>
+</body>
+</html>

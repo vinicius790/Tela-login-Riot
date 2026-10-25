@@ -1,0 +1,65 @@
+/* ==========================================
+   Riot Multi-Game Theme Switcher Styles
+   Themes: Riot Red (Default), Valorant, League of Legends, Teamfight Tactics
+   ========================================== */
+
+:root, [data-theme="riot"] {
+    --primary: #eb0029;
+    --primary-hover: #c50022;
+    --accent: #ff4655;
+    --bg-glow: rgba(235, 0, 41, 0.25);
+    --wallpaper-gradient: linear-gradient(135deg, #0f1016 0%, #181925 50%, #090a0f 100%);
+    --font-family: 'Poppins', sans-serif;
+    --card-bg: rgba(20, 20, 25, 0.85);
+    --border-color: rgba(235, 0, 41, 0.4);
+    --text-color: #ffffff;
+    --text-muted: #8b9bb4;
+}
+
+[data-theme="valorant"] {
+    --primary: #ff4655;
+    --primary-hover: #fa2334;
+    --accent: #ece8e1;
+    --bg-glow: rgba(255, 70, 85, 0.3);
+    --wallpaper-gradient: linear-gradient(135deg, #0f1923 0%, #1f2731 50%, #0b0e14 100%);
+    --font-family: 'Teko', 'Poppins', sans-serif;
+    --card-bg: rgba(15, 25, 35, 0.9);
+    --border-color: rgba(255, 70, 85, 0.5);
+    --text-color: #ece8e1;
+    --text-muted: #7e8b99;
+}
+
+[data-theme="lol"] {
+    --primary: #c8aa6d;
+    --primary-hover: #f0e6d2;
+    --accent: #0ac8b9;
+    --bg-glow: rgba(10, 200, 185, 0.2);
+    --wallpaper-gradient: linear-gradient(135deg, #010a10 0%, #0a1428 50%, #010a10 100%);
+    --font-family: 'BeaufortforLOL', 'Poppins', sans-serif;
+    --card-bg: rgba(1, 10, 16, 0.85);
+    --border-color: rgba(200, 170, 109, 0.4);
+    --text-color: #f0e6d2;
+    --text-muted: #a09b8c;
+}
+
+[data-theme="tft"] {
+    --primary: #9d4edd;
+    --primary-hover: #c77dff;
+    --accent: #4cc9f0;
+    --bg-glow: rgba(157, 78, 221, 0.25);
+    --wallpaper-gradient: linear-gradient(135deg, #13092d 0%, #24144d 50%, #0b041a 100%);
+    --font-family: 'Poppins', sans-serif;
+    --card-bg: rgba(19, 9, 45, 0.85);
+    --border-color: rgba(157, 78, 221, 0.4);
+    --text-color: #ffffff;
+    --text-muted: #9d8ec4;
+}
+
+body {
+    background: var(--wallpaper-gradient);
+    font-family: var(--font-family);
+    color: var(--text-color);
+    transition: background 0.4s ease, color 0.4s ease;
+    margin: 0;
+    min-height: 100vh;
+}
