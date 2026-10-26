@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="riot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riot Games — Central de Configurações da Conta</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 45 45'><path fill='%23EB0029' d='M14.5 0C6.5 0 0 6.5 0 14.5v16C0 38.5 6.5 45 14.5 45h16c8 0 14.5-6.5 14.5-14.5v-16C45 6.5 38.5 0 30.5 0h-16zm2.2 9.5h11.6c3.9 0 7 3.1 7 7s-3.1 7-7 7H16.7v9.5H12V9.5h4.7zm0 4.7v4.7h6.9c1.3 0 2.3-1 2.3-2.3s-1-2.3-2.3-2.3h-6.9z'/></svg>">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#EB0029">
+  <meta name="description" content="Central Oficial de Gerenciamento de Conta Riot Games — Riot ID, Contas Conectadas, Privacidade, 2FA e Sessões Ativas.">
+
+  <!-- Estilos e Design System Riot Games -->
+  <link rel="stylesheet" href="../styles/GH.css">
+  <link rel="stylesheet" href="../styles/animations.css">
+  <link rel="stylesheet" href="../styles/themes.css">
+  <link rel="stylesheet" href="../styles/account-settings.css">
+</head>
+<body class="account-body">
+
+  <!-- Top Global Header -->
+  <header class="account-header" role="banner">
+    <div style="display: flex; align-items: center; gap: 18px;">
+      <a href="index.html" class="account-header__brand" title="Voltar ao Início / Login">
+        <svg viewBox="0 0 135 45" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EB0029" d="M14.5 0C6.5 0 0 6.5 0 14.5v16C0 38.5 6.5 45 14.5 45h16c8 0 14.5-6.5 14.5-14.5v-16C45 6.5 38.5 0 30.5 0h-16zm2.2 9.5h11.6c3.9 0 7 3.1 7 7s-3.1 7-7 7H16.7v9.5H12V9.5h4.7zm0 4.7v4.7h6.9c1.3 0 2.3-1 2.3-2.3s-1-2.3-2.3-2.3h-6.9z"/>
+          <text x="50" y="32" font-family="'Lexend Deca', sans-serif" font-weight="900" font-size="28" letter-spacing="1" fill="#FFFFFF">RIOT</text>
+        </svg>
+      </a>
+
+      <div class="account-header__divider" aria-hidden="true"></div>
+      <span class="account-header__title">Central de Contas</span>
+      <span class="account-header__badge">Riot ID Portal</span>
+    </div>
+
+    <!-- Controles Globais: Tema, Áudio, Perfil e Logout -->
+    <div class="account-header__controls">
+      <!-- Seletor de Tema Dinâmico -->
+      <select id="themeSelector" class="header-btn" aria-label="Seletor de Tema Riot">
+        <option value="riot" selected>Tema: Riot Games</option>
+        <option value="valorant">Tema: Valorant</option>
+        <option value="lol">Tema: League of Legends</option>
+        <option value="tft">Tema: Teamfight Tactics</option>
+        <option value="star-guardian">Tema: Star Guardian</option>
+        <option value="kda">Tema: K/DA</option>
+      </select>
+
+      <!-- Toggle de Áudio -->
+      <button type="button" class="header-btn" id="btnAudioToggle" title="Alternar efeitos de áudio">
+        <span id="audioStatusIcon">🔊</span>
+      </button>
+
+      <!-- Badge de Usuário -->
+      <div class="header-user-pill" id="userPill">
+        <div class="header-user-avatar" id="avatarInitial">P</div>
+        <div class="header-user-info">
+          <span class="header-user-name" id="navUsername">PlayerOne</span>
+          <span class="header-user-tag" id="navTagline">#BR1</span>
+        </div>
+      </div>
+
+      <!-- Botão Voltar / Logout -->
+      <a href="index.html" class="header-btn header-btn--primary" id="btnLogout" title="Encerrar Sessão">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M16 13v-2H7V8l-5 4 5 4v-3h9zM20 3H10c-1.1 0-2 .9-2 2v4h2V5h10v14H10v-4H8v4c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+        </svg>
+        <span>Sair</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="account-wrapper">
+    
+    <!-- Sidebar com Abas de Navegação -->
+    <aside class="account-sidebar">
+      <nav class="account-nav" aria-label="Navegação da Conta">
+        <a href="#section-riot-id" class="nav-item active" data-target="section-riot-id">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+          <span>Riot ID & Tagline</span>
+        </a>
+
+        <a href="#section-connected" class="nav-item" data-target="section-connected">
+          <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+          <span>Contas Conectadas</span>
+        </a>
+
+        <a href="#section-privacy" class="nav-item" data-target="section-privacy">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+          <span>Privacidade & Sessões</span>
+        </a>
+
+        <a href="#section-recovery" class="nav-item" data-target="section-recovery">
+          <svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+          <span>Códigos de Emergência</span>
+        </a>
+      </nav>
+
+      <!-- Resumo Rápido de Segurança -->
+      <div class="sidebar-summary-card">
+        <h4>Status de Proteção</h4>
+        <div class="security-score-badge">
+          <span>🛡️ Nível de Segurança:</span>
+          <span>MÁXIMO</span>
+        </div>
+        <p style="font-size: 0.78rem; color: #9CA3AF; margin-top: 10px; line-height: 1.4;">
+          2FA ativado via Riot Mobile e e-mail. 4 conexões externas auditadas.
+        </p>
+      </div>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <div class="account-content">
+
+      <!-- =================================================================
+           SEÇÃO 1: RIOT ID & TAGLINE CUSTOMIZATION COM COOLDOWN TIMER MOCK
+           ================================================================= -->
+      <section id="section-riot-id" class="section-panel" aria-labelledby="riotIdHeading">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <h2 id="riotIdHeading">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+              Riot ID & Tagline
+            </h2>
+            <p>Seu Riot ID é o nome de exibição visível para outros jogadores em League of Legends, VALORANT, TFT e Wild Rift.</p>
+          </div>
+        </div>
+
+        <!-- Card de Pré-visualização do Gamertag -->
+        <div class="gamertag-preview-card">
+          <div class="gamertag-preview-badge">
+            <div class="gamertag-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <path d="M14.5 0C6.5 0 0 6.5 0 14.5v16C0 38.5 6.5 45 14.5 45h16c8 0 14.5-6.5 14.5-14.5v-16C45 6.5 38.5 0 30.5 0h-16zm2.2 9.5h11.6c3.9 0 7 3.1 7 7s-3.1 7-7 7H16.7v9.5H12V9.5h4.7zm0 4.7v4.7h6.9c1.3 0 2.3-1 2.3-2.3s-1-2.3-2.3-2.3h-6.9z"/>
+              </svg>
+            </div>
+            <div class="gamertag-text">
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="gamertag-name" id="previewGameName">PlayerOne</span>
+                <span class="gamertag-tag" id="previewTagLine">#BR1</span>
+              </div>
+              <span class="gamertag-region">Servidor: Brasil (BR) • Riot Games Verified</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-ghost-sm" id="btnCopyRiotId" title="Copiar Riot ID completo">
+            <span>📋 Copiar ID</span>
+          </button>
+        </div>
+
+        <!-- Card do Timer de Cooldown de 30 Dias -->
+        <div class="cooldown-card" id="cooldownCard">
+          <div class="cooldown-header">
+            <div class="cooldown-title">
+              <span id="cooldownStatusIcon">⏳</span>
+              <span id="cooldownStatusText">Tempo de Recarga Ativo (Cooldown de 30 Dias)</span>
+            </div>
+            <span class="badge-status badge-connected" id="cooldownBadge">Em Recarga</span>
+          </div>
+
+          <p style="font-size: 0.82rem; color: #D1D5DB; margin: 0; line-height: 1.45;">
+            Para prevenir fraudes e manter a integridade do matchmaking competitivo, o Riot ID e a Tagline só podem ser alterados <strong>uma vez a cada 30 dias</strong>.
+          </p>
+
+          <!-- Mostrador Digital de Contagem Regressiva -->
+          <div class="cooldown-timer-display" id="timerGrid">
+            <div class="timer-box">
+              <span class="timer-box-value" id="timerDays">23</span>
+              <span class="timer-box-label">Dias</span>
+            </div>
+            <div class="timer-box">
+              <span class="timer-box-value" id="timerHours">14</span>
+              <span class="timer-box-label">Horas</span>
+            </div>
+            <div class="timer-box">
+              <span class="timer-box-value" id="timerMinutes">32</span>
+              <span class="timer-box-label">Minutos</span>
+            </div>
+            <div class="timer-box">
+              <span class="timer-box-value" id="timerSeconds">45</span>
+              <span class="timer-box-label">Segundos</span>
+            </div>
+          </div>
+
+          <!-- Barra de Progresso Visual do Cooldown -->
+          <div class="cooldown-progress-bar-bg" title="Progresso do Cooldown">
+            <div class="cooldown-progress-bar-fill" id="cooldownProgressFill"></div>
+          </div>
+
+          <!-- Ferramentas de Teste e Simulação para Demonstração -->
+          <div class="cooldown-sim-actions">
+            <span style="font-size: 0.72rem; color: #9CA3AF; font-weight: 600;">SIMULAÇÃO DE TESTE:</span>
+            <button type="button" class="btn-ghost-sm" id="btnSimulateCooldown" title="Simular 24 dias restantes">Simular Cooldown Ativo</button>
+            <button type="button" class="btn-ghost-sm" id="btnResetCooldown" title="Liberar edição imediatamente">Liberar Alteração (Reset)</button>
+          </div>
+        </div>
+
+        <!-- Formulário de Edição do Riot ID -->
+        <form id="formRiotId" onsubmit="return false;">
+          <div class="form-grid-two">
+            <div class="input-group">
+              <label for="inputRiotId">
+                <span>Novo Riot ID</span>
+                <span class="input-char-counter" id="riotIdCharCount">8/16</span>
+              </label>
+              <div class="input-field-wrapper">
+                <input type="text" id="inputRiotId" class="custom-input" maxlength="16" value="PlayerOne" required autocomplete="off" disabled>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="inputTagline">
+                <span>Tagline</span>
+                <span class="input-char-counter" id="taglineCharCount">3/5</span>
+              </label>
+              <div class="input-field-wrapper">
+                <span class="input-prefix">#</span>
+                <input type="text" id="inputTagline" class="custom-input with-prefix" maxlength="5" value="BR1" required autocomplete="off" disabled>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+            <p style="font-size: 0.78rem; color: #9CA3AF; margin: 0;">
+              ⚠️ Ao salvar, o novo identificador entrará em vigor em todos os jogos e iniciará um novo ciclo de 30 dias.
+            </p>
+            <button type="button" class="btn-riot-primary" id="btnSaveRiotId" disabled>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+              <span>Salvar Alterações</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+
+      <!-- =================================================================
+           SEÇÃO 2: GERENCIADOR DE CONTAS CONECTADAS (TWITCH, DISCORD, PRIME, YT)
+           ================================================================= -->
+      <section id="section-connected" class="section-panel" aria-labelledby="connectedHeading">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <h2 id="connectedHeading">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--primary)"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+              Contas Conectadas
+            </h2>
+            <p>Vincule suas plataformas de streaming e redes para resgatar drops, integrar seu status no Discord e receber recompensas exclusivas.</p>
+          </div>
+        </div>
+
+        <div class="connected-grid">
+          
+          <!-- Twitch Drops Card -->
+          <div class="connected-card" id="cardTwitch">
+            <div class="connected-card__top">
+              <div class="connected-card__icon-wrap service-twitch">
+                <svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+              </div>
+              <div class="connected-card__info">
+                <h4>Twitch Drops</h4>
+                <p>Resgate recompensas no jogo assistindo transmissões de campeonatos oficiais e criadores parceiros.</p>
+                <div class="connected-card__account" id="accountTwitchTag">
+                  <span>Vinculado: <strong>twitch.tv/player1_stream</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="connected-card__bottom">
+              <span class="badge-status badge-connected" id="badgeTwitch">
+                <span class="pulse-dot"></span> Conectado
+              </span>
+              <button type="button" class="btn-service-action btn-service-disconnect" data-service="twitch">Desconectar</button>
+            </div>
+          </div>
+
+          <!-- Discord Rich Presence Card -->
+          <div class="connected-card" id="cardDiscord">
+            <div class="connected-card__top">
+              <div class="connected-card__icon-wrap service-discord">
+                <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+              </div>
+              <div class="connected-card__info">
+                <h4>Discord Rich Presence</h4>
+                <p>Exiba sua partida de VALORANT e LoL no perfil do Discord com tempo de jogo e agentes selecionados.</p>
+                <div class="connected-card__account" id="accountDiscordTag">
+                  <span>Vinculado: <strong>PlayerOne#1337</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="connected-card__bottom">
+              <span class="badge-status badge-connected" id="badgeDiscord">
+                <span class="pulse-dot"></span> Conectado
+              </span>
+              <button type="button" class="btn-service-action btn-service-disconnect" data-service="discord">Desconectar</button>
+            </div>
+          </div>
+
+          <!-- Prime Gaming Card -->
+          <div class="connected-card" id="cardPrime">
+            <div class="connected-card__top">
+              <div class="connected-card__icon-wrap service-prime">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <div class="connected-card__info">
+                <h4>Prime Gaming</h4>
+                <p>Resgate cápsulas mensais de Riot Points, skins de campeão e essências míticas através da Amazon Prime.</p>
+                <div class="connected-card__account" id="accountPrimeTag" style="display: none;">
+                  <span>Vinculado: <strong>amazon.com/player1</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="connected-card__bottom">
+              <span class="badge-status badge-disconnected" id="badgePrime">
+                ○ Não vinculado
+              </span>
+              <button type="button" class="btn-service-action btn-service-connect" data-service="prime">Conectar Conta</button>
+            </div>
+          </div>
+
+          <!-- YouTube Gaming Card -->
+          <div class="connected-card" id="cardYoutube">
+            <div class="connected-card__top">
+              <div class="connected-card__icon-wrap service-youtube">
+                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </div>
+              <div class="connected-card__info">
+                <h4>YouTube Gaming</h4>
+                <p>Conecte sua conta do Google para receber emotes e cosméticos em streams de torneios internacionais Riot.</p>
+                <div class="connected-card__account" id="accountYoutubeTag" style="display: none;">
+                  <span>Vinculado: <strong>youtube.com/@player1</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="connected-card__bottom">
+              <span class="badge-status badge-disconnected" id="badgeYoutube">
+                ○ Não vinculado
+              </span>
+              <button type="button" class="btn-service-action btn-service-connect" data-service="youtube">Conectar Conta</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- =================================================================
+           SEÇÃO 3: PRIVACIDADE, 2FA E SESSÕES ATIVAS
+           ================================================================= -->
+      <section id="section-privacy" class="section-panel" aria-labelledby="privacyHeading">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <h2 id="privacyHeading">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--primary)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+              Privacidade & Personalização
+            </h2>
+            <p>Gerencie como seus dados de jogo são compartilhados e monitore todas as sessões conectadas ao seu Riot ID.</p>
+          </div>
+        </div>
+
+        <!-- Banner de Status do 2FA -->
+        <div class="twofa-status-banner">
+          <div class="twofa-status-left">
+            <div class="twofa-shield-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+              </svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: #FFF; margin: 0;">Autenticação em Dois Fatores (2FA)</h4>
+                <span class="badge-status badge-connected">ATIVADA</span>
+              </div>
+              <p style="font-size: 0.82rem; color: #D1D5DB; margin: 4px 0 0;">
+                Protegendo logins no Riot Client e alterações críticas via aplicativo <strong>Riot Mobile</strong> e e-mail cadastrado.
+              </p>
+            </div>
+          </div>
+          <button type="button" class="btn-ghost-sm" id="btnTest2FAChallenge" title="Simular teste de desafio de segurança">Testar Desafio 2FA</button>
+        </div>
+
+        <!-- Opções de Privacidade -->
+        <div class="privacy-list">
+          
+          <div class="privacy-item">
+            <div class="privacy-info">
+              <h4>Ocultar Histórico de Partidas de Rastreadores Externos</h4>
+              <p>Impede que sites de terceiros (como OP.GG, Tracker Network e Mobalytics) exibam suas estatísticas detalhadas, KDA e ranques de partidas passadas para o público em geral.</p>
+            </div>
+            <label class="riot-switch" title="Alternar visibilidade do histórico de partidas">
+              <input type="checkbox" id="toggleHideMatchHistory" checked>
+              <span class="riot-slider"></span>
+            </label>
+          </div>
+
+          <div class="privacy-item">
+            <div class="privacy-info">
+              <h4>Comunicações e Ofertas Personalizadas</h4>
+              <p>Receba novidades oficiais da Riot Games sobre novos agentes, campeões, passes de batalha e promoções de skins na sua caixa de entrada.</p>
+            </div>
+            <label class="riot-switch" title="Alternar e-mails de marketing">
+              <input type="checkbox" id="toggleMarketing">
+              <span class="riot-slider"></span>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Sessões de Login Conectadas -->
+        <div class="sessions-list-header">
+          <div>
+            <h3>Sessões e Dispositivos Conectados</h3>
+            <p style="font-size: 0.82rem; color: #9CA3AF; margin: 2px 0 0;">Se você não reconhecer alguma destas sessões, revogue o acesso imediatamente.</p>
+          </div>
+          <button type="button" class="btn-ghost-sm" id="btnRevokeAllOther" style="color: #F87171; border-color: rgba(239, 68, 68, 0.4);">
+            Revogar Todas as Outras Sessões
+          </button>
+        </div>
+
+        <div class="sessions-container" id="sessionsList">
+          <!-- Item 1: Sessão Atual -->
+          <div class="session-item current-session" data-session-id="curr-1">
+            <div class="session-item__device">
+              <div class="session-device-icon" title="Navegador Desktop">🖥️</div>
+              <div class="session-item__details">
+                <h5>Windows 11 Pro • Chrome 124 <span class="badge-status badge-connected" style="font-size: 0.65rem; padding: 2px 6px;">Sessão Atual</span></h5>
+                <p>São Paulo, Brasil • IP: 177.136.220.45 • <strong>Ativo agora</strong></p>
+              </div>
+            </div>
+            <span style="font-size: 0.78rem; color: #9CA3AF; font-weight: 600;">Este Navegador</span>
+          </div>
+
+          <!-- Item 2: VALORANT Client -->
+          <div class="session-item" data-session-id="sess-2">
+            <div class="session-item__device">
+              <div class="session-device-icon" title="Riot Client Game Engine">🎮</div>
+              <div class="session-item__details">
+                <h5>VALORANT Client • Windows 10</h5>
+                <p>Rio de Janeiro, Brasil • IP: 189.28.14.92 • Última atividade: Há 2 horas</p>
+              </div>
+            </div>
+            <button type="button" class="btn-revoke" onclick="revokeSession('sess-2')">Revogar Sessão</button>
+          </div>
+
+          <!-- Item 3: Riot Mobile -->
+          <div class="session-item" data-session-id="sess-3">
+            <div class="session-item__device">
+              <div class="session-device-icon" title="Dispositivo Móvel">📱</div>
+              <div class="session-item__details">
+                <h5>Riot Mobile • Samsung Galaxy S23 (Android 14)</h5>
+                <p>São Paulo, Brasil • IP: 177.18.90.112 • Última atividade: Ontem às 21:14</p>
+              </div>
+            </div>
+            <button type="button" class="btn-revoke" onclick="revokeSession('sess-3')">Revogar Sessão</button>
+          </div>
+
+          <!-- Item 4: Safari macOS -->
+          <div class="session-item" data-session-id="sess-4">
+            <div class="session-item__device">
+              <div class="session-device-icon" title="Computador Portátil">💻</div>
+              <div class="session-item__details">
+                <h5>MacBook Pro • Safari 17.4 (macOS Sonoma)</h5>
+                <p>Campinas, Brasil • IP: 201.86.12.5 • Última atividade: Há 3 dias</p>
+              </div>
+            </div>
+            <button type="button" class="btn-revoke" onclick="revokeSession('sess-4')">Revogar Sessão</button>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- =================================================================
+           SEÇÃO 4: GERADOR DE CÓDIGOS DE RECUPERAÇÃO 2FA (EMERGÊNCIA)
+           ================================================================= -->
+      <section id="section-recovery" class="section-panel" aria-labelledby="recoveryHeading">
+        <div class="panel-header">
+          <div class="panel-header__left">
+            <h2 id="recoveryHeading">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--primary)"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+              Códigos de Recuperação de Emergência (2FA)
+            </h2>
+            <p>Utilize estes 8 códigos de backup caso perca o acesso ao seu celular ou ao e-mail cadastrado. Cada código funciona apenas uma única vez.</p>
+          </div>
+        </div>
+
+        <!-- Alerta de Segurança -->
+        <div class="alert-box-warning">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          <div>
+            <h5 style="color: #FBBF24; font-size: 0.92rem; font-weight: 700; margin: 0 0 4px;">Aviso Crítico de Segurança:</h5>
+            <p>Guarde estes códigos em um gerenciador de senhas seguro ou imprima-os. Se você gerar um novo conjunto de códigos, todos os códigos anteriores serão revogados automaticamente.</p>
+          </div>
+        </div>
+
+        <!-- Grade de 8 Códigos Alfanuméricos -->
+        <div class="recovery-codes-grid" id="recoveryCodesGrid">
+          <!-- 8 códigos gerados dinamicamente via JS -->
+        </div>
+
+        <!-- Ações dos Códigos de Recuperação -->
+        <div class="recovery-actions-bar">
+          <button type="button" class="btn-riot-primary" id="btnCopyAllCodes">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            <span>Copiar Todos os Códigos</span>
+          </button>
+
+          <button type="button" class="header-btn" id="btnDownloadCodesTxt" style="padding: 11px 18px;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            <span>Baixar Arquivo (.txt)</span>
+          </button>
+
+          <button type="button" class="header-btn" id="btnRegenerateCodes" style="padding: 11px 18px; margin-left: auto;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            <span>Gerar Novos Códigos</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Modal: Conexão / Autorização OAuth de Contas Conectadas -->
+  <div class="riot-modal-overlay" id="modalOAuth" role="dialog" aria-modal="true" aria-labelledby="oauthTitle">
+    <div class="riot-modal">
+      <button class="riot-modal-close" id="btnCloseOAuth" aria-label="Fechar">&times;</button>
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+        <div id="modalOAuthIcon" class="connected-card__icon-wrap service-twitch">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+        </div>
+        <div>
+          <h3 id="oauthTitle" style="color: #FFF; font-size: 1.25rem; margin: 0;">Autorizar Conexão</h3>
+          <span style="font-size: 0.78rem; color: #9CA3AF;" id="oauthProviderSubtitle">Riot Games OAuth Gateway</span>
+        </div>
+      </div>
+      
+      <p style="font-size: 0.88rem; color: #D1D5DB; line-height: 1.5; margin-bottom: 20px;">
+        Ao autorizar, você permite que a <strong>Riot Games</strong> consulte sua identidade de usuário e vincule recompensas exclusivas diretamente ao seu inventário no jogo.
+      </p>
+
+      <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 14px; margin-bottom: 24px;">
+        <div style="font-size: 0.75rem; text-transform: uppercase; color: #9CA3AF; font-weight: 700; margin-bottom: 6px;">Permissões solicitadas:</div>
+        <ul style="font-size: 0.82rem; color: #FFF; margin: 0; padding-left: 18px; line-height: 1.6;">
+          <li>Acesso ao nome de usuário público</li>
+          <li>Atribuição de drops e cosméticos automáticos</li>
+        </ul>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button type="button" class="header-btn" id="btnCancelOAuth">Cancelar</button>
+        <button type="button" class="btn-riot-primary" id="btnConfirmOAuth">Autorizar Conexão</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Teste de Desafio 2FA -->
+  <div class="riot-modal-overlay" id="modal2FATest" role="dialog" aria-modal="true" aria-labelledby="test2FATitle">
+    <div class="riot-modal" style="text-align: center;">
+      <button class="riot-modal-close" id="btnClose2FATest" aria-label="Fechar">&times;</button>
+      <div style="font-size: 2.5rem; margin-bottom: 10px;">🛡️</div>
+      <h3 id="test2FATitle" style="color: #FFF; font-size: 1.3rem; margin-bottom: 8px;">Desafio 2FA Riot Mobile</h3>
+      <p style="font-size: 0.88rem; color: #9CA3AF; margin-bottom: 20px;">
+        Uma notificação push de autenticação segura foi enviada para o seu dispositivo <strong>Samsung Galaxy S23</strong>.
+      </p>
+      
+      <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 16px; margin-bottom: 24px;">
+        <span style="font-size: 0.8rem; color: #34D399; font-weight: 700; text-transform: uppercase;">Código de Confirmação no App:</span>
+        <div style="font-size: 2rem; font-weight: 800; color: #FFF; letter-spacing: 4px; margin-top: 6px;">74</div>
+      </div>
+
+      <button type="button" class="btn-riot-primary" id="btnApprove2FATest" style="width: 100%; justify-content: center;">
+        Simular Aprovação no Celular
+      </button>
+    </div>
+  </div>
+
+  <!-- Container Global de Notificações Toast -->
+  <div class="riot-toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Scripts do Ecossistema Riot Games -->
+  <script src="../js/audio.js"></script>
+  <script src="../js/theme-switcher.js"></script>
+  <script src="../js/confetti.js"></script>
+  <script src="../js/mock-auth.js"></script>
+
+  <script>
+    /* ==========================================================================
+       Lógica da Central de Configurações de Conta Riot Games
+       ========================================================================== */
+    (function() {
+      'use strict';
+
+      // 1. Toast Notification Helper
+      window.showRiotToast = function(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `riot-toast riot-toast--${type}`;
+        
+        let icon = 'ℹ️';
+        if (type === 'success') icon = '✅';
+        if (type === 'warning') icon = '⚠️';
+        if (type === 'error') icon = '❌';
+
+        toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateX(100%)';
+          toast.style.transition = 'all 0.3s ease';
+          setTimeout(() => toast.remove(), 300);
+        }, 4000);
+      };
+
+      // 2. Audio Helper
+      function playSfx(type) {
+        if (window.riotAudio && typeof window.riotAudio.play === 'function') {
+          window.riotAudio.play(type);
+        }
+      }
+
+      // 3. User Session Initialization
+      let currentUser = {
+        gameName: 'PlayerOne',
+        tagLine: 'BR1',
+        email: 'player1@riotgames.com'
+      };
+
+      try {
+        const stored = localStorage.getItem('riot_auth_session') || sessionStorage.getItem('riot_auth_session');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.username) currentUser.gameName = parsed.username;
+          if (parsed.email) currentUser.email = parsed.email;
+        }
+      } catch (e) {}
+
+      // Check stored custom Riot ID
+      const savedRiotId = localStorage.getItem('riot_custom_id');
+      if (savedRiotId) {
+        try {
+          const p = JSON.parse(savedRiotId);
+          if (p.gameName) currentUser.gameName = p.gameName;
+          if (p.tagLine) currentUser.tagLine = p.tagLine;
+        } catch (e) {}
+      }
+
+      // Update UI with initial user data
+      function updateHeaderUserUI() {
+        document.getElementById('navUsername').textContent = currentUser.gameName;
+        document.getElementById('navTagline').textContent = '#' + currentUser.tagLine;
+        document.getElementById('previewGameName').textContent = currentUser.gameName;
+        document.getElementById('previewTagLine').textContent = '#' + currentUser.tagLine;
+        document.getElementById('inputRiotId').value = currentUser.gameName;
+        document.getElementById('inputTagline').value = currentUser.tagLine;
+        document.getElementById('avatarInitial').textContent = currentUser.gameName.charAt(0).toUpperCase();
+        document.getElementById('riotIdCharCount').textContent = `${currentUser.gameName.length}/16`;
+        document.getElementById('taglineCharCount').textContent = `${currentUser.tagLine.length}/5`;
+      }
+      updateHeaderUserUI();
+
+      // ========================================================================
+      // 4. 30-DAY COOLDOWN COUNTDOWN TIMER ENGINE (MOCK & REAL-TIME)
+      // ========================================================================
+      const COOLDOWN_KEY = 'riot_name_cooldown_end';
+      const TOTAL_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 30 dias em ms
+
+      // Initialize default cooldown if none exists (defaults to 23 days remaining for realistic mock)
+      if (!localStorage.getItem(COOLDOWN_KEY)) {
+        const mockRemainingMs = (23 * 24 * 60 * 60 + 14 * 3600 + 32 * 60 + 45) * 1000;
+        localStorage.setItem(COOLDOWN_KEY, (Date.now() + mockRemainingMs).toString());
+      }
+
+      let cooldownInterval = null;
+
+      function updateCooldownDisplay() {
+        const cooldownCard = document.getElementById('cooldownCard');
+        const badge = document.getElementById('cooldownBadge');
+        const statusText = document.getElementById('cooldownStatusText');
+        const statusIcon = document.getElementById('cooldownStatusIcon');
+        const progressFill = document.getElementById('cooldownProgressFill');
+        const inputId = document.getElementById('inputRiotId');
+        const inputTag = document.getElementById('inputTagline');
+        const btnSave = document.getElementById('btnSaveRiotId');
+
+        const endTimeStr = localStorage.getItem(COOLDOWN_KEY);
+        const endTime = endTimeStr ? parseInt(endTimeStr, 10) : 0;
+        const now = Date.now();
+        const remainingMs = endTime - now;
+
+        if (remainingMs > 0) {
+          // Cooldown is ACTIVE
+          cooldownCard.classList.remove('cooldown-expired');
+          badge.className = 'badge-status badge-connected';
+          badge.textContent = 'Em Recarga';
+          statusIcon.textContent = '⏳';
+          statusText.textContent = 'Tempo de Recarga Ativo (Cooldown de 30 Dias)';
+
+          const totalSeconds = Math.floor(remainingMs / 1000);
+          const days = Math.floor(totalSeconds / 86400);
+          const hours = Math.floor((totalSeconds % 86400) / 3600);
+          const minutes = Math.floor((totalSeconds % 3600) / 60);
+          const seconds = totalSeconds % 60;
+
+          document.getElementById('timerDays').textContent = days.toString().padStart(2, '0');
+          document.getElementById('timerHours').textContent = hours.toString().padStart(2, '0');
+          document.getElementById('timerMinutes').textContent = minutes.toString().padStart(2, '0');
+          document.getElementById('timerSeconds').textContent = seconds.toString().padStart(2, '0');
+
+          // Progress calculation: elapsed percentage
+          const elapsed = TOTAL_COOLDOWN_MS - remainingMs;
+          const pct = Math.min(100, Math.max(0, (elapsed / TOTAL_COOLDOWN_MS) * 100));
+          progressFill.style.width = pct.toFixed(1) + '%';
+
+          inputId.setAttribute('disabled', '');
+          inputTag.setAttribute('disabled', '');
+          btnSave.setAttribute('disabled', '');
+        } else {
+          // Cooldown is EXPIRED / AVAILABLE
+          cooldownCard.classList.add('cooldown-expired');
+          badge.className = 'badge-status badge-connected';
+          badge.style.background = 'rgba(16, 185, 129, 0.2)';
+          badge.style.color = '#34D399';
+          badge.textContent = 'Disponível';
+          statusIcon.textContent = '✅';
+          statusText.textContent = 'Alteração Liberada! Você pode trocar seu Riot ID agora.';
+
+          document.getElementById('timerDays').textContent = '00';
+          document.getElementById('timerHours').textContent = '00';
+          document.getElementById('timerMinutes').textContent = '00';
+          document.getElementById('timerSeconds').textContent = '00';
+          progressFill.style.width = '100%';
+
+          inputId.removeAttribute('disabled');
+          inputTag.removeAttribute('disabled');
+          btnSave.removeAttribute('disabled');
+        }
+      }
+
+      cooldownInterval = setInterval(updateCooldownDisplay, 1000);
+      updateCooldownDisplay();
+
+      // Cooldown Mock Simulation Controls
+      document.getElementById('btnSimulateCooldown').addEventListener('click', () => {
+        const mockRemaining = (24 * 24 * 3600 + 8 * 3600 + 15 * 60) * 1000;
+        localStorage.setItem(COOLDOWN_KEY, (Date.now() + mockRemaining).toString());
+        updateCooldownDisplay();
+        playSfx('whoosh');
+        window.showRiotToast('Simulação: Cooldown de 24 dias ativado.', 'warning');
+      });
+
+      document.getElementById('btnResetCooldown').addEventListener('click', () => {
+        localStorage.setItem(COOLDOWN_KEY, (Date.now() - 1000).toString());
+        updateCooldownDisplay();
+        playSfx('success');
+        window.showRiotToast('Cooldown zerado! Edição de Riot ID liberada.', 'success');
+      });
+
+      // Riot ID & Tagline Live Preview & Character Counters
+      const inputId = document.getElementById('inputRiotId');
+      const inputTag = document.getElementById('inputTagline');
+
+      inputId.addEventListener('input', () => {
+        const val = inputId.value.trim() || 'PlayerOne';
+        document.getElementById('previewGameName').textContent = val;
+        document.getElementById('riotIdCharCount').textContent = `${inputId.value.length}/16`;
+      });
+
+      inputTag.addEventListener('input', () => {
+        const val = inputTag.value.trim() || 'BR1';
+        document.getElementById('previewTagLine').textContent = '#' + val;
+        document.getElementById('taglineCharCount').textContent = `${inputTag.value.length}/5`;
+      });
+
+      // Save Riot ID Changes
+      document.getElementById('btnSaveRiotId').addEventListener('click', () => {
+        const newName = inputId.value.trim();
+        const newTag = inputTag.value.trim().toUpperCase();
+
+        if (newName.length < 3 || newTag.length < 3) {
+          playSfx('error');
+          window.showRiotToast('Riot ID e Tagline devem ter pelo menos 3 caracteres.', 'error');
+          return;
+        }
+
+        currentUser.gameName = newName;
+        currentUser.tagLine = newTag;
+        localStorage.setItem('riot_custom_id', JSON.stringify({ gameName: newName, tagLine: newTag }));
+
+        // Start new 30-day cooldown
+        const newCooldownEnd = Date.now() + TOTAL_COOLDOWN_MS;
+        localStorage.setItem(COOLDOWN_KEY, newCooldownEnd.toString());
+
+        updateHeaderUserUI();
+        updateCooldownDisplay();
+
+        if (window.triggerConfetti) window.triggerConfetti();
+        playSfx('success');
+        window.showRiotToast(`Riot ID atualizado para ${newName}#${newTag}! Novo cooldown de 30 dias iniciado.`, 'success');
+      });
+
+      // Copy Riot ID Button
+      document.getElementById('btnCopyRiotId').addEventListener('click', () => {
+        const fullId = `${currentUser.gameName}#${currentUser.tagLine}`;
+        navigator.clipboard.writeText(fullId).then(() => {
+          playSfx('click');
+          window.showRiotToast(`Riot ID "${fullId}" copiado para a área de transferência!`, 'success');
+        });
+      });
+
+      // ========================================================================
+      // 5. CONNECTED ACCOUNTS MANAGER (TWITCH, DISCORD, PRIME, YOUTUBE)
+      // ========================================================================
+      const DEFAULT_CONNECTIONS = {
+        twitch: { connected: true, tag: 'twitch.tv/player1_stream' },
+        discord: { connected: true, tag: 'PlayerOne#1337' },
+        prime: { connected: false, tag: 'amazon.com/player1' },
+        youtube: { connected: false, tag: 'youtube.com/@player1' }
+      };
+
+      const CONN_STORAGE_KEY = 'riot_connected_accounts_state';
+      let connections = DEFAULT_CONNECTIONS;
+      try {
+        const savedConn = localStorage.getItem(CONN_STORAGE_KEY);
+        if (savedConn) connections = JSON.parse(savedConn);
+      } catch (e) {}
+
+      function updateConnectionsUI() {
+        ['twitch', 'discord', 'prime', 'youtube'].forEach(service => {
+          const cap = service.charAt(0).toUpperCase() + service.slice(1);
+          const badge = document.getElementById(`badge${cap}`);
+          const tag = document.getElementById(`account${cap}Tag`);
+          const card = document.getElementById(`card${cap}`);
+          const btn = card?.querySelector('.btn-service-action');
+
+          if (!badge || !card || !btn) return;
+
+          const isConnected = connections[service]?.connected;
+
+          if (isConnected) {
+            badge.className = 'badge-status badge-connected';
+            badge.innerHTML = '<span class="pulse-dot"></span> Conectado';
+            if (tag) tag.style.display = 'flex';
+            btn.className = 'btn-service-action btn-service-disconnect';
+            btn.textContent = 'Desconectar';
+          } else {
+            badge.className = 'badge-status badge-disconnected';
+            badge.innerHTML = '○ Não vinculado';
+            if (tag) tag.style.display = 'none';
+            btn.className = 'btn-service-action btn-service-connect';
+            btn.textContent = 'Conectar Conta';
+          }
+        });
+      }
+      updateConnectionsUI();
+
+      // OAuth Modal Elements
+      let pendingOAuthService = null;
+      const modalOAuth = document.getElementById('modalOAuth');
+      const oauthTitle = document.getElementById('oauthTitle');
+      const oauthSubtitle = document.getElementById('oauthProviderSubtitle');
+      const oauthIcon = document.getElementById('modalOAuthIcon');
+
+      // Click on Connect / Disconnect Buttons
+      document.querySelectorAll('.btn-service-action').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const service = btn.getAttribute('data-service');
+          if (!service) return;
+
+          const cap = service.charAt(0).toUpperCase() + service.slice(1);
+
+          if (connections[service]?.connected) {
+            // Disconnect Flow
+            if (confirm(`Deseja realmente desconectar sua conta ${cap}? Você não receberá mais drops ou integrações automáticas.`)) {
+              connections[service].connected = false;
+              localStorage.setItem(CONN_STORAGE_KEY, JSON.stringify(connections));
+              updateConnectionsUI();
+              playSfx('whoosh');
+              window.showRiotToast(`Conta ${cap} desconectada com sucesso.`, 'info');
+            }
+          } else {
+            // Connect Flow: Open OAuth Authorization Simulation
+            pendingOAuthService = service;
+            oauthTitle.textContent = `Autorizar Conexão com ${cap}`;
+            oauthSubtitle.textContent = `${cap} OAuth 2.0 Gateway`;
+            oauthIcon.className = `connected-card__icon-wrap service-${service}`;
+            modalOAuth.classList.add('active');
+            playSfx('click');
+          }
+        });
+      });
+
+      // OAuth Modal Actions
+      document.getElementById('btnCloseOAuth').addEventListener('click', () => {
+        modalOAuth.classList.remove('active');
+      });
+      document.getElementById('btnCancelOAuth').addEventListener('click', () => {
+        modalOAuth.classList.remove('active');
+      });
+      document.getElementById('btnConfirmOAuth').addEventListener('click', () => {
+        if (pendingOAuthService) {
+          connections[pendingOAuthService].connected = true;
+          localStorage.setItem(CONN_STORAGE_KEY, JSON.stringify(connections));
+          updateConnectionsUI();
+          modalOAuth.classList.remove('active');
+          const cap = pendingOAuthService.charAt(0).toUpperCase() + pendingOAuthService.slice(1);
+          playSfx('success');
+          if (window.triggerConfetti) window.triggerConfetti();
+          window.showRiotToast(`Conta ${cap} vinculada com sucesso! Drops ativados.`, 'success');
+          pendingOAuthService = null;
+        }
+      });
+
+      // ========================================================================
+      // 6. PRIVACY & PERSONALIZATION CONTROLS
+      // ========================================================================
+      const toggleMatchHistory = document.getElementById('toggleHideMatchHistory');
+      const MATCH_PRIVACY_KEY = 'riot_privacy_hide_matches';
+
+      // Load saved state
+      if (localStorage.getItem(MATCH_PRIVACY_KEY) !== null) {
+        toggleMatchHistory.checked = localStorage.getItem(MATCH_PRIVACY_KEY) === 'true';
+      }
+
+      toggleMatchHistory.addEventListener('change', () => {
+        localStorage.setItem(MATCH_PRIVACY_KEY, toggleMatchHistory.checked.toString());
+        playSfx('click');
+        if (toggleMatchHistory.checked) {
+          window.showRiotToast('Histórico de partidas agora está OCULTO para terceiros.', 'info');
+        } else {
+          window.showRiotToast('Histórico de partidas agora está PÚBLICO.', 'warning');
+        }
+      });
+
+      // 2FA Challenge Test Modal
+      const modal2FATest = document.getElementById('modal2FATest');
+      document.getElementById('btnTest2FAChallenge').addEventListener('click', () => {
+        modal2FATest.classList.add('active');
+        playSfx('click');
+      });
+      document.getElementById('btnClose2FATest').addEventListener('click', () => {
+        modal2FATest.classList.remove('active');
+      });
+      document.getElementById('btnApprove2FATest').addEventListener('click', () => {
+        modal2FATest.classList.remove('active');
+        playSfx('success');
+        window.showRiotToast('Desafio 2FA aprovado com sucesso! Comunicação com o Riot Mobile validada.', 'success');
+      });
+
+      // Revoke Session Action
+      window.revokeSession = function(sessionId) {
+        const item = document.querySelector(`[data-session-id="${sessionId}"]`);
+        if (item) {
+          item.style.opacity = '0';
+          item.style.transform = 'translateX(-20px)';
+          item.style.transition = 'all 0.3s ease';
+          setTimeout(() => {
+            item.remove();
+            playSfx('whoosh');
+            window.showRiotToast('Sessão remota revogada com sucesso. Dispositivo desconectado.', 'info');
+          }, 300);
+        }
+      };
+
+      // Revoke All Other Sessions
+      document.getElementById('btnRevokeAllOther').addEventListener('click', () => {
+        const otherSessions = document.querySelectorAll('.session-item:not(.current-session)');
+        if (otherSessions.length === 0) {
+          window.showRiotToast('Nenhuma outra sessão remota ativa no momento.', 'info');
+          return;
+        }
+
+        if (confirm('Deseja encerrar todas as outras sessões em outros computadores e celulares?')) {
+          otherSessions.forEach(item => item.remove());
+          playSfx('success');
+          window.showRiotToast('Todas as outras sessões remotas foram encerradas com segurança!', 'success');
+        }
+      });
+
+      // ========================================================================
+      // 7. 2FA EMERGENCY RECOVERY CODES GENERATOR (8 ALPHANUMERIC CODES)
+      // ========================================================================
+      const RECOVERY_STORAGE_KEY = 'riot_2fa_recovery_codes';
+
+      function generateAlphanumericCodes(count = 8) {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // No visually ambiguous characters like O, 0, 1, I
+        const codes = [];
+        for (let i = 0; i < count; i++) {
+          let part1 = '';
+          let part2 = '';
+          for (let j = 0; j < 4; j++) part1 += chars.charAt(Math.floor(Math.random() * chars.length));
+          for (let j = 0; j < 4; j++) part2 += chars.charAt(Math.floor(Math.random() * chars.length));
+          codes.push(`${part1}-${part2}`);
+        }
+        return codes;
+      }
+
+      let currentCodes = [];
+      try {
+        const saved = localStorage.getItem(RECOVERY_STORAGE_KEY);
+        if (saved) currentCodes = JSON.parse(saved);
+      } catch (e) {}
+
+      if (!currentCodes || currentCodes.length !== 8) {
+        currentCodes = generateAlphanumericCodes(8);
+        localStorage.setItem(RECOVERY_STORAGE_KEY, JSON.stringify(currentCodes));
+      }
+
+      function renderRecoveryCodes() {
+        const grid = document.getElementById('recoveryCodesGrid');
+        grid.innerHTML = '';
+
+        currentCodes.forEach((code, idx) => {
+          const chip = document.createElement('div');
+          chip.className = 'code-chip';
+          chip.title = `Clique para copiar o código #${idx + 1}`;
+          chip.innerHTML = `
+            <span>${code}</span>
+            <span class="code-chip-copy-icon">📋</span>
+          `;
+          chip.addEventListener('click', () => {
+            navigator.clipboard.writeText(code).then(() => {
+              playSfx('click');
+              window.showRiotToast(`Código de emergência "${code}" copiado!`, 'success');
+            });
+          });
+          grid.appendChild(chip);
+        });
+      }
+      renderRecoveryCodes();
+
+      // Copy All Codes
+      document.getElementById('btnCopyAllCodes').addEventListener('click', () => {
+        const formatted = [
+          '================================================================',
+          'RIOT GAMES - CÓDIGOS DE RECUPERAÇÃO DE EMERGÊNCIA (2FA BACKUP)',
+          `Conta: ${currentUser.gameName}#${currentUser.tagLine}`,
+          `Data de Emissão: ${new Date().toLocaleString('pt-BR')}`,
+          'AVISO: Cada código pode ser utilizado apenas uma única vez.',
+          '================================================================',
+          '',
+          ...currentCodes.map((c, i) => `Código ${i + 1}:  ${c}`),
+          '',
+          '================================================================'
+        ].join('\n');
+
+        navigator.clipboard.writeText(formatted).then(() => {
+          playSfx('success');
+          window.showRiotToast('Todos os 8 códigos foram copiados para a área de transferência!', 'success');
+        });
+      });
+
+      // Download Codes as Text File (.txt)
+      document.getElementById('btnDownloadCodesTxt').addEventListener('click', () => {
+        const fileContent = [
+          '================================================================',
+          'RIOT GAMES - CÓDIGOS DE RECUPERAÇÃO DE EMERGÊNCIA (2FA BACKUP)',
+          `Conta: ${currentUser.gameName}#${currentUser.tagLine}`,
+          `E-mail de Cadastro: ${currentUser.email}`,
+          `Data de Emissão: ${new Date().toLocaleString('pt-BR')}`,
+          '================================================================',
+          'IMPORTANTE: Guarde este arquivo em local seguro (ex: cofre criptografado).',
+          'Cada código concede acesso emergencial à sua conta Riot caso você perca',
+          'o aplicativo autenticador ou o acesso ao e-mail.',
+          '================================================================\n',
+          ...currentCodes.map((c, i) => `[${i + 1}]  ${c}`),
+          '\n================================================================',
+          'Riot Games Security Operations • https://account.riotgames.com'
+        ].join('\n');
+
+        const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `riot-2fa-backup-codes-${currentUser.gameName.toLowerCase()}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        playSfx('success');
+        window.showRiotToast('Download do arquivo de códigos (.txt) iniciado!', 'success');
+      });
+
+      // Regenerate Codes Button
+      document.getElementById('btnRegenerateCodes').addEventListener('click', () => {
+        if (confirm('Atenção: Ao gerar um novo conjunto de códigos, todos os códigos anteriores serão imediatamente invalidados. Deseja continuar?')) {
+          currentCodes = generateAlphanumericCodes(8);
+          localStorage.setItem(RECOVERY_STORAGE_KEY, JSON.stringify(currentCodes));
+          renderRecoveryCodes();
+          playSfx('whoosh');
+          if (window.triggerConfetti) window.triggerConfetti();
+          window.showRiotToast('8 novos códigos de emergência gerados com sucesso!', 'success');
+        }
+      });
+
+      // ========================================================================
+      // 8. THEME SWITCHER & AUDIO ENGINE BINDINGS
+      // ========================================================================
+      const themeSelector = document.getElementById('themeSelector');
+      if (themeSelector) {
+        const savedTheme = localStorage.getItem('riot_theme_preference') || 'riot';
+        themeSelector.value = savedTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        themeSelector.addEventListener('change', (e) => {
+          const newTheme = e.target.value;
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('riot_theme_preference', newTheme);
+          playSfx('whoosh');
+          window.showRiotToast(`Tema alterado para: ${newTheme.toUpperCase()}`, 'info');
+        });
+      }
+
+      // Audio Toggle Button
+      const btnAudio = document.getElementById('btnAudioToggle');
+      const iconAudio = document.getElementById('audioStatusIcon');
+      if (btnAudio && window.riotAudio) {
+        const isMuted = localStorage.getItem('riot_audio_muted') === 'true';
+        if (iconAudio) iconAudio.textContent = isMuted ? '🔇' : '🔊';
+
+        btnAudio.addEventListener('click', () => {
+          if (typeof window.riotAudio.toggleMute === 'function') {
+            const muted = window.riotAudio.toggleMute();
+            if (iconAudio) iconAudio.textContent = muted ? '🔇' : '🔊';
+            window.showRiotToast(muted ? 'Áudio desativado' : 'Áudio ativado', 'info');
+          }
+        });
+      }
+
+      // Nav Tab Highlighting on Scroll / Click
+      const navLinks = document.querySelectorAll('.nav-item');
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          navLinks.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          playSfx('click');
+        });
+      });
+
+      // Logout handler
+      document.getElementById('btnLogout').addEventListener('click', (e) => {
+        e.preventDefault();
+        playSfx('click');
+        if (window.mockAuth && typeof window.mockAuth.logout === 'function') {
+          window.mockAuth.logout();
+        } else {
+          localStorage.removeItem('riot_auth_session');
+          sessionStorage.removeItem('riot_auth_session');
+        }
+        window.showRiotToast('Sessão encerrada. Redirecionando para login...', 'info');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 600);
+      });
+
+    })();
+  </script>
+</body>
+</html>

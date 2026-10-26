@@ -3,7 +3,7 @@
  * Exports high-quality vector SVGs for Riot login interface.
  */
 
-export const icons = {
+const icons = {
     // 1. Riot Games Official Fist Logo & Wordmark
     riotLogo: `<svg viewBox="0 0 135 45" width="100%" height="100%" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path d="M14.5 0C6.5 0 0 6.5 0 14.5v16C0 38.5 6.5 45 14.5 45h16c8 0 14.5-6.5 14.5-14.5v-16C45 6.5 38.5 0 30.5 0h-16zm2.2 9.5h11.6c3.9 0 7 3.1 7 7s-3.1 7-7 7H16.7v9.5H12V9.5h4.7zm0 4.7v4.7h6.9c1.3 0 2.3-1 2.3-2.3s-1-2.3-2.3-2.3h-6.9z"/>
@@ -81,9 +81,21 @@ export const icons = {
  * @param {string} iconName 
  * @param {string|HTMLElement} target 
  */
-export function injectIcon(iconName, target) {
+function injectIcon(iconName, target) {
     const el = typeof target === 'string' ? document.querySelector(target) : target;
     if (el && icons[iconName]) {
         el.innerHTML = icons[iconName];
     }
+}
+
+// Global window exposure for browser script tags
+if (typeof window !== 'undefined') {
+    window.icons = icons;
+    window.riotIcons = icons;
+    window.injectIcon = injectIcon;
+}
+
+// CommonJS support if in Node / bundler
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { icons, injectIcon };
 }

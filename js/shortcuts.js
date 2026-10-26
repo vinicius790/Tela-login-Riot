@@ -81,39 +81,58 @@
             });
         }
 
-        // Alt + T: Cycle themes
+        // Alt + T: Cycle themes (Supports all 6 gaming themes)
         if (e.altKey && (e.key === 't' || e.key === 'T')) {
             e.preventDefault();
-            const themes = ['riot', 'valorant', 'lol', 'tft'];
-            const current = document.documentElement.getAttribute('data-theme') || 'riot';
-            const next = themes[(themes.indexOf(current) + 1) % themes.length];
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('riot_theme', next);
-            const selector = document.getElementById('themeSelector');
-            if (selector) selector.value = next;
-            window.showRiotToast(`Tema alterado: ${next.toUpperCase()}`, 'info');
+            if (window.riotThemeSwitcher && typeof window.riotThemeSwitcher.cycleTheme === 'function') {
+                window.riotThemeSwitcher.cycleTheme();
+            } else {
+                const themes = ['riot', 'valorant', 'lol', 'tft', 'starguardian', 'kda'];
+                const current = document.documentElement.getAttribute('data-theme') || 'riot';
+                const next = themes[(themes.indexOf(current) + 1) % themes.length];
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('riot_theme_preference', next);
+                localStorage.setItem('riot_theme', next);
+                const selector = document.getElementById('themeSelector');
+                if (selector) selector.value = next;
+                if (window.riotAudio) window.riotAudio.play('whoosh');
+                window.showRiotToast(`Tema alterado: ${next.toUpperCase()}`, 'info');
+            }
         }
 
         // Alt + L: Cycle language
         if (e.altKey && (e.key === 'l' || e.key === 'L')) {
             e.preventDefault();
-            const langs = ['pt-BR', 'en-US', 'es-ES', 'ja-JP', 'ko-KR'];
-            const langSelector = document.getElementById('langSelector');
-            const current = langSelector ? langSelector.value : 'pt-BR';
-            const next = langs[(langs.indexOf(current) + 1) % langs.length];
-            if (langSelector) {
-                langSelector.value = next;
-                langSelector.dispatchEvent(new Event('change'));
-                window.showRiotToast(`Idioma: ${next}`, 'info');
+            if (window.i18n && typeof window.i18n.cycleLanguage === 'function') {
+                window.i18n.cycleLanguage(true, true);
+            } else {
+                const langs = ['pt-BR', 'en-US', 'es-ES', 'ja-JP', 'ko-KR', 'de-DE'];
+                const langSelector = document.getElementById('langSelector');
+                const current = langSelector ? langSelector.value : 'pt-BR';
+                const next = langs[(langs.indexOf(current) + 1) % langs.length];
+                if (langSelector) {
+                    langSelector.value = next;
+                    langSelector.dispatchEvent(new Event('change'));
+                }
             }
         }
 
         // Ctrl + M: Toggle Mute
         if ((e.ctrlKey || e.metaKey) && (e.key === 'm' || e.key === 'M')) {
             e.preventDefault();
-            const muteBtn = document.getElementById('audioToggleBtn');
-            if (muteBtn) {
-                muteBtn.click();
+            if (window.riotAudio) {
+                window.riotAudio.toggleMute();
+            } else {
+                const muteBtn = document.getElementById('audioToggleBtn');
+                if (muteBtn) muteBtn.click();
+            }
+        }
+
+        // Alt + A: Toggle Ambient Cyber Drone
+        if (e.altKey && (e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            if (window.riotAudio) {
+                window.riotAudio.toggleAmbient();
             }
         }
     });

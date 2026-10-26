@@ -102,10 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. Sound effect / complementary modules hook
   if (button) {
     button.addEventListener('click', () => {
-      try {
-        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJ_u3+Wb6Zztqu2g66PqpOu47M7tzvHO7s7u0uvV7NXs1uzW7Nbs1uzW7Nbs');
-        audio.play().catch(() => {});
-      } catch (e) {}
+      if (window.riotAudio) {
+        window.riotAudio.play('lockin');
+      }
     });
   }
 });

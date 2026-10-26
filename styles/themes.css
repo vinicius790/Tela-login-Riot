@@ -1,65 +1,532 @@
-/* ==========================================
-   Riot Multi-Game Theme Switcher Styles
-   Themes: Riot Red (Default), Valorant, League of Legends, Teamfight Tactics
-   ========================================== */
+/* ==========================================================================
+   Riot Multi-Game Visual Styling & Dynamic Theme Engine
+   Supported Gaming Themes:
+   1. Riot ('riot')           - Riot Red & Black, aggressive hextech styling
+   2. Valorant ('valorant')   - Tactical Radiant Red/Off-white, angular geometric borders
+   3. LoL ('lol')             - Hextech Blue & Gold, runic ornate borders, magical glowing accents
+   4. TFT ('tft')             - Cosmic Starlight & Indigo, soft nebula gradients
+   5. Star Guardian ('starguardian') - Pastel Pink, Magenta & Gold, magical girl glitter glow
+   6. K/DA ('kda')            - Neon Cyber Violet & Hot Pink, prestige pop-star dark cyber
+   ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   1. Riot Theme (Default)
+   Aggressive hextech styling, Riot Red & Black obsidian aesthetic
+   -------------------------------------------------------------------------- */
 :root, [data-theme="riot"] {
-    --primary: #eb0029;
-    --primary-hover: #c50022;
-    --accent: #ff4655;
-    --bg-glow: rgba(235, 0, 41, 0.25);
-    --wallpaper-gradient: linear-gradient(135deg, #0f1016 0%, #181925 50%, #090a0f 100%);
-    --font-family: 'Poppins', sans-serif;
-    --card-bg: rgba(20, 20, 25, 0.85);
+    /* 9 Required Standard Theme Variables */
+    --bg-primary: #0f1015;
+    --bg-secondary: #181a24;
+    --accent-color: #eb0029;
+    --accent-glow: rgba(235, 0, 41, 0.45);
+    --text-primary: #ffffff;
+    --text-secondary: #8b9bb4;
     --border-color: rgba(235, 0, 41, 0.4);
-    --text-color: #ffffff;
-    --text-muted: #8b9bb4;
+    --input-bg: rgba(24, 26, 36, 0.85);
+    --btn-gradient: linear-gradient(135deg, #eb0029 0%, #a8001d 100%);
+
+    /* Compatibility & Component Aliases */
+    --primary: var(--accent-color);
+    --primary-hover: #ff1a40;
+    --accent: #ff4655;
+    --bg-glow: var(--accent-glow);
+    --wallpaper-gradient: radial-gradient(ellipse at 80% 20%, rgba(235, 0, 41, 0.22) 0%, transparent 60%), linear-gradient(135deg, #090a0e 0%, #161822 50%, #06070a 100%);
+    --font-family: 'Lexend Deca', 'Poppins', sans-serif;
+    --card-bg: var(--bg-secondary);
+    --text-color: var(--text-primary);
+    --text-muted: var(--text-secondary);
+    --bg-main: var(--bg-primary);
+    --text-main: var(--text-primary);
+    --riot-accent: var(--accent-color);
+    --focus-ring: rgba(235, 0, 41, 0.5);
+    --theme-title: "RIOT GAMES";
+    --theme-symbol: "⚡";
+    --theme-badge-color: #eb0029;
 }
 
+/* --------------------------------------------------------------------------
+   2. Valorant Theme
+   Tactical Radiant Red/Off-white, angular geometric borders & sharp chamfers
+   -------------------------------------------------------------------------- */
 [data-theme="valorant"] {
-    --primary: #ff4655;
+    /* 9 Required Standard Theme Variables */
+    --bg-primary: #0f1923;
+    --bg-secondary: #1b2733;
+    --accent-color: #ff4655;
+    --accent-glow: rgba(255, 70, 85, 0.45);
+    --text-primary: #ece8e1;
+    --text-secondary: #7e8b99;
+    --border-color: rgba(255, 70, 85, 0.5);
+    --input-bg: rgba(27, 39, 51, 0.85);
+    --btn-gradient: linear-gradient(135deg, #ff4655 0%, #bd2b38 100%);
+
+    /* Compatibility & Component Aliases */
+    --primary: var(--accent-color);
     --primary-hover: #fa2334;
     --accent: #ece8e1;
-    --bg-glow: rgba(255, 70, 85, 0.3);
-    --wallpaper-gradient: linear-gradient(135deg, #0f1923 0%, #1f2731 50%, #0b0e14 100%);
-    --font-family: 'Teko', 'Poppins', sans-serif;
-    --card-bg: rgba(15, 25, 35, 0.9);
-    --border-color: rgba(255, 70, 85, 0.5);
-    --text-color: #ece8e1;
-    --text-muted: #7e8b99;
+    --bg-glow: var(--accent-glow);
+    --wallpaper-gradient: radial-gradient(circle at 75% 25%, rgba(255, 70, 85, 0.22) 0%, transparent 55%), linear-gradient(135deg, #0a1017 0%, #151e28 50%, #080c11 100%);
+    --font-family: 'Teko', 'Lexend Deca', sans-serif;
+    --card-bg: var(--bg-secondary);
+    --text-color: var(--text-primary);
+    --text-muted: var(--text-secondary);
+    --bg-main: var(--bg-primary);
+    --text-main: var(--text-primary);
+    --riot-accent: var(--accent-color);
+    --focus-ring: rgba(255, 70, 85, 0.5);
+    --theme-title: "VALORANT // PROTOCOL";
+    --theme-symbol: "🎯";
+    --theme-badge-color: #ff4655;
 }
 
+/* --------------------------------------------------------------------------
+   3. League of Legends Theme (LoL)
+   Hextech Blue & Gold, runic ornate borders, magical glowing accents
+   -------------------------------------------------------------------------- */
 [data-theme="lol"] {
-    --primary: #c8aa6d;
+    /* 9 Required Standard Theme Variables */
+    --bg-primary: #010a13;
+    --bg-secondary: #0a1428;
+    --accent-color: #c8aa6d;
+    --accent-glow: rgba(10, 200, 185, 0.45);
+    --text-primary: #f0e6d2;
+    --text-secondary: #a09b8c;
+    --border-color: rgba(200, 170, 109, 0.5);
+    --input-bg: rgba(10, 20, 40, 0.85);
+    --btn-gradient: linear-gradient(135deg, #c8aa6d 0%, #785a28 100%);
+
+    /* Compatibility & Component Aliases */
+    --primary: var(--accent-color);
     --primary-hover: #f0e6d2;
     --accent: #0ac8b9;
-    --bg-glow: rgba(10, 200, 185, 0.2);
-    --wallpaper-gradient: linear-gradient(135deg, #010a10 0%, #0a1428 50%, #010a10 100%);
-    --font-family: 'BeaufortforLOL', 'Poppins', sans-serif;
-    --card-bg: rgba(1, 10, 16, 0.85);
-    --border-color: rgba(200, 170, 109, 0.4);
-    --text-color: #f0e6d2;
-    --text-muted: #a09b8c;
+    --bg-glow: var(--accent-glow);
+    --wallpaper-gradient: radial-gradient(circle at 75% 30%, rgba(10, 200, 185, 0.2) 0%, rgba(200, 170, 109, 0.14) 40%, transparent 65%), linear-gradient(135deg, #010a13 0%, #091428 50%, #01060c 100%);
+    --font-family: 'BeaufortforLOL', 'Cinzel', 'Lexend Deca', serif, sans-serif;
+    --card-bg: var(--bg-secondary);
+    --text-color: var(--text-primary);
+    --text-muted: var(--text-secondary);
+    --bg-main: var(--bg-primary);
+    --text-main: var(--text-primary);
+    --riot-accent: var(--accent-color);
+    --focus-ring: rgba(10, 200, 185, 0.5);
+    --theme-title: "LEAGUE OF LEGENDS";
+    --theme-symbol: "⚔️";
+    --theme-badge-color: #c8aa6d;
 }
 
+/* --------------------------------------------------------------------------
+   4. Teamfight Tactics Theme (TFT)
+   Cosmic Starlight & Indigo, soft nebula gradients & astral radiance
+   -------------------------------------------------------------------------- */
 [data-theme="tft"] {
-    --primary: #9d4edd;
+    /* 9 Required Standard Theme Variables */
+    --bg-primary: #0f0826;
+    --bg-secondary: #1f1047;
+    --accent-color: #9d4edd;
+    --accent-glow: rgba(76, 201, 240, 0.45);
+    --text-primary: #ffffff;
+    --text-secondary: #b3a4db;
+    --border-color: rgba(157, 78, 221, 0.45);
+    --input-bg: rgba(31, 16, 71, 0.8);
+    --btn-gradient: linear-gradient(135deg, #9d4edd 0%, #4cc9f0 100%);
+
+    /* Compatibility & Component Aliases */
+    --primary: var(--accent-color);
     --primary-hover: #c77dff;
     --accent: #4cc9f0;
-    --bg-glow: rgba(157, 78, 221, 0.25);
-    --wallpaper-gradient: linear-gradient(135deg, #13092d 0%, #24144d 50%, #0b041a 100%);
-    --font-family: 'Poppins', sans-serif;
-    --card-bg: rgba(19, 9, 45, 0.85);
-    --border-color: rgba(157, 78, 221, 0.4);
-    --text-color: #ffffff;
-    --text-muted: #9d8ec4;
+    --bg-glow: var(--accent-glow);
+    --wallpaper-gradient: radial-gradient(circle at 70% 25%, rgba(76, 201, 240, 0.24) 0%, rgba(157, 78, 221, 0.2) 35%, transparent 70%), linear-gradient(135deg, #0c0620 0%, #1e1045 50%, #070312 100%);
+    --font-family: 'Poppins', 'Lexend Deca', sans-serif;
+    --card-bg: var(--bg-secondary);
+    --text-color: var(--text-primary);
+    --text-muted: var(--text-secondary);
+    --bg-main: var(--bg-primary);
+    --text-main: var(--text-primary);
+    --riot-accent: var(--accent-color);
+    --focus-ring: rgba(76, 201, 240, 0.5);
+    --theme-title: "TEAMFIGHT TACTICS";
+    --theme-symbol: "🌌";
+    --theme-badge-color: #9d4edd;
 }
 
+/* --------------------------------------------------------------------------
+   5. Star Guardian Theme ('starguardian')
+   Pastel Pink, Magenta & Gold, magical girl glitter glow & star brilliance
+   -------------------------------------------------------------------------- */
+[data-theme="starguardian"], [data-theme="star-guardian"] {
+    /* 9 Required Standard Theme Variables */
+    --bg-primary: #180c24;
+    --bg-secondary: #2c123d;
+    --accent-color: #ff66ab;
+    --accent-glow: rgba(255, 102, 171, 0.5);
+    --text-primary: #fff0f7;
+    --text-secondary: #f3b4d4;
+    --border-color: rgba(255, 102, 171, 0.45);
+    --input-bg: rgba(44, 18, 61, 0.85);
+    --btn-gradient: linear-gradient(135deg, #ff66ab 0%, #ffd166 100%);
+
+    /* Compatibility & Component Aliases */
+    --primary: var(--accent-color);
+    --primary-hover: #ff85be;
+    --accent: #ffd166;
+    --bg-glow: var(--accent-glow);
+    --wallpaper-gradient: radial-gradient(circle at 75% 20%, rgba(255, 102, 171, 0.3) 0%, rgba(255, 209, 102, 0.2) 35%, transparent 65%), linear-gradient(135deg, #160a20 0%, #291038 50%, #0d0514 100%);
+    --font-family: 'Poppins', 'Quicksand', 'Lexend Deca', sans-serif;
+    --card-bg: var(--bg-secondary);
+    --text-color: var(--text-primary);
+    --text-muted: var(--text-secondary);
+    --bg-main: var(--bg-primary);
+    --text-main: var(--text-primary);
+    --riot-accent: var(--accent-color);
+    --focus-ring: rgba(255, 102, 171, 0.55);
+    --theme-title: "STAR GUARDIAN";
+    --theme-symbol: "✨";
+    --theme-badge-color: #ff66ab;
+}
+
+/* --------------------------------------------------------------------------
+   6. K/DA Theme ('kda')
+   Neon Cyber Violet & Hot Pink, prestige pop-star dark cyber & holographic edge
+   -------------------------------------------------------------------------- */
+[data-theme="kda"] {
+    /* 9 Required Standard Theme Variables */
+    --bg-primary: #090714;
+    --bg-secondary: #17122e;
+    --accent-color: #c026d3;
+    --accent-glow: rgba(217, 70, 239, 0.55);
+    --text-primary: #ffffff;
+    --text-secondary: #c4b5fd;
+    --border-color: rgba(192, 38, 211, 0.55);
+    --input-bg: rgba(23, 18, 46, 0.88);
+    --btn-gradient: linear-gradient(135deg, #c026d3 0%, #06b6d4 100%);
+
+    /* Compatibility & Component Aliases */
+    --primary: var(--accent-color);
+    --primary-hover: #d946ef;
+    --accent: #06b6d4;
+    --bg-glow: var(--accent-glow);
+    --wallpaper-gradient: radial-gradient(ellipse at 80% 25%, rgba(192, 38, 211, 0.3) 0%, rgba(6, 182, 212, 0.2) 40%, transparent 70%), linear-gradient(135deg, #080612 0%, #15102a 50%, #040308 100%);
+    --font-family: 'Teko', 'Lexend Deca', 'Montserrat', sans-serif;
+    --card-bg: var(--bg-secondary);
+    --text-color: var(--text-primary);
+    --text-muted: var(--text-secondary);
+    --bg-main: var(--bg-primary);
+    --text-main: var(--text-primary);
+    --riot-accent: var(--accent-color);
+    --focus-ring: rgba(217, 70, 239, 0.55);
+    --theme-title: "K/DA POP/STARS";
+    --theme-symbol: "💎";
+    --theme-badge-color: #c026d3;
+}
+
+/* ==========================================================================
+   Global Base & Transitions
+   ========================================================================== */
 body {
-    background: var(--wallpaper-gradient);
+    background: var(--bg-primary);
     font-family: var(--font-family);
-    color: var(--text-color);
-    transition: background 0.4s ease, color 0.4s ease;
+    color: var(--text-primary);
+    transition: background-color 0.4s ease, color 0.4s ease;
     margin: 0;
     min-height: 100vh;
+}
+
+/* Login Sidebar Container */
+.login {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    border-right: 1px solid var(--border-color) !important;
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.4) !important;
+    transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.login__title {
+    color: var(--text-primary) !important;
+    transition: color 0.3s ease;
+}
+
+/* Form Inputs & Labels */
+.login__label span {
+    color: var(--text-secondary) !important;
+    transition: color 0.2s ease, top 0.2s ease, font-size 0.2s ease;
+}
+
+.input {
+    background-color: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+}
+
+.input:focus {
+    background-color: var(--bg-primary) !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 3px var(--focus-ring) !important;
+}
+
+.input:not(:placeholder-shown) + span,
+.login__label .span-active {
+    color: var(--accent-color) !important;
+}
+
+/* Submit Action Button */
+.login__button {
+    background: var(--btn-gradient) !important;
+    box-shadow: 0 6px 20px var(--accent-glow) !important;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, filter 0.2s ease !important;
+}
+
+.login__button:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.04) !important;
+    box-shadow: 0 8px 30px var(--accent-glow) !important;
+    filter: brightness(1.12);
+}
+
+.login__button:active:not(:disabled) {
+    transform: scale(0.97) !important;
+}
+
+/* Links & Checkbox */
+.login__link {
+    color: var(--text-secondary) !important;
+    transition: color 0.2s ease;
+}
+
+.login__link:hover {
+    color: var(--accent-color) !important;
+    text-shadow: 0 0 8px var(--accent-glow);
+}
+
+.login__label--checkbox {
+    color: var(--text-secondary) !important;
+}
+
+.input--checkbox {
+    background-color: var(--input-bg) !important;
+    border: 2px solid var(--border-color) !important;
+}
+
+.input--checkbox:checked {
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Top Toolbar Controls */
+.control-select, .control-btn {
+    background: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    transition: all 0.2s ease;
+}
+
+.control-select:hover, .control-btn:hover {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 12px var(--accent-glow) !important;
+    color: #ffffff !important;
+}
+
+.control-select option {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Theme Quick Switcher Chips */
+.theme-quick-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 3px 5px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-chip-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.theme-chip-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.theme-chip-btn.active {
+    background: var(--btn-gradient) !important;
+    color: #ffffff !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 10px var(--accent-glow) !important;
+    transform: scale(1.08);
+}
+
+/* Wallpaper Background */
+.wallpaper {
+    background-image: var(--wallpaper-gradient) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    transition: background-image 0.5s ease;
+}
+
+/* Modals & Dialogs */
+.modal-box {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px var(--accent-glow) !important;
+    color: var(--text-primary) !important;
+}
+
+.btn-action-primary {
+    background: var(--btn-gradient) !important;
+    box-shadow: 0 4px 18px var(--accent-glow) !important;
+    border: none !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Distinct Game-Specific Thematic Nuances
+   ========================================================================== */
+
+/* 1. Riot: Aggressive Hextech Industrial Accent */
+[data-theme="riot"] .login {
+    border-right: 2px solid rgba(235, 0, 41, 0.6) !important;
+}
+[data-theme="riot"] .login__button {
+    border-radius: 16px !important;
+}
+
+/* 2. Valorant: Tactical Geometric Chamfer & Angular Cuts */
+[data-theme="valorant"] .login {
+    border-right: 2px solid #ff4655 !important;
+}
+[data-theme="valorant"] .input {
+    border-radius: 2px !important;
+    font-family: 'Teko', sans-serif !important;
+    font-size: 1.15rem !important;
+    letter-spacing: 0.5px;
+}
+[data-theme="valorant"] .login__title {
+    font-family: 'Teko', sans-serif !important;
+    font-size: 2.2rem !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+[data-theme="valorant"] .login__button {
+    border-radius: 2px !important;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)) !important;
+}
+[data-theme="valorant"] .control-select, 
+[data-theme="valorant"] .control-btn {
+    border-radius: 2px !important;
+}
+
+/* 3. LoL: Hextech Runic Ornate Borders & Golden Filigree */
+[data-theme="lol"] .login {
+    border-right: 1px solid rgba(200, 170, 109, 0.7) !important;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6), inset -1px 0 0 rgba(10, 200, 185, 0.2) !important;
+}
+[data-theme="lol"] .login__title {
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(200, 170, 109, 0.4);
+}
+[data-theme="lol"] .input {
+    border-radius: 4px !important;
+    border: 1px solid rgba(200, 170, 109, 0.45) !important;
+}
+[data-theme="lol"] .input:focus {
+    border-color: #0ac8b9 !important;
+    box-shadow: 0 0 12px rgba(10, 200, 185, 0.5), inset 0 0 6px rgba(10, 200, 185, 0.2) !important;
+}
+[data-theme="lol"] .login__button {
+    border: 1px solid #f0e6d2 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 0 18px rgba(200, 170, 109, 0.55), 0 0 35px rgba(10, 200, 185, 0.3) !important;
+}
+
+/* 4. TFT: Cosmic Starlight Nebula Soft Flow */
+[data-theme="tft"] .login {
+    border-right: 1px solid rgba(157, 78, 221, 0.5) !important;
+}
+[data-theme="tft"] .input {
+    border-radius: 12px !important;
+    border: 1px solid rgba(157, 78, 221, 0.4) !important;
+}
+[data-theme="tft"] .login__button {
+    border-radius: 28px !important;
+    box-shadow: 0 0 25px rgba(157, 78, 221, 0.6), 0 0 45px rgba(76, 201, 240, 0.35) !important;
+}
+[data-theme="tft"] .control-select, 
+[data-theme="tft"] .control-btn {
+    border-radius: 16px !important;
+}
+
+/* 5. Star Guardian: Pastel Pink & Gold Magical Girl Glow */
+[data-theme="starguardian"] .login, 
+[data-theme="star-guardian"] .login {
+    border-right: 1.5px solid rgba(255, 102, 171, 0.55) !important;
+    box-shadow: 10px 0 35px rgba(26, 12, 36, 0.7), inset -1px 0 15px rgba(255, 102, 171, 0.15) !important;
+}
+[data-theme="starguardian"] .login__title,
+[data-theme="star-guardian"] .login__title {
+    color: #fff0f7 !important;
+    text-shadow: 0 0 12px rgba(255, 102, 171, 0.6), 0 0 25px rgba(255, 209, 102, 0.3);
+}
+[data-theme="starguardian"] .input,
+[data-theme="star-guardian"] .input {
+    border-radius: 14px !important;
+    border: 1.5px solid rgba(255, 102, 171, 0.35) !important;
+}
+[data-theme="starguardian"] .input:focus,
+[data-theme="star-guardian"] .input:focus {
+    border-color: #ffd166 !important;
+    box-shadow: 0 0 18px rgba(255, 102, 171, 0.5), 0 0 8px rgba(255, 209, 102, 0.4) !important;
+}
+[data-theme="starguardian"] .login__button,
+[data-theme="star-guardian"] .login__button {
+    border-radius: 24px !important;
+    border: 1.5px solid #ffd166 !important;
+    box-shadow: 0 0 22px rgba(255, 102, 171, 0.65), 0 0 45px rgba(255, 209, 102, 0.35) !important;
+}
+[data-theme="starguardian"] .control-select, 
+[data-theme="starguardian"] .control-btn,
+[data-theme="star-guardian"] .control-select, 
+[data-theme="star-guardian"] .control-btn {
+    border-radius: 20px !important;
+}
+
+/* 6. K/DA: Cyber Holographic Pop-Star Violet & Diamond Shimmer */
+[data-theme="kda"] .login {
+    border-right: 1.5px solid rgba(192, 38, 211, 0.6) !important;
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.8), inset -1px 0 15px rgba(6, 182, 212, 0.15) !important;
+}
+[data-theme="kda"] .login__title {
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 12px rgba(192, 38, 211, 0.7), 0 0 25px rgba(6, 182, 212, 0.4);
+    text-transform: uppercase;
+}
+[data-theme="kda"] .input {
+    border-radius: 4px !important;
+    border: 1px solid rgba(192, 38, 211, 0.5) !important;
+}
+[data-theme="kda"] .input:focus {
+    border-color: #06b6d4 !important;
+    box-shadow: 0 0 16px rgba(6, 182, 212, 0.55), inset 0 0 6px rgba(192, 38, 211, 0.3) !important;
+}
+[data-theme="kda"] .login__button {
+    border-radius: 6px !important;
+    border: 1px solid #06b6d4 !important;
+    box-shadow: 0 0 24px rgba(192, 38, 211, 0.65), 0 0 40px rgba(6, 182, 212, 0.4) !important;
 }

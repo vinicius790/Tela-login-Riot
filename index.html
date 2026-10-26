@@ -217,6 +217,11 @@
 
   <!-- Barra de Ferramentas Superior (Idioma, Tema, Áudio, Tela Cheia, Demo Fill) -->
   <header class="top-controls" role="region" aria-label="Preferências do usuário">
+    <a href="index/account-settings.html" class="control-btn" id="btnTopAccount" title="Central de Configurações da Conta Riot" style="text-decoration: none; display: flex; align-items: center; gap: 6px; border-color: rgba(235, 0, 41, 0.4); background: rgba(235, 0, 41, 0.12);">
+      <span>⚙️</span>
+      <span id="topAccountName">Minha Conta</span>
+    </a>
+
     <button type="button" class="control-btn" id="btnDemoFill" title="Auto-preencher credenciais de teste (player1 / password123)" style="background: rgba(235, 0, 41, 0.25); border-color: #EB0029; color: #FFF; font-weight: bold;">
       <span>⚡ Demo Fill</span>
     </button>
@@ -238,11 +243,22 @@
     </select>
 
     <select id="themeSelector" class="control-select" aria-label="Seletor de tema">
-      <option value="riot" selected>Riot Games</option>
-      <option value="valorant">Valorant</option>
-      <option value="lol">League of Legends</option>
-      <option value="tft">Teamfight Tactics</option>
+      <option value="riot" selected>⚡ Riot Games</option>
+      <option value="valorant">🎯 Valorant</option>
+      <option value="lol">⚔️ League of Legends</option>
+      <option value="tft">🌌 Teamfight Tactics</option>
+      <option value="starguardian">✨ Star Guardian</option>
+      <option value="kda">💎 K/DA Pop-Stars</option>
     </select>
+
+    <div class="theme-quick-bar" role="group" aria-label="Alternador Rápido de Temas">
+      <button type="button" class="theme-chip-btn active" data-theme-value="riot" title="Riot Games (Padrão) [⚡]">⚡</button>
+      <button type="button" class="theme-chip-btn" data-theme-value="valorant" title="Valorant [🎯]">🎯</button>
+      <button type="button" class="theme-chip-btn" data-theme-value="lol" title="League of Legends [⚔️]">⚔️</button>
+      <button type="button" class="theme-chip-btn" data-theme-value="tft" title="Teamfight Tactics [🌌]">🌌</button>
+      <button type="button" class="theme-chip-btn" data-theme-value="starguardian" title="Star Guardian [✨]">✨</button>
+      <button type="button" class="theme-chip-btn" data-theme-value="kda" title="K/DA Pop-Stars [💎]">💎</button>
+    </div>
   </header>
 
   <main>
@@ -317,6 +333,13 @@
         <div class="sub-links-group">
           <a href="#" class="login__link" id="linkForgotPassword" data-i18n="cantSignIn">não consegue iniciar sessão?</a>
           <a href="#" class="login__link" id="linkRegister" data-i18n="createAccount">criar conta</a>
+          <a href="index/account-settings.html" class="login__link" style="color: var(--primary, #EB0029); font-weight: 700; font-size: 0.78em; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+            <span>Configurações de Conta Riot ⚙️</span>
+          </a>
+          <a href="trembolona.html" class="login__link" style="color: #10B981; font-size: 0.75em; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px;">
+            <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#10B981; box-shadow:0 0 6px #10B981;"></span>
+            Status dos Serviços & Ping Riot →
+          </a>
           <a href="bodyfit/index.html" class="login__link" style="color: #6B7280; font-size: 0.75em;">Ver Projeto Bodyfit →</a>
         </div>
 
@@ -392,6 +415,7 @@
   <script src="js/mock-auth.js"></script>
   <script src="js/auth.js"></script>
   <script src="Durateston.js"></script>
+  <script src="js/riot-security.js"></script>
 
   <script>
     // Eventos de Autopreenchimento de Teste (Demo Fill)

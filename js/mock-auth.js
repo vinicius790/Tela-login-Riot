@@ -71,15 +71,17 @@
                 );
 
                 if (!user) {
-                    this.dispatch('auth:error', { message: 'Nome de usuário ou senha incorretos.' });
-                    if (window.showRiotToast) window.showRiotToast('Credenciais inválidas.', 'error');
+                    const msg = window.i18n ? window.i18n.t('toast_invalid_credentials') : 'Nome de usuário ou senha incorretos.';
+                    this.dispatch('auth:error', { message: msg });
+                    if (window.showRiotToast) window.showRiotToast(msg, 'error');
                     if (window.riotAudio) window.riotAudio.play('error');
                     return;
                 }
 
                 this.pendingUser = { ...user, rememberMe };
                 this.dispatch('auth:2fa_required', { username: user.username, email: user.email });
-                if (window.showRiotToast) window.showRiotToast('Código 2FA enviado para ' + user.email + ' (Dica: 123456)', 'info');
+                const toast2fa = window.i18n ? window.i18n.t('toast_2fa_sent', { email: user.email }) : ('Código 2FA enviado para ' + user.email + ' (Dica: 123456)');
+                if (window.showRiotToast) window.showRiotToast(toast2fa, 'info');
                 if (window.riotAudio) window.riotAudio.play('click');
             }, 450);
         }
@@ -90,8 +92,9 @@
                 const user = users.find(u => u.username.toLowerCase() === username.toLowerCase()) || this.pendingUser;
 
                 if (!user || (user.twoFactorCode !== code && code !== '123456')) {
-                    this.dispatch('auth:error', { message: 'Código de segurança incorreto.' });
-                    if (window.showRiotToast) window.showRiotToast('Código de segurança incorreto.', 'error');
+                    const msg = window.i18n ? window.i18n.t('toast_2fa_incorrect') : 'Código de segurança incorreto.';
+                    this.dispatch('auth:error', { message: msg });
+                    if (window.showRiotToast) window.showRiotToast(msg, 'error');
                     if (window.riotAudio) window.riotAudio.play('error');
                     return;
                 }
@@ -113,7 +116,8 @@
                 this.dispatch('auth:success', { user: sessionData });
                 
                 if (window.triggerConfetti) window.triggerConfetti();
-                if (window.showRiotToast) window.showRiotToast(`Bem-vindo, ${user.username}! Login realizado.`, 'success');
+                const welcomeMsg = window.i18n ? window.i18n.t('toast_login_success', { username: user.username }) : `Bem-vindo, ${user.username}! Login realizado.`;
+                if (window.showRiotToast) window.showRiotToast(welcomeMsg, 'success');
                 if (window.riotAudio) window.riotAudio.play('success');
             }, 500);
         }
@@ -124,13 +128,15 @@
                 const user = users.find(u => u.email.toLowerCase() === identifier.toLowerCase() || u.username.toLowerCase() === identifier.toLowerCase());
 
                 if (!user) {
-                    this.dispatch('auth:error', { message: 'Conta ou e-mail não encontrado.' });
-                    if (window.showRiotToast) window.showRiotToast('Conta não encontrada.', 'error');
+                    const notFound = window.i18n ? window.i18n.t('toast_recovery_not_found') : 'Conta ou e-mail não encontrado.';
+                    this.dispatch('auth:error', { message: notFound });
+                    if (window.showRiotToast) window.showRiotToast(notFound, 'error');
                     return;
                 }
 
                 this.dispatch('auth:password_recovery_sent', { email: user.email });
-                if (window.showRiotToast) window.showRiotToast('Instruções de redefinição enviadas para ' + user.email, 'success');
+                const recSent = window.i18n ? window.i18n.t('toast_recovery_sent', { email: user.email }) : ('Instruções de redefinição enviadas para ' + user.email);
+                if (window.showRiotToast) window.showRiotToast(recSent, 'success');
             }, 500);
         }
 
@@ -140,8 +146,9 @@
             setTimeout(() => {
                 const users = JSON.parse(localStorage.getItem(this.usersKey)) || [];
                 if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-                    this.dispatch('auth:error', { message: 'Este nome de usuário já está em uso.' });
-                    if (window.showRiotToast) window.showRiotToast('Nome de usuário já existe.', 'error');
+                    const existsMsg = window.i18n ? window.i18n.t('toast_user_exists') : 'Este nome de usuário já está em uso.';
+                    this.dispatch('auth:error', { message: existsMsg });
+                    if (window.showRiotToast) window.showRiotToast(existsMsg, 'error');
                     return;
                 }
 
@@ -157,7 +164,8 @@
 
                 this.dispatch('auth:account_created', { username });
                 if (window.triggerConfetti) window.triggerConfetti();
-                if (window.showRiotToast) window.showRiotToast('Conta Riot ID criada com sucesso! Faça login.', 'success');
+                const createdMsg = window.i18n ? window.i18n.t('toast_account_created') : 'Conta Riot ID criada com sucesso! Faça login.';
+                if (window.showRiotToast) window.showRiotToast(createdMsg, 'success');
                 if (window.riotAudio) window.riotAudio.play('success');
             }, 500);
         }
@@ -267,7 +275,8 @@
                         if (email && user && pass && pass.length >= 8) {
                             this.createAccount(user, email, pass);
                         } else {
-                            if (window.showRiotToast) window.showRiotToast('Preencha todos os campos (senha mín. 8 caracteres).', 'error');
+                            const err = window.i18n ? window.i18n.t('toast_empty_fields') : 'Preencha todos os campos (senha mín. 8 caracteres).';
+                            if (window.showRiotToast) window.showRiotToast(err, 'error');
                         }
                     });
                 }
@@ -281,9 +290,28 @@
         }
 
         registerServiceWorker() {
-            if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+            if ('serviceWorker' in navigator && (window.location.protocol.startsWith('http') || window.location.hostname === 'localhost')) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js').catch(() => {});
+                    const swPath = window.location.pathname.includes('/index/') ? '../js/sw.js' : './sw.js';
+                    navigator.serviceWorker.register(swPath)
+                        .catch(() => navigator.serviceWorker.register('./js/sw.js'))
+                        .then((reg) => {
+                            if (reg && reg.onupdatefound) {
+                                reg.onupdatefound = () => {
+                                    const installingWorker = reg.installing;
+                                    if (installingWorker) {
+                                        installingWorker.onstatechange = () => {
+                                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                                if (window.showRiotToast) {
+                                                    window.showRiotToast('Nova versão disponível (riot-portal-v2)!', 'info');
+                                                }
+                                            }
+                                        };
+                                    }
+                                };
+                            }
+                        })
+                        .catch(() => {});
                 });
             }
         }

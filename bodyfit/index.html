@@ -4,205 +4,485 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bodyfit — Plataforma de Performance & Saúde</title>
+    <title>Bodyfit — Riot Esports Performance & Training Lab</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%2300FF88' d='M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 5.57 14.14 14.14 5.57 17.71 9.14 16.29 10.57 17.71 12l2.86 2.86z'/></svg>">
     <link rel="stylesheet" href="Termogenico.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        .calc-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
-        }
-
-        .calc-card {
-            background: #1C1C22;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .calc-card:hover {
-            transform: translateY(-4px);
-            border-color: #00FF88;
-        }
-
-        .calc-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .input-group {
-            flex: 1;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.8rem;
-            color: #9CA3AF;
-            margin-bottom: 4px;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 9px 12px;
-            background: #111116;
-            border: 1px solid #374151;
-            color: #FFF;
-            border-radius: 6px;
-            outline: none;
-            font-size: 0.9rem;
-        }
-
-        .btn-calc {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: opacity 0.2s;
-            margin-top: 6px;
-        }
-
-        .btn-calc:hover {
-            opacity: 0.9;
-        }
-
-        .result-box {
-            margin-top: 14px;
-            padding: 10px;
-            border-radius: 6px;
-            background: rgba(0, 0, 0, 0.3);
-            text-align: center;
-            font-size: 0.95rem;
-            min-height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
 </head>
 <body>
+
+    <!-- Header & Navegação Superior -->
     <header class="header">
-       <img class="logo" src="Logo.png" alt="Bodyfit Logo"> 
-       <h1>Bodyfit</h1>
-       <nav style="margin-left: auto; display: flex; align-items: center; gap: 20px;">
-           <a href="#calc" style="color: #00FF88; text-decoration: none; font-weight: bold;">Calculadoras</a>
-           <a href="#planos" style="color: #00FF88; text-decoration: none; font-weight: bold;">Planos</a>
-           <a href="../index.html" style="color: #9CA3AF; text-decoration: none; font-size: 0.9rem;">← Voltar ao Riot Client</a>
-       </nav>
+        <a href="#" class="logo-container">
+            <img class="logo" src="Logo.png" alt="Bodyfit Logo"> 
+            <div class="header-brand">
+                <h1>Bodyfit <span>Esports</span></h1>
+                <span class="header-tagline">Performance &amp; Biometrics Lab</span>
+            </div>
+        </a>
+        
+        <nav class="nav-links">
+            <a href="#esports-suite" class="nav-link"><i class="fa-solid fa-gamepad" style="color: var(--neon-green);"></i> Esports Lab</a>
+            <a href="#calc" class="nav-link"><i class="fa-solid fa-calculator" style="color: var(--hextech-cyan);"></i> Biometria</a>
+            <a href="#planos" class="nav-link"><i class="fa-solid fa-dumbbell" style="color: var(--hextech-blue);"></i> Planos</a>
+            <button type="button" class="nav-link nav-btn-highlight" onclick="openErgoModal()">
+                <i class="fa-solid fa-person-walking"></i> Ergonomia &amp; Postura
+            </button>
+            <button type="button" id="sound-toggle" class="sound-toggle-btn active" onclick="toggleSound()">
+                <i class="fa-solid fa-volume-high"></i> Áudio: ON
+            </button>
+            <a href="../index/index.html" class="nav-link-back">
+                <i class="fa-solid fa-arrow-left"></i> Riot Client
+            </a>
+        </nav>
     </header>
 
-    <main style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
-        <section style="text-align: center; margin-bottom: 45px;">
-            <h2 style="font-size: 2.6rem; margin-bottom: 12px; color: #00FF88;">Potencialize Seus Resultados</h2>
-            <p style="color: #9CA3AF; font-size: 1.1rem; max-width: 650px; margin: 0 auto;">
-                Ferramentas biométricas gratuitas de alta precisão para controle de peso, hidratação celular e meta calórica diária.
+    <main style="max-width: 1060px; margin: 30px auto; padding: 0 20px;">
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-badge">
+                <i class="fa-solid fa-microchip"></i> Riot Esports Suite • Edição 2026
+            </div>
+            <h2 class="hero-title">
+                Alcance a Máxima Velocidade &amp; <span>Performance Cognitiva</span>
+            </h2>
+            <p class="hero-subtitle">
+                O laboratório biomecânico definitivo para cyberatletas e entusiastas. Meça seus reflexos visuais contra recordes de Pro Players, treine cliques por minuto (APM) e mantenha hidratação e metabolismo no pico.
             </p>
-        </section>
-
-        <!-- Grade de Calculadoras Fitness -->
-        <section id="calc" class="calc-grid">
-            <!-- 1. Calculadora de IMC -->
-            <div class="calc-card">
-                <h3 style="color: #00FF88;"><i class="fa-solid fa-calculator"></i> Índice de Massa Corporal</h3>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label for="peso">Peso (kg)</label>
-                        <input type="number" id="peso" placeholder="75">
-                    </div>
-                    <div class="input-group">
-                        <label for="altura">Altura (m)</label>
-                        <input type="number" step="0.01" id="altura" placeholder="1.75">
-                    </div>
-                </div>
-                <button type="button" class="btn-calc" onclick="calcularIMC()" style="background: #00FF88; color: #111;">Calcular IMC</button>
-                <div id="resultado-imc" class="result-box">Aguardando dados...</div>
-            </div>
-
-            <!-- 2. Calculadora de Ingestão de Água -->
-            <div class="calc-card">
-                <h3 style="color: #38BDF8;"><i class="fa-solid fa-droplet"></i> Meta de Hidratação</h3>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label for="peso-agua">Seu Peso (kg)</label>
-                        <input type="number" id="peso-agua" placeholder="70">
-                    </div>
-                </div>
-                <button type="button" class="btn-calc" onclick="calcularAgua()" style="background: #38BDF8; color: #111;">Calcular Ingestão</button>
-                <div id="resultado-agua" class="result-box">Aguardando dados...</div>
-            </div>
-
-            <!-- 3. Taxa Metabólica Basal (TMB) -->
-            <div class="calc-card">
-                <h3 style="color: #C084FC;"><i class="fa-solid fa-fire-flame-curved"></i> Taxa Metabólica (TMB)</h3>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label for="tmb-peso">Peso (kg)</label>
-                        <input type="number" id="tmb-peso" placeholder="75">
-                    </div>
-                    <div class="input-group">
-                        <label for="tmb-altura">Altura (cm)</label>
-                        <input type="number" id="tmb-altura" placeholder="175">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label for="tmb-idade">Idade</label>
-                        <input type="number" id="tmb-idade" placeholder="25">
-                    </div>
-                    <div class="input-group">
-                        <label for="tmb-sexo">Sexo</label>
-                        <select id="tmb-sexo">
-                            <option value="m">Masculino</option>
-                            <option value="f">Feminino</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="button" class="btn-calc" onclick="calcularTMB()" style="background: #C084FC; color: #111;">Calcular Calorias</button>
-                <div id="resultado-tmb" class="result-box">Aguardando dados...</div>
+            <div class="hero-actions">
+                <a href="#esports-suite" class="btn-hero btn-hero-primary">
+                    <i class="fa-solid fa-bolt"></i> Treinar APM &amp; Reflexos
+                </a>
+                <a href="#calc" class="btn-hero btn-hero-secondary">
+                    <i class="fa-solid fa-heart-pulse"></i> Calculadoras Biométricas
+                </a>
+                <button type="button" onclick="openErgoModal()" class="btn-hero btn-hero-secondary">
+                    <i class="fa-solid fa-chair"></i> Guia de Postura Pro
+                </button>
             </div>
         </section>
 
-        <!-- Planos de Treinamento -->
-        <section id="planos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
-            <div style="background: #1C1C22; padding: 25px; border-radius: 12px; border-top: 4px solid #00FF88;">
-                <h3 style="color:#FFF;">Hipertrofia Muscular</h3>
-                <p style="color: #9CA3AF; margin: 15px 0; font-size: 0.92rem;">Treinos com sobrecarga progressiva, periodização de força e recuperação otimizada.</p>
-                <span style="font-size: 1.25rem; font-weight: bold; color: #00FF88;">PROGRAMA PRO</span>
-            </div>
-            <div style="background: #1C1C22; padding: 25px; border-radius: 12px; border-top: 4px solid #38BDF8;">
-                <h3 style="color:#FFF;">Definição & Cutting</h3>
-                <p style="color: #9CA3AF; margin: 15px 0; font-size: 0.92rem;">Protocolos de déficit calórico inteligente preservando 100% da sua massa magra.</p>
-                <span style="font-size: 1.25rem; font-weight: bold; color: #38BDF8;">PROGRAMA ELITE</span>
-            </div>
-            <div style="background: #1C1C22; padding: 25px; border-radius: 12px; border-top: 4px solid #C084FC;">
-                <h3 style="color:#FFF;">Longevidade & Saúde</h3>
-                <p style="color: #9CA3AF; margin: 15px 0; font-size: 0.92rem;">Foco em flexibilidade, saúde cardiovascular, postura e bem-estar integral.</p>
-                <span style="font-size: 1.25rem; font-weight: bold; color: #C084FC;">PROGRAMA VITAL</span>
+        <!-- Gamer Active Break Timer Bar -->
+        <section style="margin-bottom: 35px;">
+            <div class="break-timer-box">
+                <div class="break-timer-info">
+                    <h4><i class="fa-solid fa-clock-rotate-left" style="color: var(--neon-green);"></i> Gamer Break Alert: Prevenção de Fadiga &amp; Túnel do Carpo</h4>
+                    <p>Ative o cronômetro para receber lembretes de pausa, alongamento de punhos e hidratação entre filas ranqueadas.</p>
+                </div>
+                <div class="break-timer-controls">
+                    <div style="display: flex; gap: 4px;">
+                        <button class="sound-toggle-btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick="setBreakDuration(30)">30m</button>
+                        <button class="sound-toggle-btn active" style="padding: 4px 8px; font-size: 0.75rem;" onclick="setBreakDuration(45)">45m</button>
+                        <button class="sound-toggle-btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick="setBreakDuration(60)">60m</button>
+                    </div>
+                    <span id="break-timer-display" class="timer-countdown">45:00</span>
+                    <button id="btn-break-toggle" class="btn-timer-action" onclick="toggleBreakTimer()">
+                        <i class="fa-solid fa-play"></i> Iniciar Timer
+                    </button>
+                    <button class="sound-toggle-btn" onclick="resetBreakTimer()" title="Reiniciar">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
             </div>
         </section>
+
+        <!-- ========================================================== -->
+        <!-- SEÇÃO 1: ESPORTS PERFORMANCE TRAINING SUITE (APM & REFLEX) -->
+        <!-- ========================================================== -->
+        <section id="esports-suite" style="margin-bottom: 50px;">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">
+                        <i class="fa-solid fa-crosshairs" style="color: var(--neon-green);"></i> Esports Performance Training Suite
+                    </h3>
+                    <p class="section-desc">Métricas de precisão mecânica, APM contínuo e tempo de latência motora com calibração profissional.</p>
+                </div>
+                <div>
+                    <span class="esports-badge badge-hextech"><i class="fa-solid fa-shield-halved"></i> Hextech Certified</span>
+                </div>
+            </div>
+
+            <div class="esports-grid">
+                
+                <!-- CARD 1: APM CLICKER & PRECISION TRAINER -->
+                <div class="esports-card">
+                    <div class="esports-card-header">
+                        <div>
+                            <h4 class="esports-card-title">
+                                <i class="fa-solid fa-computer-mouse" style="color: var(--neon-green);"></i> APM Clicker Trainer
+                            </h4>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">
+                                Sprint de 10 segundos • Cálculo dinâmico de Ações Por Minuto
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <button id="btn-mode-speed" class="sound-toggle-btn apm-mode-btn active" onclick="setApmMode('speed')" title="Cliques Brutos Rápidos">
+                                <i class="fa-solid fa-bolt"></i> Burst
+                            </button>
+                            <button id="btn-mode-precision" class="sound-toggle-btn apm-mode-btn" onclick="setApmMode('precision')" title="Alvos Hextech Aleatórios">
+                                <i class="fa-solid fa-bullseye"></i> Precisão
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Indicadores de status da sessão de APM -->
+                    <div class="stats-row">
+                        <div class="stat-pill">
+                            <div class="stat-pill-label">Cliques / Acertos</div>
+                            <div id="apm-clicks-val" class="stat-pill-val" style="color: var(--neon-green);">0</div>
+                        </div>
+                        <div class="stat-pill">
+                            <div class="stat-pill-label">Tempo Restante</div>
+                            <div id="apm-time-val" class="stat-pill-val" style="color: var(--hextech-cyan);">10.0s</div>
+                        </div>
+                        <div class="stat-pill">
+                            <div class="stat-pill-label">APM Atual</div>
+                            <div id="apm-current-val" class="stat-pill-val" style="color: var(--hextech-gold);">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Arena Interativa de Cliques -->
+                    <div id="apm-arena" class="apm-arena" onclick="handleApmArenaClick(event)">
+                        <div id="apm-prompt-title" class="apm-prompt-text">CLIQUE PARA INICIAR</div>
+                        <div id="apm-prompt-sub" class="apm-prompt-sub">O cronômetro de 10 segundos inicia no primeiro clique.</div>
+                    </div>
+
+                    <!-- Barra de progresso de tempo -->
+                    <div class="timer-bar-container">
+                        <div id="apm-timer-fill" class="timer-bar-fill"></div>
+                    </div>
+
+                    <!-- Resultado de Rank APM após os 10s -->
+                    <div id="apm-rank-result" class="rank-result-container"></div>
+
+                    <!-- Rodapé do Card APM com recorde -->
+                    <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);">
+                        <span><i class="fa-solid fa-trophy" style="color: var(--hextech-gold);"></i> Seu Recorde: <strong id="apm-best-val" style="color: #FFF;">0</strong> APM</span>
+                        <span><i class="fa-solid fa-circle-info"></i> Pro Avg: 280+ APM</span>
+                    </div>
+                </div>
+
+
+                <!-- CARD 2: VISUAL REFLEX / REACTION LATENCY TIMER -->
+                <div class="esports-card">
+                    <div class="esports-card-header">
+                        <div>
+                            <h4 class="esports-card-title">
+                                <i class="fa-solid fa-stopwatch" style="color: var(--hextech-blue);"></i> Visual Reflex Timer
+                            </h4>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">
+                                Latência neuromuscular em milissegundos (ms)
+                            </p>
+                        </div>
+                        <span class="esports-badge badge-neon"><i class="fa-solid fa-bolt-lightning"></i> Sensor de Precisão</span>
+                    </div>
+
+                    <!-- Estatísticas da sessão de Reflexo -->
+                    <div class="stats-row" style="grid-template-columns: repeat(2, 1fr);">
+                        <div class="stat-pill">
+                            <div class="stat-pill-label">Melhor Latência</div>
+                            <div id="reflex-best-val" class="stat-pill-val" style="color: var(--neon-green);">-- ms</div>
+                        </div>
+                        <div class="stat-pill">
+                            <div class="stat-pill-label">Média da Sessão</div>
+                            <div id="reflex-avg-val" class="stat-pill-val" style="color: var(--hextech-cyan);">-- ms</div>
+                        </div>
+                    </div>
+
+                    <!-- Box interativo do teste de reação -->
+                    <div id="reflex-box" class="reflex-box reflex-idle" onclick="handleReflexBoxClick()">
+                        <div style="font-size: 2.2rem; margin-bottom: 8px; color: var(--hextech-blue);">
+                            <i id="reflex-icon" class="fa-solid fa-play"></i>
+                        </div>
+                        <div id="reflex-title" class="reflex-title">CLIQUE PARA TESTAR</div>
+                        <div id="reflex-desc" class="reflex-desc">
+                            Aguarde a tela ficar <strong style="color: var(--neon-green);">VERDE</strong> e clique no menor tempo possível. Cuidado com falsas largadas!
+                        </div>
+                    </div>
+
+                    <!-- Histórico recente de tentativas -->
+                    <div style="margin-top: 14px;">
+                        <div style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Histórico Recente:</div>
+                        <div id="reflex-history-pills" class="history-pills">
+                            <span class="history-pill">Aguardando testes...</span>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Comparação com Pro Players -->
+                    <div class="pro-benchmark">
+                        <div class="benchmark-title">
+                            <span><i class="fa-solid fa-chart-simple"></i> Benchmark Esports Pro</span>
+                            <span style="color: var(--hextech-gold); font-size: 0.72rem;">Referência Global</span>
+                        </div>
+                        <div class="pro-ladder">
+                            <div class="pro-ladder-item faker">
+                                <span><i class="fa-solid fa-crown" style="color: #F0E6D2;"></i> <strong>Faker / Chovy</strong> (LCK Elite)</span>
+                                <span style="font-weight: 700; color: #F0E6D2;">~140 ms</span>
+                            </div>
+                            <div class="pro-ladder-item pro">
+                                <span><i class="fa-solid fa-trophy" style="color: var(--neon-green);"></i> <strong>Média Pro Player</strong> (CBLOL / LCS)</span>
+                                <span style="font-weight: 700; color: var(--neon-green);">~160 ms</span>
+                            </div>
+                            <div class="pro-ladder-item casual">
+                                <span><i class="fa-solid fa-gem" style="color: #38BDF8;"></i> <strong>Diamante / Mestre</strong></span>
+                                <span>~195 ms</span>
+                            </div>
+                            <div class="pro-ladder-item casual">
+                                <span><i class="fa-solid fa-user" style="color: var(--text-muted);"></i> <strong>Média Casual / Humana</strong></span>
+                                <span>~250 ms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ========================================================== -->
+        <!-- SEÇÃO 2: CALCULADORAS BIOMÉTRICAS (IMC, ÁGUA, TMB)         -->
+        <!-- ========================================================== -->
+        <section id="calc">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">
+                        <i class="fa-solid fa-heart-pulse" style="color: var(--neon-green);"></i> Biometria &amp; Saúde Gamer
+                    </h3>
+                    <p class="section-desc">Mantenha a saúde física e celular calibrada para longas sessões de scrims e solo queue.</p>
+                </div>
+                <div>
+                    <span class="esports-badge badge-neon"><i class="fa-solid fa-droplet"></i> Foco Celular</span>
+                </div>
+            </div>
+
+            <div class="calc-grid">
+                <!-- 1. Calculadora de IMC -->
+                <div class="calc-card card-green">
+                    <h3 style="color: var(--neon-green);"><i class="fa-solid fa-weight-scale"></i> Índice de Massa Corporal (IMC)</h3>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="peso">Peso (kg)</label>
+                            <input type="number" id="peso" placeholder="75">
+                        </div>
+                        <div class="input-group">
+                            <label for="altura">Altura (m)</label>
+                            <input type="number" step="0.01" id="altura" placeholder="1.75">
+                        </div>
+                    </div>
+                    <button type="button" class="btn-calc" onclick="calcularIMC()" style="background: var(--neon-green); color: #080A10;">
+                        <i class="fa-solid fa-calculator"></i> Calcular IMC
+                    </button>
+                    <div id="resultado-imc" class="result-box">Aguardando dados...</div>
+                </div>
+
+                <!-- 2. Calculadora de Ingestão de Água -->
+                <div class="calc-card card-blue">
+                    <h3 style="color: var(--hextech-blue);"><i class="fa-solid fa-droplet"></i> Meta de Hidratação Gamer</h3>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="peso-agua">Seu Peso (kg)</label>
+                            <input type="number" id="peso-agua" placeholder="70">
+                        </div>
+                    </div>
+                    <button type="button" class="btn-calc" onclick="calcularAgua()" style="background: var(--hextech-blue); color: #080A10;">
+                        <i class="fa-solid fa-bottle-water"></i> Calcular Ingestão
+                    </button>
+                    <div id="resultado-agua" class="result-box">Aguardando dados...</div>
+                </div>
+
+                <!-- 3. Taxa Metabólica Basal (TMB) -->
+                <div class="calc-card card-purple">
+                    <h3 style="color: var(--purple-tmb);"><i class="fa-solid fa-fire-flame-curved"></i> Taxa Metabólica Basal (TMB)</h3>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="tmb-peso">Peso (kg)</label>
+                            <input type="number" id="tmb-peso" placeholder="75">
+                        </div>
+                        <div class="input-group">
+                            <label for="tmb-altura">Altura (cm)</label>
+                            <input type="number" id="tmb-altura" placeholder="175">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="tmb-idade">Idade</label>
+                            <input type="number" id="tmb-idade" placeholder="24">
+                        </div>
+                        <div class="input-group">
+                            <label for="tmb-sexo">Sexo Biológico</label>
+                            <select id="tmb-sexo">
+                                <option value="m">Masculino</option>
+                                <option value="f">Feminino</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-calc" onclick="calcularTMB()" style="background: var(--purple-tmb); color: #080A10;">
+                        <i class="fa-solid fa-bolt"></i> Calcular Calorias Diárias
+                    </button>
+                    <div id="resultado-tmb" class="result-box">Aguardando dados...</div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================================== -->
+        <!-- SEÇÃO 3: PLANOS DE TREINAMENTO ESPORTS & FITNESS           -->
+        <!-- ========================================================== -->
+        <section id="planos">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">
+                        <i class="fa-solid fa-trophy" style="color: var(--hextech-gold);"></i> Programas de Alta Performance
+                    </h3>
+                    <p class="section-desc">Periodização biomecânica pensada para sinergia entre condicionamento muscular e agilidade motora.</p>
+                </div>
+            </div>
+
+            <div class="plans-grid">
+                <div class="plan-card plan-pro">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span class="plan-badge" style="color: var(--neon-green);">PROGRAMA PRO</span>
+                            <span class="esports-badge badge-neon">Força &amp; Grip</span>
+                        </div>
+                        <h3>Hipertrofia &amp; Estabilidade</h3>
+                        <p>Fortalecimento de antebraço, manguito rotador, trapézio e cadeia posterior para evitar fadiga em competições presenciais.</p>
+                    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Acompanhamento Biométrico</span>
+                        <span style="font-weight: 700; color: var(--neon-green);">Incluso</span>
+                    </div>
+                </div>
+
+                <div class="plan-card plan-elite">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span class="plan-badge" style="color: var(--hextech-blue);">PROGRAMA ELITE</span>
+                            <span class="esports-badge badge-hextech">Cognitivo &amp; Cutting</span>
+                        </div>
+                        <h3>Definição &amp; Foco Mental</h3>
+                        <p>Protocolos de queima de gordura preservando massa magra, combinados com otimização nutricional para clareza e foco nos clutchs.</p>
+                    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Refeições Pré-Game</span>
+                        <span style="font-weight: 700; color: var(--hextech-blue);">Personalizado</span>
+                    </div>
+                </div>
+
+                <div class="plan-card plan-vital">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span class="plan-badge" style="color: var(--purple-tmb);">PROGRAMA VITAL</span>
+                            <span class="esports-badge" style="background: rgba(192, 132, 252, 0.15); border: 1px solid rgba(192, 132, 252, 0.4); color: var(--purple-tmb);">Longevidade</span>
+                        </div>
+                        <h3>Postura &amp; Mobilidade Gamer</h3>
+                        <p>Correção postural contínua, descompressão discal da coluna, flexibilidade de punhos e saúde visual com protocolos preventivos.</p>
+                    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Sessões de Fisioterapia</span>
+                        <span style="font-weight: 700; color: var(--purple-tmb);">Semanais</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <footer style="text-align: center; padding: 24px; color: #6B7280; font-size: 0.85rem; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.06);">
-        &copy; 2026 Bodyfit Health Systems • Módulo Integrado
+
+    <!-- ========================================================== -->
+    <!-- MODAL: GUIA DE ERGONOMIA & POSTURA PRO GAMER               -->
+    <!-- ========================================================== -->
+    <div id="ergo-modal" class="modal-overlay">
+        <div class="modal-content animate-fade-in">
+            <div class="modal-header">
+                <h2>
+                    <i class="fa-solid fa-chair" style="color: var(--neon-green);"></i> Guia de Ergonomia &amp; Postura Pro Gamer
+                </h2>
+                <button type="button" class="modal-close-btn" onclick="closeErgoModal()" title="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0; margin-bottom: 22px;">
+                A carreira de um atleta de esports depende diretamente da saúde biomecânica dos pulsos, pescoço e lombar. Siga os 4 pilares recomendados pela medicina esportiva competitiva:
+            </p>
+
+            <!-- 4 Pilares da Postura Correta -->
+            <div class="ergo-grid">
+                <div class="ergo-card">
+                    <div class="ergo-card-icon"><i class="fa-solid fa-eye"></i></div>
+                    <h4>1. Altura dos Olhos &amp; Tela</h4>
+                    <p>O topo do monitor deve ficar nivelado aos olhos, a 50-70 cm de distância. Aplique a <strong>Regra 20-20-20</strong>: a cada 20 min, olhe para algo a 6 metros por 20 seg para relaxar os olhos.</p>
+                </div>
+
+                <div class="ergo-card">
+                    <div class="ergo-card-icon"><i class="fa-solid fa-hand"></i></div>
+                    <h4>2. Punhos &amp; Túnel do Carpo</h4>
+                    <p>Mantenha o punho em linha reta (posição neutra), sem torcer para cima ou para os lados. Evite apoiar o punho com pressão sobre a quina da mesa.</p>
+                </div>
+
+                <div class="ergo-card">
+                    <div class="ergo-card-icon"><i class="fa-solid fa-arrows-down-to-people"></i></div>
+                    <h4>3. Ombros &amp; Cotovelos</h4>
+                    <p>Apoie os cotovelos nos braços da cadeira nivelados à mesa formando um ângulo de 90° a 100°. Ombros relaxados, sem tensão no trapézio.</p>
+                </div>
+
+                <div class="ergo-card">
+                    <div class="ergo-card-icon"><i class="fa-solid fa-person-shelter"></i></div>
+                    <h4>4. Lombar &amp; Pés Firmes</h4>
+                    <p>Encosto firme sustentando a curvatura natural da lombar. Joelhos a 90° com as duas solas dos pés completamente apoiadas no chão.</p>
+                </div>
+            </div>
+
+            <!-- Rotina de Alongamento em 4 Passos -->
+            <div class="stretch-routine">
+                <h3><i class="fa-solid fa-stopwatch-20"></i> Protocolo de Alongamento Rápido (3 Minutos entre Partidas)</h3>
+                <div class="stretch-list">
+                    <div class="stretch-item">
+                        <strong>Passo 1: Extensores de Punho</strong>
+                        <span>Estenda o braço com a palma para baixo e puxe os dedos suavemente para trás por 15 segundos em cada braço.</span>
+                    </div>
+                    <div class="stretch-item">
+                        <strong>Passo 2: Flexores &amp; Polegar</strong>
+                        <span>Palma para frente apontando dedos para o teto, puxe a ponta dos dedos em direção ao peito por 15 seg.</span>
+                    </div>
+                    <div class="stretch-item">
+                        <strong>Passo 3: Trapézio &amp; Pescoço</strong>
+                        <span>Incline a orelha em direção ao ombro com leve pressão da mão por 15 seg de cada lado. Solte os ombros.</span>
+                    </div>
+                    <div class="stretch-item">
+                        <strong>Passo 4: Descompressão Lombar</strong>
+                        <span>Fique de pé, coloque as mãos na lombar e incline suavemente o tronco para trás respirando profundamente.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: right;">
+                <button type="button" class="btn-calc" onclick="closeErgoModal()" style="display: inline-flex; width: auto; padding: 10px 24px; background: var(--neon-green); color: #07090E;">
+                    <i class="fa-solid fa-check"></i> Entendido, Voltar aos Treinos
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#esports-suite">Esports Lab</a>
+            <a href="#calc">Calculadoras</a>
+            <a href="#planos">Planos Pro</a>
+            <a href="javascript:void(0)" onclick="openErgoModal()">Ergonomia &amp; Postura</a>
+            <a href="../index/index.html">Riot Client</a>
+            <a href="../index/account-settings.html">Conta Riot ⚙️</a>
+        </div>
+        <p>&copy; 2026 Bodyfit Health Systems • Riot Esports Performance &amp; Training Suite</p>
     </footer>
 
+    <!-- Scripts do Sistema -->
     <script src="Creatina.js"></script>
 </body>
 </html>

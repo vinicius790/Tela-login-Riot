@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;500;600;700&display=swap');
-@import url('./styles/animations.css');
+@import url('./animations.css');
 
 :root {
   --white: #FFFFFF;
@@ -273,7 +273,7 @@ main {
 
 .wallpaper {
   width: 100%;
-  background-image: linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('./images/wallpaper.jpg');
+  background: var(--wallpaper-gradient, linear-gradient(135deg, #0f1016 0%, #181925 50%, #090a0f 100%));
   background-size: cover;
   background-position: center;
   flex: 1;

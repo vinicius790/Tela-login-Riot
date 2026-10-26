@@ -1,0 +1,2999 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="riot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riot Games — Portal de Status dos Serviços & Saúde da Rede</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 45 45'><path fill='%23EB0029' d='M14.5 0C6.5 0 0 6.5 0 14.5v16C0 38.5 6.5 45 14.5 45h16c8 0 14.5-6.5 14.5-14.5v-16C45 6.5 38.5 0 30.5 0h-16zm2.2 9.5h11.6c3.9 0 7 3.1 7 7s-3.1 7-7 7H16.7v9.5H12V9.5h4.7zm0 4.7v4.7h6.9c1.3 0 2.3-1 2.3-2.3s-1-2.3-2.3-2.3h-6.9z'/></svg>">
+  <meta name="theme-color" content="#EB0029">
+  <meta name="description" content="Portal oficial e responsivo de monitoramento de status em tempo real, shards de servidores globais, telemetria de rede e teste de ping dos jogos Riot Games.">
+  
+  <!-- Estilos Globais do Ecossistema Riot -->
+  <link rel="stylesheet" href="../styles/GH.css">
+  <link rel="stylesheet" href="styles/GH.css">
+  <link rel="stylesheet" href="../styles/animations.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="../styles/themes.css">
+  <link rel="stylesheet" href="styles/themes.css">
+  
+  <!-- Fontes Oficiais Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Lexend+Deca:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       Riot Games Service Status & Network Health Portal — Estilos Avançados
+       ========================================================================== */
+    :root {
+      --primary: #EB0029;
+      --primary-hover: #C50022;
+      --accent: #FF4655;
+      --status-operational: #10B981;
+      --status-degraded: #F59E0B;
+      --status-maintenance: #8B5CF6;
+      --status-critical: #EF4444;
+      --bg-dark: #090B0E;
+      --bg-card: rgba(18, 22, 31, 0.85);
+      --bg-card-hover: rgba(26, 32, 46, 0.95);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --border-card-hover: rgba(235, 0, 41, 0.35);
+      --text-bright: #FFFFFF;
+      --text-normal: #E2E8F0;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Lexend Deca', 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(235, 0, 41, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 45%),
+        linear-gradient(180deg, #07090C 0%, #0F131A 50%, #07090C 100%);
+      background-attachment: fixed;
+      color: var(--text-normal);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090B0E;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E293B;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* Layout Container */
+    .portal-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    /* Barra Superior / Header */
+    .portal-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 24px;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .riot-fist-logo {
+      height: 38px;
+      filter: drop-shadow(0 2px 8px rgba(235, 0, 41, 0.4));
+      transition: transform 0.25s ease;
+    }
+
+    .brand-group:hover .riot-fist-logo {
+      transform: scale(1.04);
+    }
+
+    .brand-text-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-bright);
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title span {
+      color: var(--primary);
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* Controles da Barra Superior */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-bright);
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-link-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(235, 0, 41, 0.35);
+    }
+
+    .nav-link-btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .nav-link-btn.primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .control-select, .control-btn {
+      background: rgba(20, 26, 36, 0.9);
+      color: var(--text-normal);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .control-select:hover, .control-btn:hover {
+      border-color: var(--primary);
+      color: #FFF;
+    }
+
+    .auto-refresh-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 20px;
+      font-size: 0.78rem;
+      color: var(--status-operational);
+      font-weight: 600;
+    }
+
+    .refresh-spinner-btn {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
+    .refresh-spinner-btn:hover {
+      transform: rotate(180deg);
+    }
+
+    /* Banner Global de Status */
+    .global-status-banner {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(20, 26, 36, 0.95) 50%, rgba(16, 185, 129, 0.15) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 12px;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 35px;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.12);
+      transition: all 0.3s ease;
+    }
+
+    .global-status-banner.degraded {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(20, 26, 36, 0.95) 50%, rgba(245, 158, 11, 0.15) 100%);
+      border-color: rgba(245, 158, 11, 0.4);
+      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.12);
+    }
+
+    .banner-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .pulse-radar-dot {
+      width: 18px;
+      height: 18px;
+      background: var(--status-operational);
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 14px var(--status-operational);
+      flex-shrink: 0;
+    }
+
+    .pulse-radar-dot::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px solid var(--status-operational);
+      animation: pulseGlowRing 2s infinite;
+    }
+
+    @keyframes pulseGlowRing {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    .banner-left h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-bright);
+      margin-bottom: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .banner-left p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .banner-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Hero Quick KPI Stats */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-bottom: 40px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary);
+      opacity: 0.8;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-card-hover);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .kpi-card.green::before { background: var(--status-operational); }
+    .kpi-card.amber::before { background: var(--status-degraded); }
+    .kpi-card.blue::before { background: #38BDF8; }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kpi-value {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--text-bright);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.5px;
+    }
+
+    .kpi-subtext {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Seções e Títulos */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .section-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .section-title svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      padding: 7px 15px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFF;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFF;
+      box-shadow: 0 2px 10px rgba(235, 0, 41, 0.35);
+    }
+
+    /* Game Operational Status Badges Grid */
+    .games-status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
+      margin-bottom: 50px;
+    }
+
+    .game-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .game-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .game-identity {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .game-crest-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .game-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-bright);
+      line-height: 1.2;
+    }
+
+    .game-genre {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .status-pill.operational {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--status-operational);
+    }
+
+    .status-pill.degraded {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: var(--status-degraded);
+    }
+
+    .status-pill.maintenance {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      color: var(--status-maintenance);
+    }
+
+    .status-pill.critical {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: var(--status-critical);
+    }
+
+    .status-dot-mini {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Sub-serviços do jogo */
+    .subservices-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .subservice-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .subservice-name {
+      color: var(--text-normal);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .subservice-check {
+      color: var(--status-operational);
+      font-weight: bold;
+    }
+
+    .subservice-alert {
+      color: var(--status-degraded);
+      font-weight: bold;
+    }
+
+    /* 30-Day Sparkline Uptime Bars */
+    .uptime-bar-wrapper {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .uptime-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .sparkline-segments {
+      display: flex;
+      gap: 3px;
+      height: 22px;
+      align-items: flex-end;
+    }
+
+    .segment-bar {
+      flex: 1;
+      height: 100%;
+      background: var(--status-operational);
+      border-radius: 2px;
+      opacity: 0.85;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .segment-bar:hover {
+      opacity: 1;
+      transform: scaleY(1.2);
+      background: #34D399;
+    }
+
+    .segment-bar.yellow {
+      background: var(--status-degraded);
+    }
+
+    .segment-bar.red {
+      background: var(--status-critical);
+    }
+
+    /* Shard Status Grid (Americas, Europe, Asia-Pacific, Korea) */
+    .shard-regions-container {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+      margin-bottom: 50px;
+    }
+
+    .region-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .region-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .region-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .region-flag {
+      font-size: 1.4rem;
+    }
+
+    .region-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-bright);
+    }
+
+    .region-code-badge {
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .shard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .shard-card {
+      background: rgba(15, 19, 27, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .shard-card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px);
+      background: rgba(20, 26, 38, 0.9);
+    }
+
+    .shard-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .shard-location-code {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .shard-datacenter {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .shard-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-item span:first-child {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .metric-value {
+      font-size: 1.1rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-bright);
+    }
+
+    .metric-value.excellent { color: var(--status-operational); }
+    .metric-value.good { color: #38BDF8; }
+    .metric-value.moderate { color: var(--status-degraded); }
+    .metric-value.high { color: var(--status-critical); }
+
+    /* Animated mini SVG sparkline */
+    .mini-sparkline {
+      width: 100%;
+      height: 32px;
+      stroke-width: 2;
+      fill: none;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    }
+
+    /* Speed Test & Diagnostic Benchmark Section */
+    .benchmark-section {
+      background: linear-gradient(135deg, rgba(17, 23, 34, 0.95) 0%, rgba(10, 13, 20, 0.98) 100%);
+      border: 1px solid rgba(235, 0, 41, 0.3);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 50px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .benchmark-section::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(235, 0, 41, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .benchmark-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    .benchmark-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--text-bright);
+      letter-spacing: 0.5px;
+    }
+
+    .benchmark-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 680px;
+    }
+
+    .btn-speedtest {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #EB0029 0%, #B8001F 100%);
+      border: none;
+      color: #FFF;
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding: 16px 36px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(235, 0, 41, 0.45);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-speedtest:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 35px rgba(235, 0, 41, 0.65);
+      background: linear-gradient(135deg, #FF1E40 0%, #D40026 100%);
+    }
+
+    .btn-speedtest:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Benchmark Progress Box */
+    .benchmark-progress-box {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .benchmark-progress-box.active {
+      display: flex;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #EB0029, #FF4655, #10B981);
+      border-radius: 5px;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 12px rgba(255, 70, 85, 0.6);
+    }
+
+    .diagnostic-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .step-pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-dim);
+    }
+
+    .step-pill.running {
+      color: #38BDF8;
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .step-pill.done {
+      color: var(--status-operational);
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    /* Benchmark Results Dashboard */
+    .benchmark-results {
+      width: 100%;
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .benchmark-results.active {
+      display: grid;
+    }
+
+    .bench-result-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .bench-result-label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .bench-result-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-bright);
+    }
+
+    .readiness-badge {
+      grid-column: 1 / -1;
+      padding: 14px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 10px;
+      color: var(--status-operational);
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* Incident Timeline Stream with Severity Tags */
+    .timeline-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 50px;
+    }
+
+    .timeline-stream {
+      position: relative;
+      margin-top: 24px;
+      padding-left: 28px;
+    }
+
+    .timeline-stream::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      bottom: 20px;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .incident-item {
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .incident-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .incident-node-icon {
+      position: absolute;
+      left: -28px;
+      top: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--bg-dark);
+      border: 3px solid var(--status-operational);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .incident-node-icon.critical { border-color: var(--status-critical); box-shadow: 0 0 10px var(--status-critical); }
+    .incident-node-icon.major { border-color: var(--status-degraded); box-shadow: 0 0 8px var(--status-degraded); }
+    .incident-node-icon.minor { border-color: #FCD34D; }
+    .incident-node-icon.informational { border-color: #38BDF8; }
+
+    .incident-card {
+      background: rgba(15, 19, 27, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      transition: border-color 0.2s ease;
+    }
+
+    .incident-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .incident-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .incident-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .severity-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .severity-tag.critical { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--status-critical); color: #FCA5A5; }
+    .severity-tag.major { background: rgba(245, 158, 11, 0.2); border: 1px solid var(--status-degraded); color: #FCD34D; }
+    .severity-tag.minor { background: rgba(253, 224, 71, 0.15); border: 1px solid #FCD34D; color: #FEF08A; }
+    .severity-tag.informational { background: rgba(56, 189, 248, 0.2); border: 1px solid #38BDF8; color: #BAE6FD; }
+
+    .incident-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-bright);
+    }
+
+    .incident-timestamp {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    /* Workflow progression tags */
+    .incident-stages-bar {
+      display: flex;
+      gap: 6px;
+      margin: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .stage-item {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-dim);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stage-item.completed {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--status-operational);
+    }
+
+    .stage-item.active {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38BDF8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .incident-body {
+      font-size: 0.88rem;
+      color: var(--text-normal);
+      line-height: 1.6;
+    }
+
+    .incident-updates-list {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .update-log-entry {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      padding-left: 12px;
+      border-left: 2px solid var(--primary);
+    }
+
+    .update-log-time {
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-right: 6px;
+    }
+
+    /* Interactive Simulation Bar for Portal Review */
+    .simulation-control-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .sim-info {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .sim-info strong {
+      color: var(--text-bright);
+    }
+
+    .sim-btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sim-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-normal);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sim-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #FFF;
+    }
+
+    .sim-btn.active-sim {
+      background: var(--status-degraded);
+      border-color: var(--status-degraded);
+      color: #000;
+      font-weight: 700;
+    }
+
+    /* Footer & Navigation */
+    .portal-footer {
+      border-top: 1px solid var(--border-card);
+      padding-top: 35px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    .footer-nav-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .footer-nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Modal de Reportar Telemetria */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #121620;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-close-btn:hover {
+      color: #FFF;
+    }
+
+    .modal-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #FFF;
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--primary);
+    }
+
+    /* Toast Notification HUD */
+    .toast-hud {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(18, 22, 31, 0.95);
+      border: 1px solid var(--primary);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      padding: 12px 24px;
+      border-radius: 30px;
+      color: #FFF;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 10000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .toast-hud.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .portal-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .global-status-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .games-status-grid {
+        grid-template-columns: 1fr;
+      }
+      .benchmark-title {
+        font-size: 1.4rem;
+      }
+      .btn-speedtest {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-container">
+
+    <!-- Header Principal da Plataforma -->
+    <header class="portal-header">
+      <a href="trembolona.html" class="brand-group" aria-label="Riot Games Status Portal">
+        <!-- Logo Vetorial Riot Games Oficial -->
+        <svg class="riot-fist-logo" viewBox="0 0 135 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EB0029" d="M14.5 0C6.5 0 0 6.5 0 14.5v16C0 38.5 6.5 45 14.5 45h16c8 0 14.5-6.5 14.5-14.5v-16C45 6.5 38.5 0 30.5 0h-16zm2.2 9.5h11.6c3.9 0 7 3.1 7 7s-3.1 7-7 7H16.7v9.5H12V9.5h4.7zm0 4.7v4.7h6.9c1.3 0 2.3-1 2.3-2.3s-1-2.3-2.3-2.3h-6.9z"/>
+          <text x="50" y="32" font-family="'Lexend Deca', sans-serif" font-weight="900" font-size="28" letter-spacing="1" fill="#FFFFFF">RIOT</text>
+        </svg>
+        <div class="brand-text-block">
+          <div class="brand-title">SERVICE <span>STATUS</span></div>
+          <div class="brand-subtitle">Network Health & Shard Telemetry</div>
+        </div>
+      </a>
+
+      <div class="header-controls">
+        <!-- Link de Retorno ao Client de Autenticação -->
+        <a href="index.html" class="nav-link-btn primary" title="Retornar à tela de login do Riot Client">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Voltar ao Riot Client</span>
+        </a>
+
+        <!-- Link para Configurações de Conta -->
+        <a href="account-settings.html" class="nav-link-btn" title="Central de Contas Riot" style="color: #ECECEC;">
+          <span>⚙️ Conta Riot</span>
+        </a>
+
+        <!-- Contador de Auto-Refresh -->
+        <div class="auto-refresh-badge" title="Intervalo de atualização automática de telemetria">
+          <span id="countdownLabel">Atualizando em 30s</span>
+          <button class="refresh-spinner-btn" id="btnManualRefresh" aria-label="Atualizar agora">↻</button>
+        </div>
+
+        <!-- Seletor de Tema Dinâmico -->
+        <select id="themeSelector" class="control-select" aria-label="Selecione o Tema Visual">
+          <option value="riot">Riot Red (Padrão)</option>
+          <option value="valorant">Valorant Tático</option>
+          <option value="lol">Hextech LoL</option>
+          <option value="tft">Astral TFT</option>
+          <option value="star-guardian">Star Guardian</option>
+          <option value="kda">K/DA Neon</option>
+        </select>
+
+        <!-- Seletor de Idioma -->
+        <select id="langSelector" class="control-select" aria-label="Selecionar Idioma">
+          <option value="pt-BR">🇧🇷 Português</option>
+          <option value="en-US">🇺🇸 English</option>
+          <option value="es-ES">🇪🇸 Español</option>
+          <option value="ja-JP">🇯🇵 日本語</option>
+          <option value="ko-KR">🇰🇷 한국어</option>
+        </select>
+
+        <!-- Alternador de Som Sintetizado -->
+        <button id="audioToggleBtn" class="control-btn" title="Alternar Efeitos Sonoros Synthesized Web Audio">🔊</button>
+      </div>
+    </header>
+
+    <!-- Banner Global de Status Operacional -->
+    <section class="global-status-banner" id="globalBanner" aria-live="polite">
+      <div class="banner-left">
+        <div class="pulse-radar-dot" id="globalRadarDot"></div>
+        <div>
+          <h2 id="globalStatusHeading">TODOS OS SISTEMAS OPERACIONAIS</h2>
+          <p id="globalStatusDesc">Todos os datacenters globais e serviços de matchmaking estão operando com telemetria nominal.</p>
+        </div>
+      </div>
+      <div class="banner-right">
+        <button class="nav-link-btn" id="btnOpenReportModal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>Reportar Problema</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- KPIs de Visão Geral em Tempo Real -->
+    <div class="kpi-grid">
+      <div class="kpi-card green">
+        <div class="kpi-label">
+          <span>Uptime 90 Dias</span>
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <div class="kpi-value" id="kpiUptime">99.98%</div>
+        <div class="kpi-subtext">SLA da infraestrutura Riot Cloud Edge</div>
+      </div>
+
+      <div class="kpi-card green">
+        <div class="kpi-label">
+          <span>Shards Regionais Ativos</span>
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        </div>
+        <div class="kpi-value" id="kpiShards">16 / 16</div>
+        <div class="kpi-subtext">Américas, Europa, Ásia-Pacífico, Coreia</div>
+      </div>
+
+      <div class="kpi-card blue">
+        <div class="kpi-label">
+          <span>Latência Média Regional</span>
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2.05v3.03c3.39.49 6 3.39 6 6.92 0 .9-.18 1.75-.48 2.54l2.6 1.53c.56-1.24.88-2.62.88-4.07 0-5.18-3.95-9.45-9-9.95zM12 19c-3.87 0-7-3.13-7-7 0-3.53 2.61-6.43 6-6.92V2.05c-5.05.5-9 4.76-9 9.95 0 5.52 4.47 10 10 10 2.54 0 4.86-.95 6.64-2.53l-2.13-2.13C15.19 18.28 13.68 19 12 19z"/></svg>
+        </div>
+        <div class="kpi-value" id="kpiPing">19 ms</div>
+        <div class="kpi-subtext">RTT Américas (São Paulo & Chicago)</div>
+      </div>
+
+      <div class="kpi-card green" id="kpiIncidentCard">
+        <div class="kpi-label">
+          <span>Incidentes Ativos</span>
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        </div>
+        <div class="kpi-value" id="kpiIncidents">0</div>
+        <div class="kpi-subtext" id="kpiIncidentsSubtext">Nenhum bloqueio crítico registrado</div>
+      </div>
+    </div>
+
+    <!-- Barra de Simulação Interativa (Demonstração e Auditoria) -->
+    <div class="simulation-control-box">
+      <div class="sim-info">
+        <strong>🎮 Ferramentas de Telemetria Interativa:</strong> Alterne o estado dos serviços para testar a resposta do portal em caso de instabilidade.
+      </div>
+      <div class="sim-btn-group">
+        <button class="sim-btn" id="simAllOkBtn">Tudo Operacional</button>
+        <button class="sim-btn" id="simDegradeEuwBtn">Simular VAN-84 na Europa (EUW)</button>
+        <button class="sim-btn" id="simMaintainKrBtn">Simular Manutenção na Coreia (KR)</button>
+      </div>
+    </div>
+
+    <!-- Seção 1: Status Operacional dos Jogos -->
+    <section aria-labelledby="gamesHeading">
+      <div class="section-header">
+        <h3 class="section-title" id="gamesHeading">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          Status dos Jogos Riot Games
+        </h3>
+        <div class="filter-tabs" id="gameFilterTabs">
+          <button class="tab-btn active" data-filter="all">Todos os Jogos</button>
+          <button class="tab-btn" data-filter="lol">League of Legends</button>
+          <button class="tab-btn" data-filter="valorant">Valorant</button>
+          <button class="tab-btn" data-filter="tft">Teamfight Tactics</button>
+          <button class="tab-btn" data-filter="lor">Runeterra</button>
+          <button class="tab-btn" data-filter="wildrift">Wild Rift</button>
+        </div>
+      </div>
+
+      <div class="games-status-grid" id="gamesGrid">
+        
+        <!-- JOGO 1: League of Legends -->
+        <article class="game-card" data-game="lol">
+          <div class="game-card-header">
+            <div class="game-identity">
+              <div class="game-crest-icon" style="color: #C8AA6D;">
+                <!-- Brasão LoL em SVG -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zm0 8.5L4.5 7 12 3.25 19.5 7 12 10.5zM3 9v6l9 4.5V14L5 10v-1H3zm18 0l-2 1v4l-7 4.5v-5.5l9-4.5v1z"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="game-name">League of Legends</h4>
+                <span class="game-genre">MOBA • PC Desktop</span>
+              </div>
+            </div>
+            <span class="status-pill operational" id="pill-lol">
+              <span class="status-dot-mini"></span>
+              <span>Operacional</span>
+            </span>
+          </div>
+
+          <div class="subservices-list">
+            <div class="subservice-row">
+              <span class="subservice-name">Fila Ranqueada Solo/Duo & Flex</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Partidas Normais & ARAM</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Loja Hextech & Transações</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Riot Vanguard Anti-Cheat Core</span>
+              <span class="subservice-check">✔ Protegido</span>
+            </div>
+          </div>
+
+          <div class="uptime-bar-wrapper">
+            <div class="uptime-bar-label">
+              <span>Histórico de Estabilidade (30 dias)</span>
+              <span>99.98%</span>
+            </div>
+            <div class="sparkline-segments" title="30 dias de disponibilidade ininterrupta">
+              <!-- 30 barras diárias -->
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- JOGO 2: Valorant -->
+        <article class="game-card" data-game="valorant">
+          <div class="game-card-header">
+            <div class="game-identity">
+              <div class="game-crest-icon" style="color: #FF4655;">
+                <!-- Logo V de Valorant SVG -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.98 2L2 14.53h5.99L12.98 8l4.99 6.53h5.99L12.98 2zM2 17.5h5.99L12 22H6.01L2 17.5zm16.01 0L22 17.5l-4.01 4.5H12l5.01-4.5z"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="game-name">VALORANT</h4>
+                <span class="game-genre">FPS Tático 5v5</span>
+              </div>
+            </div>
+            <span class="status-pill operational" id="pill-valorant">
+              <span class="status-dot-mini"></span>
+              <span>Operacional</span>
+            </span>
+          </div>
+
+          <div class="subservices-list">
+            <div class="subservice-row">
+              <span class="subservice-name">Fila Competitiva (Ranqueada)</span>
+              <span class="subservice-check">✔ 128 Tickrate</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Vanguard Kernel Anti-Cheat</span>
+              <span class="subservice-check" id="subservice-vanguard">✔ Ativo</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Mercado Noturno & Loja</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Chat de Voz Riot VOIP</span>
+              <span class="subservice-check">✔ Baixa Latência</span>
+            </div>
+          </div>
+
+          <div class="uptime-bar-wrapper">
+            <div class="uptime-bar-label">
+              <span>Histórico de Estabilidade (30 dias)</span>
+              <span>99.95%</span>
+            </div>
+            <div class="sparkline-segments" title="30 dias de disponibilidade ininterrupta">
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- JOGO 3: Teamfight Tactics (TFT) -->
+        <article class="game-card" data-game="tft">
+          <div class="game-card-header">
+            <div class="game-identity">
+              <div class="game-crest-icon" style="color: #9D4EDD;">
+                <!-- Ícone Espátula Dourada TFT SVG -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.07 4.93a10 10 0 0 0-14.14 0c-3.9 3.9-3.9 10.24 0 14.14 3.9 3.9 10.24 3.9 14.14 0 3.9-3.9 3.9-10.24 0-14.14zM12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="game-name">Teamfight Tactics</h4>
+                <span class="game-genre">Autobattler Estratégico</span>
+              </div>
+            </div>
+            <span class="status-pill operational" id="pill-tft">
+              <span class="status-dot-mini"></span>
+              <span>Operacional</span>
+            </span>
+          </div>
+
+          <div class="subservices-list">
+            <div class="subservice-row">
+              <span class="subservice-name">Fila Ranqueada & Batalha Frenética</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Duplas Dinâmicas (Double Up)</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Passe de Batalha & Pequenas Lendas</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Cross-play PC / Mobile</span>
+              <span class="subservice-check">✔ Sincronizado</span>
+            </div>
+          </div>
+
+          <div class="uptime-bar-wrapper">
+            <div class="uptime-bar-label">
+              <span>Histórico de Estabilidade (30 dias)</span>
+              <span>100%</span>
+            </div>
+            <div class="sparkline-segments">
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- JOGO 4: Legends of Runeterra -->
+        <article class="game-card" data-game="lor">
+          <div class="game-card-header">
+            <div class="game-identity">
+              <div class="game-crest-icon" style="color: #38BDF8;">
+                <!-- Ícone Rúnico Runeterra SVG -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="game-name">Legends of Runeterra</h4>
+                <span class="game-genre">Card Game Estratégico</span>
+              </div>
+            </div>
+            <span class="status-pill operational" id="pill-lor">
+              <span class="status-dot-mini"></span>
+              <span>Operacional</span>
+            </span>
+          </div>
+
+          <div class="subservices-list">
+            <div class="subservice-row">
+              <span class="subservice-name">O Caminho dos Campeões (PvE)</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Matchmaking Ranqueado PvP</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Sincronização de Coleção de Cartas</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Loja de Fragmentos & Campeões</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+          </div>
+
+          <div class="uptime-bar-wrapper">
+            <div class="uptime-bar-label">
+              <span>Histórico de Estabilidade (30 dias)</span>
+              <span>99.99%</span>
+            </div>
+            <div class="sparkline-segments">
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- JOGO 5: Wild Rift -->
+        <article class="game-card" data-game="wildrift">
+          <div class="game-card-header">
+            <div class="game-identity">
+              <div class="game-crest-icon" style="color: #F59E0B;">
+                <!-- Ícone Asas Wild Rift SVG -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="game-name">LoL: Wild Rift</h4>
+                <span class="game-genre">MOBA Mobile (iOS & Android)</span>
+              </div>
+            </div>
+            <span class="status-pill operational" id="pill-wildrift">
+              <span class="status-dot-mini"></span>
+              <span>Operacional</span>
+            </span>
+          </div>
+
+          <div class="subservices-list">
+            <div class="subservice-row">
+              <span class="subservice-name">Servidores Regionais Mobile Netcode</span>
+              <span class="subservice-check">✔ 60fps Estável</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Fila Ranqueada & ARAM Mobile</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Autenticação Riot ID Mobile</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+            <div class="subservice-row">
+              <span class="subservice-name">Loja de Wild Cores & Passes</span>
+              <span class="subservice-check">✔ Normal</span>
+            </div>
+          </div>
+
+          <div class="uptime-bar-wrapper">
+            <div class="uptime-bar-label">
+              <span>Histórico de Estabilidade (30 dias)</span>
+              <span>99.97%</span>
+            </div>
+            <div class="sparkline-segments">
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+              <div class="segment-bar"></div><div class="segment-bar"></div><div class="segment-bar"></div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Seção 2: Ferramenta de Speed Test / Benchmark de Latência Riot -->
+    <section class="benchmark-section" aria-labelledby="benchHeading">
+      <div class="benchmark-inner">
+        <h3 class="benchmark-title" id="benchHeading">DIAGNÓSTICO DE REDE & BENCHMARK DE PING RIOT</h3>
+        <p class="benchmark-desc">
+          Execute um teste de ida e volta (RTT) em tempo real contra as bordas dos datacenters Riot Direct. 
+          Medimos jitter, variância de pacotes e calculamos o índice de prontidão para partidas competitivas.
+        </p>
+
+        <button type="button" class="btn-speedtest" id="btnRunSpeedTest">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span id="speedTestBtnText">Iniciar Teste de Rede / Ping Shards</span>
+        </button>
+
+        <!-- Caixa de Progresso Interativa -->
+        <div class="benchmark-progress-box" id="benchProgressBox">
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700;">
+            <span id="diagnosticStatusText">Iniciando sondas de pacotes...</span>
+            <span id="diagnosticPercentText">0%</span>
+          </div>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="diagnosticProgressFill"></div>
+          </div>
+
+          <div class="diagnostic-steps-grid">
+            <div class="step-pill" id="step-dns">① DNS Riot Direct Edge</div>
+            <div class="step-pill" id="step-tls">② Handshake TLS 1.3</div>
+            <div class="step-pill" id="step-americas">③ Shard Américas (BR/NA)</div>
+            <div class="step-pill" id="step-europe">④ Shard Europa (EUW)</div>
+            <div class="step-pill" id="step-asia">⑤ Shard Ásia & Coreia</div>
+            <div class="step-pill" id="step-jitter">⑥ Jitter & Bufferbloat</div>
+          </div>
+        </div>
+
+        <!-- Dashboard de Resultados do Teste -->
+        <div class="benchmark-results" id="benchResultsBox">
+          <div class="bench-result-card">
+            <div class="bench-result-label">Melhor Shard</div>
+            <div class="bench-result-val" style="color: #10B981;" id="resBestShard">BR (São Paulo)</div>
+          </div>
+          <div class="bench-result-card">
+            <div class="bench-result-label">Ping Mínimo</div>
+            <div class="bench-result-val" id="resMinPing">17 ms</div>
+          </div>
+          <div class="bench-result-card">
+            <div class="bench-result-label">Jitter Médio</div>
+            <div class="bench-result-val" id="resJitter">± 0.9 ms</div>
+          </div>
+          <div class="bench-result-card">
+            <div class="bench-result-label">Perda de Pacotes</div>
+            <div class="bench-result-val" style="color: #10B981;" id="resPacketLoss">0.00%</div>
+          </div>
+          
+          <div class="readiness-badge" id="resReadiness">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <span>CLASSIFICAÇÃO DIAMANTE: Conexão ideal com latência ultra-baixa para Modo Competitivo em Valorant e LoL.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 3: Grid de Status dos Servidores e Shards Regionais -->
+    <section aria-labelledby="shardsHeading">
+      <div class="section-header">
+        <h3 class="section-title" id="shardsHeading">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1zm0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1zM6 4h2v1H6V4zm0 8h2v1H6v-1zm0 8h2v1H6v-1z"/></svg>
+          Grade de Shards Globais & Datacenters
+        </h3>
+        <div style="font-size: 0.85rem; color: var(--text-dim); display: flex; align-items: center; gap: 6px;">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10B981;"></span>
+          Telemetria atualizada em tempo real via Riot Direct Edge
+        </div>
+      </div>
+
+      <div class="shard-regions-container">
+
+        <!-- REGIÃO 1: AMÉRICAS -->
+        <div class="region-block" data-region="americas">
+          <div class="region-header">
+            <div class="region-title-group">
+              <span class="region-flag">🌎</span>
+              <h4 class="region-name">Região Américas</h4>
+              <span class="region-code-badge">AMER • 4 Shards</span>
+            </div>
+            <span class="status-pill operational">
+              <span class="status-dot-mini"></span>
+              <span>Todos Operacionais</span>
+            </span>
+          </div>
+
+          <div class="shard-grid">
+            <!-- BR -->
+            <div class="shard-card" id="shard-br">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇧🇷 BR (Brasil)</div>
+                  <div class="shard-datacenter">São Paulo • NAP do Brasil IDC</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value excellent live-ping" data-base="18">18 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 0.8 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">64%</span>
+                </div>
+              </div>
+              <!-- Mini SVG Sparkline -->
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,25 Q20,18 40,24 T80,20 T120,23 T160,19 T200,22"/>
+              </svg>
+            </div>
+
+            <!-- NA -->
+            <div class="shard-card" id="shard-na">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇺🇸 NA (North America)</div>
+                  <div class="shard-datacenter">Chicago, IL & Ashburn, VA</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value excellent live-ping" data-base="32">32 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 1.1 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">78%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,22 Q25,28 50,20 T100,23 T150,18 T200,21"/>
+              </svg>
+            </div>
+
+            <!-- LAS -->
+            <div class="shard-card" id="shard-las">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇨🇱 LAS (Latam Sul)</div>
+                  <div class="shard-datacenter">Santiago & Buenos Aires</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value good live-ping" data-base="44">44 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 1.4 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">52%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,20 Q30,15 60,25 T120,20 T180,22 T200,19"/>
+              </svg>
+            </div>
+
+            <!-- LAN -->
+            <div class="shard-card" id="shard-lan">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇲🇽 LAN (Latam Norte)</div>
+                  <div class="shard-datacenter">Cidade do México & Miami</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value good live-ping" data-base="56">56 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.01%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 1.8 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">61%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,24 Q35,29 70,22 T140,25 T200,23"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- REGIÃO 2: EUROPA -->
+        <div class="region-block" data-region="europe">
+          <div class="region-header">
+            <div class="region-title-group">
+              <span class="region-flag">🇪🇺</span>
+              <h4 class="region-name">Região Europa</h4>
+              <span class="region-code-badge">EMEA • 4 Shards</span>
+            </div>
+            <span class="status-pill operational" id="pill-europe-region">
+              <span class="status-dot-mini"></span>
+              <span>Operacional</span>
+            </span>
+          </div>
+
+          <div class="shard-grid">
+            <!-- EUW -->
+            <div class="shard-card" id="shard-euw">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇩🇪 EUW (Europe West)</div>
+                  <div class="shard-datacenter">Frankfurt & Amsterdam Edge</div>
+                </div>
+                <span class="status-pill operational" id="pill-shard-euw">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value moderate live-ping" data-base="112">112 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 1.9 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">84%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" id="spark-euw" d="M0,21 Q25,26 50,19 T100,24 T150,20 T200,22"/>
+              </svg>
+            </div>
+
+            <!-- EUNE -->
+            <div class="shard-card" id="shard-eune">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇵🇱 EUNE (Nordic & East)</div>
+                  <div class="shard-datacenter">Frankfurt & Varsóvia IDC</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value moderate live-ping" data-base="124">124 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 2.1 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">69%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,25 Q30,19 60,25 T120,21 T180,24 T200,20"/>
+              </svg>
+            </div>
+
+            <!-- TR -->
+            <div class="shard-card" id="shard-tr">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇹🇷 TR (Turquia)</div>
+                  <div class="shard-datacenter">Istambul • Turkcell Datacenter</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value moderate live-ping" data-base="142">142 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.02%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 2.7 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">58%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,22 Q30,28 60,20 T120,24 T180,18 T200,22"/>
+              </svg>
+            </div>
+
+            <!-- RU -->
+            <div class="shard-card" id="shard-ru">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇷🇺 RU (Rússia)</div>
+                  <div class="shard-datacenter">Moscou & São Petersburgo</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value high live-ping" data-base="158">158 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.01%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 3.1 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">49%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,26 Q35,20 70,26 T140,22 T200,24"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- REGIÃO 3: ÁSIA-PACÍFICO -->
+        <div class="region-block" data-region="apac">
+          <div class="region-header">
+            <div class="region-title-group">
+              <span class="region-flag">🌏</span>
+              <h4 class="region-name">Região Ásia-Pacífico</h4>
+              <span class="region-code-badge">APAC • 4 Shards</span>
+            </div>
+            <span class="status-pill operational">
+              <span class="status-dot-mini"></span>
+              <span>Operacional</span>
+            </span>
+          </div>
+
+          <div class="shard-grid">
+            <!-- OCE -->
+            <div class="shard-card" id="shard-oce">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇦🇺 OCE (Oceania)</div>
+                  <div class="shard-datacenter">Sydney • Equinix SY1</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value high live-ping" data-base="215">215 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 2.4 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">62%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,20 Q25,25 50,18 T100,23 T150,19 T200,22"/>
+              </svg>
+            </div>
+
+            <!-- SG -->
+            <div class="shard-card" id="shard-sg">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇸🇬 SG (Singapura / SEA)</div>
+                  <div class="shard-datacenter">Singapura • Global Switch IDC</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value high live-ping" data-base="198">198 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 2.0 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">77%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,24 Q30,18 60,24 T120,20 T180,23 T200,21"/>
+              </svg>
+            </div>
+
+            <!-- PH -->
+            <div class="shard-card" id="shard-ph">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇵🇭 PH (Filipinas)</div>
+                  <div class="shard-datacenter">Manila • PLDT Vitro</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value high live-ping" data-base="222">222 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.03%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 3.2 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">71%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,23 Q35,28 70,21 T140,25 T200,22"/>
+              </svg>
+            </div>
+
+            <!-- TW -->
+            <div class="shard-card" id="shard-tw">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇹🇼 TW (Taiwan)</div>
+                  <div class="shard-datacenter">Taipei • Chunghwa Telecom IDC</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value high live-ping" data-base="206">206 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.01%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 2.2 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">68%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,21 Q25,26 50,20 T100,25 T150,21 T200,23"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- REGIÃO 4: COREIA & LESTE ASIÁTICO -->
+        <div class="region-block" data-region="korea">
+          <div class="region-header">
+            <div class="region-title-group">
+              <span class="region-flag">🇰🇷</span>
+              <h4 class="region-name">Região Coreia & Leste Asiático</h4>
+              <span class="region-code-badge">KR / JP • 2 Shards</span>
+            </div>
+            <span class="status-pill operational" id="pill-korea-region">
+              <span class="status-dot-mini"></span>
+              <span>Operacional</span>
+            </span>
+          </div>
+
+          <div class="shard-grid">
+            <!-- KR -->
+            <div class="shard-card" id="shard-kr">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇰🇷 KR (Coreia do Sul)</div>
+                  <div class="shard-datacenter">Seul • KT Mokdong IDC Central</div>
+                </div>
+                <span class="status-pill operational" id="pill-shard-kr">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value high live-ping" data-base="184">184 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 1.2 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">91%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" id="spark-kr" d="M0,22 Q25,17 50,24 T100,19 T150,23 T200,20"/>
+              </svg>
+            </div>
+
+            <!-- JP -->
+            <div class="shard-card" id="shard-jp">
+              <div class="shard-card-top">
+                <div>
+                  <div class="shard-location-code">🇯🇵 JP (Japão)</div>
+                  <div class="shard-datacenter">Tóquio • Shinjuku Equinix TY2</div>
+                </div>
+                <span class="status-pill operational">Operacional</span>
+              </div>
+              <div class="shard-metrics">
+                <div class="metric-item">
+                  <span>Ping RTT</span>
+                  <span class="metric-value high live-ping" data-base="192">192 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Perda Pacotes</span>
+                  <span class="metric-value live-loss">0.00%</span>
+                </div>
+                <div class="metric-item">
+                  <span>Jitter</span>
+                  <span class="metric-value live-jitter">± 1.5 ms</span>
+                </div>
+                <div class="metric-item">
+                  <span>Carga Servidor</span>
+                  <span class="metric-value">67%</span>
+                </div>
+              </div>
+              <svg class="mini-sparkline" viewBox="0 0 200 40">
+                <path stroke="#10B981" d="M0,24 Q30,19 60,25 T120,21 T180,24 T200,21"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Seção 4: Linha do Tempo de Incidentes com Tags de Gravidade -->
+    <section class="timeline-container" aria-labelledby="incidentsHeading">
+      <div class="section-header">
+        <h3 class="section-title" id="incidentsHeading">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          Histórico & Linha do Tempo de Incidentes
+        </h3>
+        <div class="filter-tabs" id="incidentFilterTabs">
+          <button class="tab-btn active" data-severity="all">Todos os Registros</button>
+          <button class="tab-btn" data-severity="critical">Crítico</button>
+          <button class="tab-btn" data-severity="major">Grave</button>
+          <button class="tab-btn" data-severity="minor">Leve</button>
+          <button class="tab-btn" data-severity="informational">Informativo</button>
+        </div>
+      </div>
+
+      <div class="timeline-stream" id="incidentStream">
+        
+        <!-- Incidente 1: CRÍTICO (Resolvido) -->
+        <div class="incident-item" data-sev="critical">
+          <div class="incident-node-icon critical"></div>
+          <div class="incident-card">
+            <div class="incident-header-row">
+              <div class="incident-title-wrap">
+                <span class="severity-tag critical">Crítico</span>
+                <h4 class="incident-title">League of Legends (Américas) — Instabilidade Transitória nas Filas Ranqueadas</h4>
+              </div>
+              <span class="incident-timestamp">Hoje • 09:42 UTC (Resolvido há 2h)</span>
+            </div>
+
+            <div class="incident-stages-bar">
+              <span class="stage-item completed">✔ Investigado</span>
+              <span class="stage-item completed">✔ Causa Identificada</span>
+              <span class="stage-item completed">✔ Mitigado</span>
+              <span class="stage-item completed">✔ 100% Resolvido</span>
+            </div>
+
+            <p class="incident-body">
+              Jogadores nos servidores de São Paulo (BR) e Miami (LAN) enfrentaram desconexões súbitas durante a fase de seleção de campeões, gerando penalidades indevidas de tempo de espera. Nossa engenharia ativou o protocolo de derrota perdoada (*Loss Forgiven*) e re-roteou o tráfego de borda por rotas de backup tier-1.
+            </p>
+
+            <div class="incident-updates-list">
+              <div class="update-log-entry">
+                <span class="update-log-time">10:30 UTC:</span> Todas as rotas de fibra óptica restabelecidas. As filas ranqueadas voltaram à operação integral sem perda de pacotes.
+              </div>
+              <div class="update-log-entry">
+                <span class="update-log-time">09:55 UTC:</span> Roteamento redundante ativado na América do Sul. Tráfego re-estabilizado em 18ms.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incidente 2: GRAVE (Monitoramento Ativo) -->
+        <div class="incident-item" data-sev="major" id="incident-euw-van">
+          <div class="incident-node-icon major"></div>
+          <div class="incident-card">
+            <div class="incident-header-row">
+              <div class="incident-title-wrap">
+                <span class="severity-tag major">Grave</span>
+                <h4 class="incident-title">VALORANT (Europa Ocidental EUW) — Código de Erro VAN-84 Durante Conexão</h4>
+              </div>
+              <span class="incident-timestamp">Hoje • 11:15 UTC (Em Monitoramento)</span>
+            </div>
+
+            <div class="incident-stages-bar">
+              <span class="stage-item completed">✔ Investigado</span>
+              <span class="stage-item completed">✔ Causa Identificada</span>
+              <span class="stage-item active">● Monitorando Hotfix</span>
+              <span class="stage-item">Aguardando Resolução Total</span>
+            </div>
+
+            <p class="incident-body">
+              Identificamos uma oscilação na validação de sessões do cluster de autenticação do Vanguard no datacenter de Frankfurt. Um patch de micro-serviço foi distribuído às 11:30 UTC e as taxas de erro caíram 98.4%. Nossa equipe segue monitorando até a estabilização completa.
+            </p>
+
+            <div class="incident-updates-list">
+              <div class="update-log-entry">
+                <span class="update-log-time">11:35 UTC:</span> Patch de reconciliação de tokens aplicado nos servidores de Frankfurt e Paris.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incidente 3: LEVE (Resolvido) -->
+        <div class="incident-item" data-sev="minor">
+          <div class="incident-node-icon minor"></div>
+          <div class="incident-card">
+            <div class="incident-header-row">
+              <div class="incident-title-wrap">
+                <span class="severity-tag minor">Leve</span>
+                <h4 class="incident-title">Teamfight Tactics — Atraso na Entrega de Recompensas do Passe de Batalha</h4>
+              </div>
+              <span class="incident-timestamp">Ontem • 18:00 UTC (Resolvido)</span>
+            </div>
+
+            <div class="incident-stages-bar">
+              <span class="stage-item completed">✔ Investigado</span>
+              <span class="stage-item completed">✔ Fila de Transações Re-processada</span>
+              <span class="stage-item completed">✔ Resolvido</span>
+            </div>
+
+            <p class="incident-body">
+              Pequeno atraso assíncrono na entrega de emotes e ovos de estrategistas adquiridos na versão mobile. Todas as filas de transação foram re-processadas sem perdas.
+            </p>
+          </div>
+        </div>
+
+        <!-- Incidente 4: INFORMATIVO (Programado) -->
+        <div class="incident-item" data-sev="informational">
+          <div class="incident-node-icon informational"></div>
+          <div class="incident-card">
+            <div class="incident-header-row">
+              <div class="incident-title-wrap">
+                <span class="severity-tag informational">Informativo</span>
+                <h4 class="incident-title">Infraestrutura Riot Direct — Manutenção Preventiva de Roteadores de Borda na Coreia (KR)</h4>
+              </div>
+              <span class="incident-timestamp">Agendado • Amanhã 03:00 - 05:00 UTC</span>
+            </div>
+
+            <div class="incident-stages-bar">
+              <span class="stage-item active">● Janela Programada</span>
+              <span class="stage-item">Sem Impacto em Partidas Normais</span>
+            </div>
+
+            <p class="incident-body">
+              Atualização de firmware dos comutadores do datacenter KT Mokdong em Seul. As filas ranqueadas serão pausadas 30 minutos antes para evitar desconexões em andamento.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Rodapé Oficial com Links de Navegação e Copyright -->
+    <footer class="portal-footer">
+      <div class="footer-nav-links">
+        <a href="index.html">← Riot Client (Autenticação)</a>
+        <a href="trembolona.html">Portal de Status dos Serviços</a>
+        <a href="../bodyfit/index.html">Projeto Bodyfit Integrado</a>
+        <a href="https://status.riotgames.com" target="_blank" rel="noopener">Riot Games Official Status ↗</a>
+        <a href="https://support.riotgames.com" target="_blank" rel="noopener">Suporte ao Jogador ↗</a>
+      </div>
+
+      <p>© 2026 Riot Games, Inc. Todos os direitos reservados. League of Legends, VALORANT, TFT, Wild Rift e Legends of Runeterra são marcas registradas da Riot Games.</p>
+      <p style="font-size: 0.78rem; color: var(--text-dim);">Riot Network Telemetry Engine v3.4.0 • Cluster Edge Probe Engine</p>
+    </footer>
+
+  </div>
+
+  <!-- Modal Interativo: Reportar Incidente de Conexão -->
+  <div class="modal-overlay" id="reportModal" role="dialog" aria-modal="true" aria-labelledby="reportModalTitle">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="closeReportModal" aria-label="Fechar">&times;</button>
+      <h3 style="font-size: 1.3rem; font-weight: 800; color: #FFF; margin-bottom: 8px;" id="reportModalTitle">Reportar Instabilidade ou Ping Alto</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+        Envie telemetria da sua conexão diretamente para os engenheiros do Riot Direct.
+      </p>
+
+      <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Jogo Impactado</label>
+      <select class="modal-input" id="reportGameSelect">
+        <option value="lol">League of Legends</option>
+        <option value="valorant">VALORANT</option>
+        <option value="tft">Teamfight Tactics</option>
+        <option value="lor">Legends of Runeterra</option>
+        <option value="wildrift">Wild Rift</option>
+      </select>
+
+      <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Região / Shard</label>
+      <select class="modal-input" id="reportRegionSelect">
+        <option value="br">Américas — Brasil (BR)</option>
+        <option value="na">Américas — América do Norte (NA)</option>
+        <option value="las">Américas — LAS / LAN</option>
+        <option value="euw">Europa — EUW (Europe West)</option>
+        <option value="eune">Europa — EUNE</option>
+        <option value="kr">Ásia — Coreia (KR) / Japão (JP)</option>
+      </select>
+
+      <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Descrição do Sintoma</label>
+      <textarea class="modal-input" id="reportDescription" rows="3" placeholder="Ex: Ping saltou de 18ms para 140ms às 14:00 com 5% de perda de pacotes..."></textarea>
+
+      <button type="button" class="btn-speedtest" style="width: 100%; justify-content: center; border-radius: 8px; padding: 12px;" id="btnSubmitTelemetryReport">
+        Enviar Diagnóstico ao Suporte Riot
+      </button>
+    </div>
+  </div>
+
+  <!-- HUD Toast Notification -->
+  <div class="toast-hud" id="toastHud" role="status" aria-live="polite">
+    <span id="toastIcon">✔</span>
+    <span id="toastMsg">Notificação do Portal Riot</span>
+  </div>
+
+  <!-- Sintetizador Sonoro Procedural Web Audio API Embutido & Integrado -->
+  <script>
+    class RiotStatusAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = localStorage.getItem('riot_status_audio_muted') === 'true';
+      }
+
+      initContext() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      toggleMute() {
+        this.muted = !this.muted;
+        localStorage.setItem('riot_status_audio_muted', this.muted);
+        return this.muted;
+      }
+
+      play(type) {
+        if (this.muted) return;
+        this.initContext();
+        if (!this.ctx) return;
+
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, t);
+          osc.frequency.exponentialRampToValueAtTime(300, t + 0.04);
+          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+          osc.start(t);
+          osc.stop(t + 0.04);
+        } else if (type === 'beep') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(950, t);
+          gain.gain.setValueAtTime(0.06, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+          osc.start(t);
+          osc.stop(t + 0.06);
+        } else if (type === 'success') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, t); // C5
+          osc.frequency.setValueAtTime(659.25, t + 0.08); // E5
+          osc.frequency.setValueAtTime(783.99, t + 0.16); // G5
+          osc.frequency.setValueAtTime(1046.50, t + 0.24); // C6
+          gain.gain.setValueAtTime(0.1, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+          osc.start(t);
+          osc.stop(t + 0.45);
+        } else if (type === 'alert') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(440, t);
+          osc.frequency.linearRampToValueAtTime(220, t + 0.2);
+          gain.gain.setValueAtTime(0.09, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+          osc.start(t);
+          osc.stop(t + 0.2);
+        }
+      }
+    }
+
+    window.statusAudio = new RiotStatusAudioEngine();
+  </script>
+
+  <!-- Lógica Principal do Portal de Status e Telemetria -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // 1. Toast Notification Helper
+      const toastHud = document.getElementById('toastHud');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+
+      function showToast(message, type = 'success') {
+        if (!toastHud) return;
+        toastMsg.textContent = message;
+        toastIcon.textContent = type === 'success' ? '✔' : (type === 'alert' ? '⚠' : 'ℹ');
+        toastHud.classList.add('show');
+        if (window.statusAudio) window.statusAudio.play(type === 'alert' ? 'alert' : 'click');
+        setTimeout(() => toastHud.classList.remove('show'), 3500);
+      }
+
+      // 2. Theme Switcher Support
+      const themeSelector = document.getElementById('themeSelector');
+      const savedTheme = localStorage.getItem('riot_theme_preference') || 'riot';
+      if (themeSelector) {
+        themeSelector.value = savedTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeSelector.addEventListener('change', (e) => {
+          const newTheme = e.target.value;
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('riot_theme_preference', newTheme);
+          showToast(`Tema alterado para: ${newTheme.toUpperCase()}`, 'info');
+        });
+      }
+
+      // 3. Audio Toggle
+      const audioToggleBtn = document.getElementById('audioToggleBtn');
+      if (audioToggleBtn) {
+        const updateAudioBtnUI = (isMuted) => {
+          audioToggleBtn.textContent = isMuted ? '🔇' : '🔊';
+          audioToggleBtn.title = isMuted ? 'Áudio Mudo (Clique para Ativar)' : 'Áudio Ativado (Clique para Silenciar)';
+        };
+        updateAudioBtnUI(window.statusAudio.muted);
+        audioToggleBtn.addEventListener('click', () => {
+          const isMuted = window.statusAudio.toggleMute();
+          updateAudioBtnUI(isMuted);
+          showToast(isMuted ? 'Efeitos Sonoros Desativados' : 'Efeitos Sonoros Ativados', 'info');
+        });
+      }
+
+      // 4. Auto-Refresh Loop com Contador Decrescente
+      let countdown = 30;
+      const countdownLabel = document.getElementById('countdownLabel');
+      const btnManualRefresh = document.getElementById('btnManualRefresh');
+
+      function triggerTelemetryUpdate() {
+        // Simula micro-flutuações realistas de ping e jitter na grade de shards
+        document.querySelectorAll('.live-ping').forEach(el => {
+          const base = parseInt(el.getAttribute('data-base'), 10) || 20;
+          const variance = Math.floor(Math.random() * 5) - 2;
+          const current = Math.max(8, base + variance);
+          el.textContent = `${current} ms`;
+        });
+
+        document.querySelectorAll('.live-jitter').forEach(el => {
+          const j = (Math.random() * 1.5 + 0.5).toFixed(1);
+          el.textContent = `± ${j} ms`;
+        });
+
+        // Atualiza KPI Ping Américas
+        const brPing = document.querySelector('#shard-br .live-ping');
+        if (brPing) {
+          const kpiPing = document.getElementById('kpiPing');
+          if (kpiPing) kpiPing.textContent = brPing.textContent;
+        }
+
+        countdown = 30;
+        if (countdownLabel) countdownLabel.textContent = `Atualizado agora`;
+        setTimeout(() => {
+          if (countdownLabel) countdownLabel.textContent = `Atualizando em ${countdown}s`;
+        }, 1200);
+      }
+
+      setInterval(() => {
+        countdown--;
+        if (countdown <= 0) {
+          triggerTelemetryUpdate();
+        } else {
+          if (countdownLabel) countdownLabel.textContent = `Atualizando em ${countdown}s`;
+        }
+      }, 1000);
+
+      if (btnManualRefresh) {
+        btnManualRefresh.addEventListener('click', () => {
+          triggerTelemetryUpdate();
+          showToast('Telemetria dos shards sincronizada com sucesso!', 'success');
+          if (window.statusAudio) window.statusAudio.play('click');
+        });
+      }
+
+      // 5. Filtro de Jogos
+      const gameFilterTabs = document.querySelectorAll('#gameFilterTabs .tab-btn');
+      const gameCards = document.querySelectorAll('.game-card');
+      gameFilterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          gameFilterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const filter = tab.getAttribute('data-filter');
+
+          gameCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-game') === filter) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          if (window.statusAudio) window.statusAudio.play('click');
+        });
+      });
+
+      // 6. Filtro de Incidentes por Gravidade
+      const incidentFilterTabs = document.querySelectorAll('#incidentFilterTabs .tab-btn');
+      const incidentItems = document.querySelectorAll('.incident-item');
+      incidentFilterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          incidentFilterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const sev = tab.getAttribute('data-severity');
+
+          incidentItems.forEach(item => {
+            if (sev === 'all' || item.getAttribute('data-sev') === sev) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+          if (window.statusAudio) window.statusAudio.play('click');
+        });
+      });
+
+      // 7. Speed Test & Diagnostic Benchmark Engine
+      const btnRunSpeedTest = document.getElementById('btnRunSpeedTest');
+      const benchProgressBox = document.getElementById('benchProgressBox');
+      const diagnosticStatusText = document.getElementById('diagnosticStatusText');
+      const diagnosticPercentText = document.getElementById('diagnosticPercentText');
+      const diagnosticProgressFill = document.getElementById('diagnosticProgressFill');
+      const benchResultsBox = document.getElementById('benchResultsBox');
+
+      const steps = [
+        { id: 'step-dns', text: 'Resolvendo DNS Anycast Riot Direct Edge...', pct: 15 },
+        { id: 'step-tls', text: 'Negociando handshake seguro TLS 1.3 & cipher suites...', pct: 30 },
+        { id: 'step-americas', text: 'Sondando latência nos shards Américas (São Paulo / Chicago)...', pct: 55 },
+        { id: 'step-europe', text: 'Sondando latência nos shards Europa (Frankfurt / Dublin)...', pct: 75 },
+        { id: 'step-asia', text: 'Sondando latência Ásia-Pacífico e Coreia (Seul / Tóquio)...', pct: 90 },
+        { id: 'step-jitter', text: 'Calculando dispersão de Jitter, bufferbloat e loss rate...', pct: 100 }
+      ];
+
+      if (btnRunSpeedTest) {
+        btnRunSpeedTest.addEventListener('click', () => {
+          btnRunSpeedTest.disabled = true;
+          benchProgressBox.classList.add('active');
+          benchResultsBox.classList.remove('active');
+
+          // Reseta classes de steps
+          document.querySelectorAll('.step-pill').forEach(p => {
+            p.classList.remove('running', 'done');
+          });
+
+          let currentStepIdx = 0;
+
+          function runNextStep() {
+            if (currentStepIdx < steps.length) {
+              const s = steps[currentStepIdx];
+              diagnosticStatusText.textContent = s.text;
+              diagnosticPercentText.textContent = `${s.pct}%`;
+              diagnosticProgressFill.style.width = `${s.pct}%`;
+
+              const stepEl = document.getElementById(s.id);
+              if (stepEl) stepEl.classList.add('running');
+
+              if (window.statusAudio) window.statusAudio.play('beep');
+
+              setTimeout(() => {
+                if (stepEl) {
+                  stepEl.classList.remove('running');
+                  stepEl.classList.add('done');
+                }
+                currentStepIdx++;
+                runNextStep();
+              }, 450);
+            } else {
+              // Finalizado com Sucesso
+              diagnosticStatusText.textContent = 'Diagnóstico de Rede Concluído com Sucesso!';
+              if (window.statusAudio) window.statusAudio.play('success');
+
+              // Exibe resultados
+              setTimeout(() => {
+                benchResultsBox.classList.add('active');
+                btnRunSpeedTest.disabled = false;
+                showToast('Benchmark concluído: Sua conexão está apta para partidas competitivas!', 'success');
+              }, 300);
+            }
+          }
+
+          runNextStep();
+        });
+      }
+
+      // 8. Controles de Simulação Interativa (Demonstração do Portal)
+      const simAllOkBtn = document.getElementById('simAllOkBtn');
+      const simDegradeEuwBtn = document.getElementById('simDegradeEuwBtn');
+      const simMaintainKrBtn = document.getElementById('simMaintainKrBtn');
+
+      const globalBanner = document.getElementById('globalBanner');
+      const globalStatusHeading = document.getElementById('globalStatusHeading');
+      const globalStatusDesc = document.getElementById('globalStatusDesc');
+      const kpiIncidents = document.getElementById('kpiIncidents');
+      const kpiIncidentsSubtext = document.getElementById('kpiIncidentsSubtext');
+      const pillEuw = document.getElementById('pill-shard-euw');
+      const sparkEuw = document.getElementById('spark-euw');
+      const pillKr = document.getElementById('pill-shard-kr');
+      const sparkKr = document.getElementById('spark-kr');
+      const subserviceVanguard = document.getElementById('subservice-vanguard');
+
+      if (simAllOkBtn) {
+        simAllOkBtn.addEventListener('click', () => {
+          globalBanner.className = 'global-status-banner';
+          globalStatusHeading.textContent = 'TODOS OS SISTEMAS OPERACIONAIS';
+          globalStatusDesc.textContent = 'Todos os datacenters globais e serviços de matchmaking estão operando com telemetria nominal.';
+          kpiIncidents.textContent = '0';
+          kpiIncidentsSubtext.textContent = 'Nenhum bloqueio crítico registrado';
+
+          if (pillEuw) {
+            pillEuw.className = 'status-pill operational';
+            pillEuw.textContent = 'Operacional';
+          }
+          if (sparkEuw) sparkEuw.setAttribute('stroke', '#10B981');
+
+          if (pillKr) {
+            pillKr.className = 'status-pill operational';
+            pillKr.textContent = 'Operacional';
+          }
+          if (sparkKr) sparkKr.setAttribute('stroke', '#10B981');
+
+          if (subserviceVanguard) {
+            subserviceVanguard.className = 'subservice-check';
+            subserviceVanguard.textContent = '✔ Ativo';
+          }
+
+          showToast('Simulação: Todos os shards restaurados para 100% Nominal!', 'success');
+        });
+      }
+
+      if (simDegradeEuwBtn) {
+        simDegradeEuwBtn.addEventListener('click', () => {
+          globalBanner.className = 'global-status-banner degraded';
+          globalStatusHeading.textContent = 'INSTABILIDADE REGIONAL — VALORANT (EUW)';
+          globalStatusDesc.textContent = 'Oscilação no cluster de autenticação Vanguard em Frankfurt. Equipes monitorando mitigação.';
+          kpiIncidents.textContent = '1';
+          kpiIncidentsSubtext.textContent = '1 incidente em monitoramento (EUW)';
+
+          if (pillEuw) {
+            pillEuw.className = 'status-pill degraded';
+            pillEuw.textContent = 'Degradado';
+          }
+          if (sparkEuw) sparkEuw.setAttribute('stroke', '#F59E0B');
+
+          if (subserviceVanguard) {
+            subserviceVanguard.className = 'subservice-alert';
+            subserviceVanguard.textContent = '▲ Investigando VAN-84';
+          }
+
+          showToast('Simulação ativada: Instabilidade VAN-84 na Europa Ocidental.', 'alert');
+        });
+      }
+
+      if (simMaintainKrBtn) {
+        simMaintainKrBtn.addEventListener('click', () => {
+          if (pillKr) {
+            pillKr.className = 'status-pill maintenance';
+            pillKr.textContent = 'Manutenção';
+          }
+          if (sparkKr) sparkKr.setAttribute('stroke', '#8B5CF6');
+          showToast('Simulação ativada: Janela de manutenção preventiva no Shard Coreia (KR).', 'info');
+        });
+      }
+
+      // 9. Modal de Reportar Problema
+      const btnOpenReportModal = document.getElementById('btnOpenReportModal');
+      const closeReportModal = document.getElementById('closeReportModal');
+      const reportModal = document.getElementById('reportModal');
+      const btnSubmitTelemetryReport = document.getElementById('btnSubmitTelemetryReport');
+
+      if (btnOpenReportModal && reportModal) {
+        btnOpenReportModal.addEventListener('click', () => {
+          reportModal.classList.add('active');
+          if (window.statusAudio) window.statusAudio.play('click');
+        });
+      }
+
+      if (closeReportModal && reportModal) {
+        closeReportModal.addEventListener('click', () => {
+          reportModal.classList.remove('active');
+          if (window.statusAudio) window.statusAudio.play('click');
+        });
+      }
+
+      if (btnSubmitTelemetryReport && reportModal) {
+        btnSubmitTelemetryReport.addEventListener('click', () => {
+          const desc = document.getElementById('reportDescription').value;
+          const game = document.getElementById('reportGameSelect').value.toUpperCase();
+          reportModal.classList.remove('active');
+          document.getElementById('reportDescription').value = '';
+          const ticketId = 'RIT-' + Math.floor(100000 + Math.random() * 900000);
+          showToast(`Telemetria registrada com sucesso! Ticket ID: ${ticketId} (${game})`, 'success');
+        });
+      }
+
+      // Fechar modal ao clicar fora
+      window.addEventListener('click', (e) => {
+        if (e.target === reportModal) {
+          reportModal.classList.remove('active');
+        }
+      });
+
+      // 10. Suporte ao Seletor de Idiomas (i18n básico de amostra)
+      const langSelector = document.getElementById('langSelector');
+      if (langSelector) {
+        langSelector.addEventListener('change', (e) => {
+          const lang = e.target.value;
+          if (lang === 'en-US') {
+            document.getElementById('globalStatusHeading').textContent = 'ALL SYSTEMS OPERATIONAL';
+            document.getElementById('globalStatusDesc').textContent = 'All global datacenters and matchmaking queues operating at nominal telemetry.';
+            showToast('Language switched to English (US)', 'info');
+          } else if (lang === 'es-ES') {
+            document.getElementById('globalStatusHeading').textContent = 'TODOS LOS SISTEMAS OPERATIVOS';
+            document.getElementById('globalStatusDesc').textContent = 'Todos los centros de datos globales funcionan con telemetría nominal.';
+            showToast('Idioma cambiado a Español', 'info');
+          } else {
+            document.getElementById('globalStatusHeading').textContent = 'TODOS OS SISTEMAS OPERACIONAIS';
+            document.getElementById('globalStatusDesc').textContent = 'Todos os datacenters globais e serviços de matchmaking estão operando com telemetria nominal.';
+            showToast('Idioma alterado para Português', 'info');
+          }
+        });
+      }
+
+    });
+  </script>
+</body>
+</html>
