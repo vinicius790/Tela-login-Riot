@@ -703,7 +703,7 @@
                 const progress = this.modal.querySelector('#captchaSliderProgress');
                 if (progress) progress.style.background = '#10B981';
 
-                this.statusText.textContent = '✓ Verificação concluída com sucesso!';
+                this.statusText.textContent = window.i18n ? window.i18n.t('captcha_success') : '✓ Verificação concluída com sucesso!';
                 this.statusText.style.color = '#10B981';
 
                 // Snap piece into position
@@ -721,7 +721,7 @@
                 this.sliderThumb.style.backgroundColor = '#EF4444';
                 this.sliderThumb.style.color = '#FFF';
                 this.sliderThumb.innerHTML = '✕';
-                this.statusText.textContent = 'Encaixe incorreto. Tente novamente.';
+                this.statusText.textContent = window.i18n ? window.i18n.t('captcha_failed') : 'Encaixe incorreto. Tente novamente.';
                 this.statusText.style.color = '#EF4444';
 
                 // Shake modal box

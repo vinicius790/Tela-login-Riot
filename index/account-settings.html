@@ -35,6 +35,16 @@
 
     <!-- Controles Globais: Tema, Áudio, Perfil e Logout -->
     <div class="account-header__controls">
+      <!-- Seletor de Idioma -->
+      <select id="langSelector" class="header-btn" aria-label="Seletor de Idioma" data-i18n-aria="lang_selector_label" title="Idioma / Language">
+        <option value="pt-BR">🇧🇷 Português (BR)</option>
+        <option value="en-US">🇺🇸 English (US)</option>
+        <option value="es-ES">🇪🇸 Español (ES)</option>
+        <option value="ja-JP">🇯🇵 日本語 (JA)</option>
+        <option value="ko-KR">🇰🇷 한국어 (KO)</option>
+        <option value="de-DE">🇩🇪 Deutsch (DE)</option>
+      </select>
+
       <!-- Seletor de Tema Dinâmico -->
       <select id="themeSelector" class="header-btn" aria-label="Seletor de Tema Riot">
         <option value="riot" selected>Tema: Riot Games</option>
@@ -574,9 +584,12 @@
   <div class="riot-toast-container" id="toastContainer" aria-live="polite"></div>
 
   <!-- Scripts do Ecossistema Riot Games -->
+  <script src="../assets/icons.js"></script>
   <script src="../js/audio.js"></script>
+  <script src="../js/i18n.js"></script>
   <script src="../js/theme-switcher.js"></script>
   <script src="../js/confetti.js"></script>
+  <script src="../js/shortcuts.js"></script>
   <script src="../js/mock-auth.js"></script>
 
   <script>

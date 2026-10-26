@@ -26,10 +26,11 @@
 4. [Especificação do Sintetizador Web Audio API](#4-especificação-do-sintetizador-web-audio-api)
 5. [Motor de Partículas Canvas VFX & Emblemas Centrais](#5-motor-de-partículas-canvas-vfx--emblemas-centrais)
 6. [Criptografia WebCrypto SHA-256 & Fluxo 2FA TOTP](#6-criptografia-webcrypto-sha-256--fluxo-2fa-totp)
-7. [Treinador de Reflexos APM & Suite Bodyfit Esports](#7-treinador-de-reflexos-apm--suite-bodyfit-esports)
-8. [Tabela de Atalhos de Teclado & Modo Imersivo](#8-tabela-de-atalhos-de-teclado--modo-imersivo)
-9. [Instalação PWA & Guia do Service Worker (riot-portal-v2)](#9-instalação-pwa--guia-do-service-worker-riot-portal-v2)
-10. [Como Executar Localmente & Deploy](#10-como-executar-localmente--deploy)
+7. [Central de Configurações da Conta Riot (Riot ID, Contas Conectadas, 2FA, Sessões)](#7-central-de-configurações-da-conta-riot)
+8. [Treinador de Reflexos APM & Suite Bodyfit Esports](#8-treinador-de-reflexos-apm--suite-bodyfit-esports)
+9. [Tabela de Atalhos de Teclado & Modo Imersivo](#9-tabela-de-atalhos-de-teclado--modo-imersivo)
+10. [Instalação PWA & Guia do Service Worker (riot-portal-v2)](#10-instalação-pwa--guia-do-service-worker-riot-portal-v2)
+11. [Como Executar Localmente & Deploy](#11-como-executar-localmente--deploy)
 
 ---
 
@@ -74,6 +75,10 @@ O sistema opera sob uma arquitetura desacoplada e baseada em eventos (`CustomEve
 Tela-login-Riot/
 ├── index.html                   # Portal principal de autenticação de alta fidelidade
 ├── trembolona.html              # Interface de login retrô de alta performance
+├── index/                       # Portal modular de autenticação e gerenciamento de conta
+│   ├── index.html               # Portal Riot Client com tema dinâmico, 2FA e Web Audio
+│   ├── account-settings.html    # Central de Configurações da Conta Riot (Riot ID, Cooldown, 2FA, Sessões)
+│   └── trembolona.html          # Portal de monitoramento de status de servidores e shards
 ├── manifest.json                # Manifesto PWA completo (ícones 192px, 512px, maskable, shortcuts)
 ├── sw.js                        # Service Worker raiz (delega para js/sw.js com escopo global)
 ├── GH.css                       # Folha de estilos legada mantida para retrocompatibilidade
@@ -89,7 +94,7 @@ Tela-login-Riot/
 │   ├── auth.js                  # Controladores de input flutuante, validações e detecção de Caps Lock
 │   ├── confetti.js              # Canhão procedural de partículas de confete para celebração de login
 │   ├── Durateston.js            # Módulo modularizado de compatibilidade do formulário
-│   ├── i18n.js                  # Engine de internacionalização dinâmica em tempo real (5 idiomas)
+│   ├── i18n.js                  # Engine de internacionalização nativa de alta precisão (6 idiomas: PT, EN, ES, JA, KO, DE)
 │   ├── mock-auth.js             # Autenticação segura com WebCrypto SHA-256, 2FA OTP e sessão
 │   ├── particles.js             # Motor Canvas VFX 60fps com 6 emblemas dinâmicos e física vetorial
 │   ├── riot-security.js         # Módulo de segurança: Captcha deslizante, Passkeys WebAuthn e Shards
@@ -212,7 +217,35 @@ sequenceDiagram
 
 ---
 
-### 7. Treinador de Reflexos APM & Suite Bodyfit Esports
+### 7. Central de Configurações da Conta Riot
+
+Acessível em [`index/account-settings.html`](index/account-settings.html) e integrada diretamente à interface de login via ícone superior e redirecionamento pós-autenticação:
+
+1. **Riot ID & Tagline com Cooldown Timer de 30 Dias**:
+   * **Pré-visualização Dinâmica**: Gamertag formatado em tempo real com indicador de região (`PlayerOne#BR1`).
+   * **Relógio Digital de Contagem Regressiva (Mock em Tempo Real)**: Cronômetro decrescente segundo a segundo (Dias, Horas, Minutos, Segundos) com barra de progresso visual de preenchimento proporcional.
+   * **Ferramentas de Simulação**: Botões de teste integrados para simular cooldown ativo de 24 dias ou liberar alteração imediata (reset) para fins de teste.
+   * **Salvamento com Persistência**: Ao salvar, reinicia o ciclo oficial de 30 dias em `localStorage`, dispara celebração de confetes e efeitos sonoros procedurais.
+
+2. **Gerenciador de Contas Conectadas**:
+   * Suporte para 4 plataformas: **Twitch Drops**, **Discord Rich Presence**, **Prime Gaming** e **YouTube Gaming**.
+   * Badges de status dinâmicos (`● Conectado` com ponto pulsante verde vs `○ Não vinculado`).
+   * Modal de Autorização OAuth 2.0 simulado com permissões de usuário e gatilhos de áudio.
+
+3. **Controles de Privacidade & Sessões Ativas**:
+   * **Ocultar Histórico de Partidas**: Interruptor estilizado que protege estatísticas e KDA contra rastreadores externos (OP.GG, Tracker.gg).
+   * **Status de Autenticação em Dois Fatores (2FA)**: Nível de proteção máxima com simulador de desafio push no Riot Mobile (código 74).
+   * **Gerenciador de Sessões**: Lista de dispositivos (Windows, macOS, Android), endereços IP simulados, localização e botão individual de **Revogar Sessão**, além do comando master **Revogar Todas as Outras Sessões**.
+
+4. **Gerador de Códigos de Recuperação de Emergência (2FA)**:
+   * Gera **8 códigos alfanuméricos únicos** formatados no padrão de segurança `XXXX-XXXX`.
+   * **Copiar Todos os Códigos**: Exportação formatada para a área de transferência com carimbo de data/hora.
+   * **Download de Arquivo (.txt)**: Criação de Blob em tempo real com download de `riot-2fa-backup-codes-[user].txt`.
+   * **Cópia Individual**: Clique direto em cada chip para copiar o código individualmente.
+
+---
+
+### 8. Treinador de Reflexos APM & Suite Bodyfit Esports
 
 Acessível em [`bodyfit/index.html`](bodyfit/index.html) ou pelo atalho no portal:
 
@@ -237,12 +270,12 @@ Acessível em [`bodyfit/index.html`](bodyfit/index.html) ou pelo atalho no porta
 
 ---
 
-### 8. Tabela de Atalhos de Teclado & Modo Imersivo
+### 9. Tabela de Atalhos de Teclado & Modo Imersivo
 
 | Tecla de Atalho | Ação Executada | Módulo Responsável |
 |---|---|---|
 | <kbd>Alt</kbd> + <kbd>T</kbd> | Alterna ciclicamente entre os 6 temas da Riot Games | [`shortcuts.js`](js/shortcuts.js) |
-| <kbd>Alt</kbd> + <kbd>L</kbd> | Alterna ciclicamente entre os 5 idiomas suportados | [`i18n.js`](js/i18n.js) |
+| <kbd>Alt</kbd> + <kbd>L</kbd> | Alterna ciclicamente entre os 6 idiomas suportados (PT, EN, ES, JA, KO, DE) | [`i18n.js`](js/i18n.js) |
 | <kbd>Ctrl</kbd> + <kbd>M</kbd> / <kbd>Cmd</kbd> + <kbd>M</kbd> | Ativa / Desativa o sintetizador sonoro (Mudo) | [`audio.js`](js/audio.js) |
 | <kbd>F11</kbd> ou Botão `⛶` | Alterna o modo de Tela Cheia Imersiva | Fullscreen API |
 | <kbd>Esc</kbd> | Fecha imediatamente qualquer modal aberto (2FA, Captcha, Ajuda) | [`shortcuts.js`](js/shortcuts.js) |
@@ -251,7 +284,7 @@ Acessível em [`bodyfit/index.html`](bodyfit/index.html) ou pelo atalho no porta
 
 ---
 
-### 9. Instalação PWA & Guia do Service Worker (riot-portal-v2)
+### 10. Instalação PWA & Guia do Service Worker (riot-portal-v2)
 
 O portal é um **Progressive Web App (PWA)** de Classe A:
 
@@ -282,7 +315,7 @@ graph TD
 
 ---
 
-### 10. Como Executar Localmente & Deploy
+### 11. Como Executar Localmente & Deploy
 
 Como o projeto segue a filosofia **Zero-Dependency**, nenhuma instalação de pacotes `npm install` é necessária:
 
@@ -318,10 +351,11 @@ Como o projeto segue a filosofia **Zero-Dependency**, nenhuma instalação de pa
 4. [Web Audio API Synthesizer Specification](#4-web-audio-api-synthesizer-specification)
 5. [Canvas Particle VFX Engine & Thematic Centerpieces](#5-canvas-particle-vfx-engine--thematic-centerpieces)
 6. [WebCrypto SHA-256 Hashing & 2FA TOTP Workflow](#6-webcrypto-sha-256-hashing--2fa-totp-workflow)
-7. [APM Reflex Trainer & Bodyfit Esports Suite](#7-apm-reflex-trainer--bodyfit-esports-suite)
-8. [Keyboard Shortcuts Cheatsheet & Immersive Mode](#8-keyboard-shortcuts-cheatsheet--immersive-mode)
-9. [PWA Installation & Service Worker (riot-portal-v2)](#9-pwa-installation--service-worker-riot-portal-v2)
-10. [Local Execution & Deployment](#10-local-execution--deployment)
+7. [Riot Account Settings Center (Riot ID, Connected Accounts, 2FA, Sessions)](#7-riot-account-settings-center)
+8. [APM Reflex Trainer & Bodyfit Esports Suite](#8-apm-reflex-trainer--bodyfit-esports-suite)
+9. [Keyboard Shortcuts Cheatsheet & Immersive Mode](#9-keyboard-shortcuts-cheatsheet--immersive-mode)
+10. [PWA Installation & Service Worker (riot-portal-v2)](#10-pwa-installation--service-worker-riot-portal-v2)
+11. [Local Execution & Deployment](#11-local-execution--deployment)
 
 ---
 
@@ -366,6 +400,10 @@ The application leverages an event-driven decoupled architecture (`CustomEvent` 
 Tela-login-Riot/
 ├── index.html                   # Master login portal with complete animations and HUD
 ├── trembolona.html              # High-performance lightweight retro login UI
+├── index/                       # Modular portal authentication and account management
+│   ├── index.html               # Full client portal with dynamic themes, 2FA and Web Audio
+│   ├── account-settings.html    # Riot Account Settings Center (Riot ID, Cooldown, 2FA, Sessions)
+│   └── trembolona.html          # Server status, shard telemetry and ping monitor
 ├── manifest.json                # PWA manifest (192px, 512px, maskable icons & shortcuts)
 ├── sw.js                        # Root Service Worker forwarder with global scope
 ├── GH.css                       # Root base stylesheet for backward compatibility
@@ -381,7 +419,7 @@ Tela-login-Riot/
 │   ├── auth.js                  # Floating labels, Caps Lock detector & validation logic
 │   ├── confetti.js              # Canvas confetti cannon for successful authentications
 │   ├── Durateston.js            # Modular form listener module
-│   ├── i18n.js                  # Dynamic client-side internationalization (5 languages)
+│   ├── i18n.js                  # Dynamic client-side internationalization (6 languages: PT, EN, ES, JA, KO, DE)
 │   ├── mock-auth.js             # WebCrypto SHA-256 hashing, 2FA OTP, and session manager
 │   ├── particles.js             # Canvas 60fps VFX engine with 6 dynamic centerpieces
 │   ├── riot-security.js         # Sliding puzzle captcha, WebAuthn Passkeys & Shard selector
@@ -504,7 +542,35 @@ sequenceDiagram
 
 ---
 
-### 7. APM Reflex Trainer & Bodyfit Esports Suite
+### 7. Riot Account Settings Center
+
+Accessible at [`index/account-settings.html`](index/account-settings.html) and integrated seamlessly into the login screen via top navigation button and post-authentication redirection:
+
+1. **Riot ID & Tagline Customization with 30-Day Cooldown Countdown Timer**:
+   * **Dynamic Live Gamertag Preview**: Shows real-time handle updates with region indicator (`PlayerOne#BR1`).
+   * **Real-time Digital Countdown Clock**: Ticking down second-by-second (Days, Hours, Minutes, Seconds) with animated elapsed percentage bar.
+   * **Interactive Cooldown Simulator**: Quickly toggle active 24-day cooldown or unlock immediate changes for evaluation.
+   * **Persistent Storage & Audio**: Saves new handle to `localStorage`, re-arms 30-day cooldown, and triggers Web Audio SFX + Confetti.
+
+2. **Connected Accounts Manager**:
+   * Supports 4 major gaming platforms: **Twitch Drops**, **Discord Rich Presence**, **Prime Gaming**, and **YouTube Gaming**.
+   * Real-time status badges (`● Connected` with glowing green pulse vs `○ Disconnected`).
+   * Realistic OAuth 2.0 Authorization modal with permission scope inspection.
+
+3. **Privacy & Login Session Controls**:
+   * **Hide Match History**: Custom toggle protecting in-game stats from 3rd-party trackers (Tracker.gg, OP.GG).
+   * **Two-Factor Authentication (2FA) Status**: High-security shield badge with interactive push verification challenge.
+   * **Active Sessions List**: Monitor connected hardware (Windows, macOS, Mobile), IP addresses, geolocation, and **Revoke Session** button per device or in bulk.
+
+4. **2FA Emergency Backup Codes Generator**:
+   * Generates **8 unique alphanumeric backup codes** in `XXXX-XXXX` format.
+   * **Copy All Codes**: Formats clean security document to clipboard.
+   * **Download Text File (.txt)**: Instant Blob generator for `riot-2fa-backup-codes-[user].txt`.
+   * **One-Click Single Code Copy**: Click any code chip to copy instantly.
+
+---
+
+### 8. APM Reflex Trainer & Bodyfit Esports Suite
 
 Available directly in [`bodyfit/index.html`](bodyfit/index.html):
 
@@ -529,12 +595,12 @@ Available directly in [`bodyfit/index.html`](bodyfit/index.html):
 
 ---
 
-### 8. Keyboard Shortcuts Cheatsheet & Immersive Mode
+### 9. Keyboard Shortcuts Cheatsheet & Immersive Mode
 
 | Shortcut Key | Action Triggered | Handler Module |
 |---|---|---|
 | <kbd>Alt</kbd> + <kbd>T</kbd> | Cycle through all 6 Riot Gaming themes | [`shortcuts.js`](js/shortcuts.js) |
-| <kbd>Alt</kbd> + <kbd>L</kbd> | Cycle through all 5 supported languages | [`i18n.js`](js/i18n.js) |
+| <kbd>Alt</kbd> + <kbd>L</kbd> | Cycle through all 6 supported languages (PT, EN, ES, JA, KO, DE) | [`i18n.js`](js/i18n.js) |
 | <kbd>Ctrl</kbd> + <kbd>M</kbd> / <kbd>Cmd</kbd> + <kbd>M</kbd> | Toggle Web Audio Synthesizer mute state | [`audio.js`](js/audio.js) |
 | <kbd>F11</kbd> or `⛶` Button | Toggle Fullscreen Immersive Mode | Fullscreen API |
 | <kbd>Esc</kbd> | Close any active modal dialog (2FA, Captcha, Help) | [`shortcuts.js`](js/shortcuts.js) |
@@ -543,7 +609,7 @@ Available directly in [`bodyfit/index.html`](bodyfit/index.html):
 
 ---
 
-### 9. PWA Installation & Service Worker (riot-portal-v2)
+### 10. PWA Installation & Service Worker (riot-portal-v2)
 
 The application fulfills all criteria for a Tier-1 **Progressive Web App (PWA)**:
 
@@ -574,7 +640,7 @@ graph TD
 
 ---
 
-### 10. Local Execution & Deployment
+### 11. Local Execution & Deployment
 
 Adhering strictly to the **Zero-Dependency** design, no `npm install` or compilation step is required:
 

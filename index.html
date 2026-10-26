@@ -217,13 +217,17 @@
 
   <!-- Barra de Ferramentas Superior (Idioma, Tema, Áudio, Tela Cheia, Demo Fill) -->
   <header class="top-controls" role="region" aria-label="Preferências do usuário">
-    <a href="index/account-settings.html" class="control-btn" id="btnTopAccount" title="Central de Configurações da Conta Riot" style="text-decoration: none; display: flex; align-items: center; gap: 6px; border-color: rgba(235, 0, 41, 0.4); background: rgba(235, 0, 41, 0.12);">
+    <a href="index/account-settings.html" class="control-btn" id="btnTopAccount" title="Central de Configurações da Conta Riot" data-i18n-title="settings_title" style="text-decoration: none; display: flex; align-items: center; gap: 6px; border-color: rgba(235, 0, 41, 0.4); background: rgba(235, 0, 41, 0.12);">
       <span>⚙️</span>
-      <span id="topAccountName">Minha Conta</span>
+      <span id="topAccountName" data-i18n="settings_title">Configurações</span>
     </a>
 
-    <button type="button" class="control-btn" id="btnDemoFill" title="Auto-preencher credenciais de teste (player1 / password123)" style="background: rgba(235, 0, 41, 0.25); border-color: #EB0029; color: #FFF; font-weight: bold;">
-      <span>⚡ Demo Fill</span>
+    <button type="button" class="control-btn" id="btnShortcutsHud" title="Atalhos de Teclado" data-i18n-title="shortcuts_title">
+      <span>⌨</span> <span data-i18n="shortcuts_btn">Atalhos</span>
+    </button>
+
+    <button type="button" class="control-btn" id="btnDemoFill" title="Auto-preencher credenciais de teste (player1 / password123)" data-i18n-title="demo_fill_tooltip" style="background: rgba(235, 0, 41, 0.25); border-color: #EB0029; color: #FFF; font-weight: bold;">
+      <span data-i18n="demo_fill">⚡ Demo Fill</span>
     </button>
 
     <button type="button" class="control-btn" onclick="toggleFullscreen()" title="Tela cheia (F11)">
@@ -234,12 +238,13 @@
       <span id="audioIcon">🔊</span>
     </button>
 
-    <select id="langSelector" class="control-select" aria-label="Seletor de idioma">
-      <option value="pt-BR" selected>Português (BR)</option>
-      <option value="en-US">English (US)</option>
-      <option value="es-ES">Español (ES)</option>
-      <option value="ja-JP">日本語 (JA)</option>
-      <option value="ko-KR">한국어 (KO)</option>
+    <select id="langSelector" class="control-select" aria-label="Seletor de idioma" data-i18n-aria="lang_selector_label" title="Idioma / Language">
+      <option value="pt-BR" selected>🇧🇷 Português (BR)</option>
+      <option value="en-US">🇺🇸 English (US)</option>
+      <option value="es-ES">🇪🇸 Español (ES)</option>
+      <option value="ja-JP">🇯🇵 日本語 (JA)</option>
+      <option value="ko-KR">🇰🇷 한국어 (KO)</option>
+      <option value="de-DE">🇩🇪 Deutsch (DE)</option>
     </select>
 
     <select id="themeSelector" class="control-select" aria-label="Seletor de tema">
@@ -405,6 +410,49 @@
     </div>
   </div>
 
+  <!-- Modal: Atalhos de Teclado (Shortcuts HUD) -->
+  <div class="modal-overlay" id="modalShortcuts" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="modal-box" style="max-width: 480px;">
+      <button class="modal-close-btn" id="closeShortcutsBtn" aria-label="Fechar" data-i18n-aria="close_aria">&times;</button>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom: 8px;">
+        <span style="font-size: 1.4rem;">⌨️</span>
+        <h2 id="shortcutsTitle" data-i18n="shortcuts_title" style="margin:0;">Atalhos de Teclado</h2>
+      </div>
+      <p data-i18n="shortcuts_subtitle" style="margin-bottom: 20px;">Navegue pelo Riot Client rapidamente usando atalhos do teclado</p>
+      
+      <div class="shortcuts-list" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_theme" style="font-size:0.86rem; color:#E4E4E7;">Alternar temas visuais (Riot, Valorant, LoL, TFT)</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">Alt</kbd> + <kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">T</kbd></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_lang" style="font-size:0.86rem; color:#E4E4E7;">Alternar idioma da interface ciclicamente</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">Alt</kbd> + <kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">L</kbd></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_audio" style="font-size:0.86rem; color:#E4E4E7;">Ativar ou silenciar efeitos sonoros (SFX)</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">Ctrl</kbd> + <kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">M</kbd></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_fullscreen" style="font-size:0.86rem; color:#E4E4E7;">Entrar ou sair do modo de tela cheia</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">F11</kbd></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_escape" style="font-size:0.86rem; color:#E4E4E7;">Fechar janelas modais ativas</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">Esc</kbd></div>
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button type="button" class="btn-action-primary" id="btnCloseShortcutsModal" data-i18n="close">Fechar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Módulos JavaScript Integrados -->
   <script src="js/audio.js"></script>
   <script src="js/i18n.js"></script>
@@ -455,6 +503,51 @@
           });
         }
       });
+
+      // Redirecionamento Automático para Central de Configurações da Conta
+      window.addEventListener('auth:success', (e) => {
+        const username = e.detail?.user?.username || 'player1';
+        if (window.showRiotToast) {
+          window.showRiotToast(`Login aprovado! Entrando na Central de Contas Riot...`, 'success');
+        }
+        setTimeout(() => {
+          window.location.href = 'index/account-settings.html';
+        }, 1200);
+      });
+
+      // Shortcuts HUD Modal Handlers
+      const btnShortcuts = document.getElementById('btnShortcutsHud');
+      const modalShortcuts = document.getElementById('modalShortcuts');
+      const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
+      const btnCloseShortcutsModal = document.getElementById('btnCloseShortcutsModal');
+
+      if (btnShortcuts && modalShortcuts) {
+        btnShortcuts.addEventListener('click', () => {
+          modalShortcuts.classList.add('active');
+          if (window.riotAudio) window.riotAudio.play('click');
+        });
+      }
+
+      [closeShortcutsBtn, btnCloseShortcutsModal].forEach(btn => {
+        if (btn && modalShortcuts) {
+          btn.addEventListener('click', () => {
+            modalShortcuts.classList.remove('active');
+            if (window.riotAudio) window.riotAudio.play('click');
+          });
+        }
+      });
+
+      // Atualizar indicador da conta no topo se houver sessão ativa
+      try {
+        const activeSession = localStorage.getItem('riot_auth_session') || sessionStorage.getItem('riot_auth_session');
+        if (activeSession) {
+          const parsed = JSON.parse(activeSession);
+          if (parsed.username) {
+            const topLabel = document.getElementById('topAccountName');
+            if (topLabel) topLabel.textContent = parsed.username;
+          }
+        }
+      } catch (err) {}
     });
   </script>
 </body>

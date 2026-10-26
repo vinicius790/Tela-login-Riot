@@ -1054,9 +1054,11 @@
             }
 
             // Dispatch standard custom events
-            const eventDetail = { language: lang, dictionary: translations[lang] };
-            window.dispatchEvent(new CustomEvent('riot-lang-changed', { detail: eventDetail }));
-            window.dispatchEvent(new CustomEvent('riotLangChanged', { detail: eventDetail }));
+            if (typeof window.dispatchEvent === 'function' && typeof CustomEvent === 'function') {
+                const eventDetail = { language: lang, dictionary: translations[lang] };
+                window.dispatchEvent(new CustomEvent('riot-lang-changed', { detail: eventDetail }));
+                window.dispatchEvent(new CustomEvent('riotLangChanged', { detail: eventDetail }));
+            }
 
             return true;
         }

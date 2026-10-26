@@ -1374,12 +1374,13 @@
         </select>
 
         <!-- Seletor de Idioma -->
-        <select id="langSelector" class="control-select" aria-label="Selecionar Idioma">
-          <option value="pt-BR">🇧🇷 Português</option>
-          <option value="en-US">🇺🇸 English</option>
-          <option value="es-ES">🇪🇸 Español</option>
-          <option value="ja-JP">🇯🇵 日本語</option>
-          <option value="ko-KR">🇰🇷 한국어</option>
+        <select id="langSelector" class="control-select" aria-label="Selecionar Idioma" data-i18n-aria="lang_selector_label" title="Idioma / Language">
+          <option value="pt-BR">🇧🇷 Português (BR)</option>
+          <option value="en-US">🇺🇸 English (US)</option>
+          <option value="es-ES">🇪🇸 Español (ES)</option>
+          <option value="ja-JP">🇯🇵 日本語 (JA)</option>
+          <option value="ko-KR">🇰🇷 한국어 (KO)</option>
+          <option value="de-DE">🇩🇪 Deutsch (DE)</option>
         </select>
 
         <!-- Alternador de Som Sintetizado -->
@@ -2574,6 +2575,7 @@
   </div>
 
   <!-- Sintetizador Sonoro Procedural Web Audio API Embutido & Integrado -->
+  <script src="../js/i18n.js"></script>
   <script>
     class RiotStatusAudioEngine {
       constructor() {
@@ -2972,24 +2974,42 @@
         }
       });
 
-      // 10. Suporte ao Seletor de Idiomas (i18n básico de amostra)
+      // 10. Suporte ao Seletor de Idiomas (i18n Multi-Idioma Completo)
       const langSelector = document.getElementById('langSelector');
       if (langSelector) {
+        if (window.i18n) {
+          langSelector.value = window.i18n.getLanguage();
+        }
         langSelector.addEventListener('change', (e) => {
           const lang = e.target.value;
-          if (lang === 'en-US') {
-            document.getElementById('globalStatusHeading').textContent = 'ALL SYSTEMS OPERATIONAL';
-            document.getElementById('globalStatusDesc').textContent = 'All global datacenters and matchmaking queues operating at nominal telemetry.';
-            showToast('Language switched to English (US)', 'info');
-          } else if (lang === 'es-ES') {
-            document.getElementById('globalStatusHeading').textContent = 'TODOS LOS SISTEMAS OPERATIVOS';
-            document.getElementById('globalStatusDesc').textContent = 'Todos los centros de datos globales funcionan con telemetría nominal.';
-            showToast('Idioma cambiado a Español', 'info');
-          } else {
-            document.getElementById('globalStatusHeading').textContent = 'TODOS OS SISTEMAS OPERACIONAIS';
-            document.getElementById('globalStatusDesc').textContent = 'Todos os datacenters globais e serviços de matchmaking estão operando com telemetria nominal.';
-            showToast('Idioma alterado para Português', 'info');
+          if (window.i18n && typeof window.i18n.setLanguage === 'function') {
+            window.i18n.setLanguage(lang);
           }
+
+          const statusHeadings = {
+            'pt-BR': { heading: 'TODOS OS SISTEMAS OPERACIONAIS', desc: 'Todos os datacenters globais e serviços de matchmaking estão operando com telemetria nominal.' },
+            'en-US': { heading: 'ALL SYSTEMS OPERATIONAL', desc: 'All global datacenters and matchmaking queues operating at nominal telemetry.' },
+            'es-ES': { heading: 'TODOS LOS SISTEMAS OPERATIVOS', desc: 'Todos los centros de datos globales funcionan con telemetría nominal.' },
+            'ja-JP': { heading: 'すべてのシステムが正常稼働中', desc: 'すべてのグローバルデータセンターとマッチメイキングキューが正常に稼働しています。' },
+            'ko-KR': { heading: '모든 시스템 정상 작동 중', desc: '모든 글로벌 데이터 센터 및 대전 검색 대기열이 정상 작동하고 있습니다.' },
+            'de-DE': { heading: 'ALLE SYSTEME BETRIEBSBEREIT', desc: 'Alle globalen Rechenzentren und Matchmaking-Warteschlangen arbeiten nominal.' }
+          };
+
+          const textData = statusHeadings[lang] || statusHeadings['pt-BR'];
+          const h = document.getElementById('globalStatusHeading');
+          const d = document.getElementById('globalStatusDesc');
+          if (h) h.textContent = textData.heading;
+          if (d) d.textContent = textData.desc;
+
+          const toastMessages = {
+            'pt-BR': 'Idioma alterado para Português (BR)',
+            'en-US': 'Language switched to English (US)',
+            'es-ES': 'Idioma cambiado a Español (ES)',
+            'ja-JP': '言語が日本語に変更されました',
+            'ko-KR': '언어가 한국어로 변경되었습니다',
+            'de-DE': 'Sprache auf Deutsch geändert'
+          };
+          showToast(toastMessages[lang] || `Idioma: ${lang}`, 'info');
         });
       }
 

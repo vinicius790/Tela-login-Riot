@@ -761,8 +761,8 @@
          * Initialize Audio UI Controls: binds header buttons or fallback floating button
          */
         initUI() {
-            // 1. Connect Header Audio Toggle Button (#audioToggleBtn)
-            const headerAudioBtn = document.getElementById('audioToggleBtn');
+            // 1. Connect Header Audio Toggle Button (#audioToggleBtn or #btnAudioToggle)
+            const headerAudioBtn = document.getElementById('audioToggleBtn') || document.getElementById('btnAudioToggle');
             if (headerAudioBtn && !headerAudioBtn._riotAudioBound) {
                 headerAudioBtn._riotAudioBound = true;
                 headerAudioBtn.addEventListener('click', (e) => {
@@ -854,20 +854,25 @@
          * Update state and icons across all audio buttons in the DOM
          */
         updateAllAudioUI() {
-            // 1. Header Audio Toggle Button
-            const headerAudioBtn = document.getElementById('audioToggleBtn');
-            const audioIcon = document.getElementById('audioIcon');
-            if (headerAudioBtn) {
-                if (this.muted) {
-                    if (audioIcon) audioIcon.textContent = '🔇';
-                    headerAudioBtn.title = 'Áudio Silenciado (Ctrl+M para ativar | Clique direito: Cyber Drone)';
-                    headerAudioBtn.classList.add('audio-muted');
-                } else {
-                    if (audioIcon) audioIcon.textContent = '🔊';
-                    headerAudioBtn.title = 'Áudio Ativado (Ctrl+M para silenciar | Clique direito: Cyber Drone)';
-                    headerAudioBtn.classList.remove('audio-muted');
+            // 1. Header Audio Toggle Button (#audioToggleBtn and #btnAudioToggle)
+            const audioButtons = [
+                { btn: document.getElementById('audioToggleBtn'), icon: document.getElementById('audioIcon') },
+                { btn: document.getElementById('btnAudioToggle'), icon: document.getElementById('audioStatusIcon') }
+            ];
+
+            audioButtons.forEach(({ btn, icon }) => {
+                if (btn) {
+                    if (this.muted) {
+                        if (icon) icon.textContent = '🔇';
+                        btn.title = 'Áudio Silenciado (Ctrl+M para ativar | Clique direito: Cyber Drone)';
+                        btn.classList.add('audio-muted');
+                    } else {
+                        if (icon) icon.textContent = '🔊';
+                        btn.title = 'Áudio Ativado (Ctrl+M para silenciar | Clique direito: Cyber Drone)';
+                        btn.classList.remove('audio-muted');
+                    }
                 }
-            }
+            });
 
             // 2. Header Ambient Button
             const ambientBtn = document.getElementById('ambientToggleBtn');
@@ -913,7 +918,7 @@
                 }
 
                 // 2. Audio control buttons have their own toggles
-                if (e.target.closest('#audioToggleBtn, #riot-audio-toggle, #ambientToggleBtn')) {
+                if (e.target.closest('#audioToggleBtn, #btnAudioToggle, #riot-audio-toggle, #ambientToggleBtn')) {
                     return;
                 }
 

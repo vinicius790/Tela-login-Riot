@@ -217,25 +217,29 @@
 
   <!-- Barra de Ferramentas Superior (Idioma, Tema, Áudio, Tela Cheia, Demo Fill) -->
   <header class="top-controls" role="region" aria-label="Preferências do usuário">
-    <a href="account-settings.html" class="control-btn" id="btnTopAccount" title="Central de Configurações da Conta Riot" style="text-decoration: none; display: flex; align-items: center; gap: 6px; border-color: rgba(235, 0, 41, 0.4); background: rgba(235, 0, 41, 0.12);">
+    <a href="account-settings.html" class="control-btn" id="btnTopAccount" title="Central de Configurações da Conta Riot" data-i18n-title="settings_title" style="text-decoration: none; display: flex; align-items: center; gap: 6px; border-color: rgba(235, 0, 41, 0.4); background: rgba(235, 0, 41, 0.12);">
       <span>⚙️</span>
-      <span id="topAccountName">Minha Conta</span>
+      <span id="topAccountName" data-i18n="settings_title">Configurações</span>
     </a>
 
-    <a href="trembolona.html" class="control-btn" title="Portal de Status dos Serviços & Shards Riot" style="text-decoration: none; display: flex; align-items: center; gap: 6px; color: #10B981; border-color: rgba(16, 185, 129, 0.4);">
+    <a href="trembolona.html" class="control-btn" title="Portal de Status dos Serviços & Shards Riot" data-i18n-title="server_status_title" style="text-decoration: none; display: flex; align-items: center; gap: 6px; color: #10B981; border-color: rgba(16, 185, 129, 0.4);">
       <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10B981; box-shadow: 0 0 6px #10B981;"></span>
-      <span>Status</span>
+      <span data-i18n="server_status_btn">Status</span>
     </a>
 
-    <button type="button" class="control-btn" id="btnDemoFill" title="Auto-preencher credenciais de teste (player1 / password123)" style="background: rgba(235, 0, 41, 0.25); border-color: #EB0029; color: #FFF; font-weight: bold;">
-      <span>⚡ Demo Fill</span>
+    <button type="button" class="control-btn" id="btnShortcutsHud" title="Atalhos de Teclado" data-i18n-title="shortcuts_title">
+      <span>⌨</span> <span data-i18n="shortcuts_btn">Atalhos</span>
     </button>
 
-    <button type="button" class="control-btn" onclick="toggleFullscreen()" title="Tela cheia (F11)">
+    <button type="button" class="control-btn" id="btnDemoFill" title="Auto-preencher credenciais de teste (player1 / password123)" data-i18n-title="demo_fill_tooltip" style="background: rgba(235, 0, 41, 0.25); border-color: #EB0029; color: #FFF; font-weight: bold;">
+      <span data-i18n="demo_fill">⚡ Demo Fill</span>
+    </button>
+
+    <button type="button" class="control-btn" onclick="toggleFullscreen()" title="Tela cheia (F11)" data-i18n-title="fullscreen_tooltip">
       <span>⛶</span>
     </button>
 
-    <button type="button" class="control-btn" id="audioToggleBtn" title="Alternar som (Ctrl+M)">
+    <button type="button" class="control-btn" id="audioToggleBtn" title="Alternar som (Ctrl+M)" data-i18n-title="audio_tooltip">
       <span id="audioIcon">🔊</span>
     </button>
 
@@ -243,12 +247,13 @@
       <span id="ambientIcon">🎧 Drone</span>
     </button>
 
-    <select id="langSelector" class="control-select" aria-label="Seletor de idioma">
-      <option value="pt-BR" selected>Português (BR)</option>
-      <option value="en-US">English (US)</option>
-      <option value="es-ES">Español (ES)</option>
-      <option value="ja-JP">日本語 (JA)</option>
-      <option value="ko-KR">한국어 (KO)</option>
+    <select id="langSelector" class="control-select" aria-label="Seletor de idioma" data-i18n-aria="lang_selector_label" title="Idioma / Language">
+      <option value="pt-BR" selected>🇧🇷 Português (BR)</option>
+      <option value="en-US">🇺🇸 English (US)</option>
+      <option value="es-ES">🇪🇸 Español (ES)</option>
+      <option value="ja-JP">🇯🇵 日本語 (JA)</option>
+      <option value="ko-KR">🇰🇷 한국어 (KO)</option>
+      <option value="de-DE">🇩🇪 Deutsch (DE)</option>
     </select>
 
     <button type="button" class="control-btn" id="shardPingBadge" title="Status do Servidor Riot & Latência em tempo real (Clique para detalhes)" style="display: inline-flex; align-items: center; gap: 6px; font-family: monospace;">
@@ -305,7 +310,7 @@
         <label class="login__label">
           <span data-i18n="username">nome de usuário / riot id</span>
           <div style="position: relative; width: 100%;">
-            <input type="text" name="username" class="input" id="usernameInput" autocomplete="username" required>
+            <input type="text" name="username" class="input" id="usernameInput" autocomplete="username" data-i18n-placeholder="username_placeholder" placeholder="Nome de usuário" required>
             <button type="button" id="btnLoginGenTag" title="Gerar Tagline Riot ID aleatória (ex: #BR1, #EUW, #NA1)" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: rgba(235, 0, 41, 0.18); border: 1px solid rgba(235, 0, 41, 0.5); color: #FFF; border-radius: 4px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">
               🎲 #Tag
             </button>
@@ -317,8 +322,8 @@
         <label class="login__label">
           <span data-i18n="password">senha</span>
           <div class="password-container">
-            <input type="password" name="password" class="input" id="passwordInput" autocomplete="current-password" required>
-            <button type="button" class="password-toggle-btn" id="togglePasswordBtn" aria-label="Mostrar ou ocultar senha">
+            <input type="password" name="password" class="input" id="passwordInput" autocomplete="current-password" data-i18n-placeholder="password_placeholder" placeholder="Senha" required>
+            <button type="button" class="password-toggle-btn" id="togglePasswordBtn" aria-label="Mostrar ou ocultar senha" data-i18n-aria="show_password">
               <svg id="eyeIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
@@ -331,24 +336,24 @@
         </label>
   
         <!-- Botões Sociais com SVGs Nativos -->
-        <div class="login__icons" aria-label="Opções de autenticação social">
-          <button type="button" class="icons__button" id="btnAuthFacebook" title="Entrar com Facebook">
+        <div class="login__icons" aria-label="Opções de autenticação social" data-i18n-aria="social_login">
+          <button type="button" class="icons__button" id="btnAuthFacebook" title="Entrar com Facebook" data-i18n-title="auth_facebook">
             <svg viewBox="0 0 24 24" fill="#FFFFFF"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </button>
   
-          <button type="button" class="icons__button" id="btnAuthGoogle" title="Entrar com Google">
+          <button type="button" class="icons__button" id="btnAuthGoogle" title="Entrar com Google" data-i18n-title="auth_google">
             <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.19v3.15C3.17 21.32 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.19C.43 8.11 0 9.83 0 12s.43 3.89 1.19 5.42l4.09-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.17 2.68 1.19 6.58l4.09 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
           </button>
   
-          <button type="button" class="icons__button" id="btnAuthApple" title="Entrar com Apple">
+          <button type="button" class="icons__button" id="btnAuthApple" title="Entrar com Apple" data-i18n-title="auth_apple">
             <svg viewBox="0 0 24 24" fill="#FFFFFF"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 5.39c.65-.79 1.09-1.89.97-2.99-.94.04-2.08.63-2.75 1.42-.59.69-1.11 1.8-0.97 2.87 1.06.08 2.1-.51 2.75-1.3z"/></svg>
           </button>
 
-          <button type="button" class="icons__button" id="btnAuthXbox" title="Entrar com Xbox" style="background-color: #107C10;">
+          <button type="button" class="icons__button" id="btnAuthXbox" title="Entrar com Xbox" data-i18n-title="auth_xbox" style="background-color: #107C10;">
             <svg viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.223 17.584c-.453-.255-3.223-1.93-3.223-1.93s-2.77 1.675-3.223 1.93c-.636.357-1.168-.275-.826-.874 1.13-1.972 3.12-5.34 4.049-6.906-.929-1.566-2.919-4.934-4.049-6.906-.342-.599.19-1.231.826-.874.453.255 3.223 1.93 3.223 1.93s2.77-1.675 3.223-1.93c.636-.357 1.168.275.826.874-1.13 1.972-3.12 5.34-4.049 6.906.929 1.566 2.919 4.934 4.049 6.906.342.599-.19 1.231-.826.874z"/></svg>
           </button>
 
-          <button type="button" class="icons__button" id="btnPasskeyAuth" title="Entrar com Biometria / WebAuthn Passkey" style="background-color: #18181B; border: 1px solid #10B981;">
+          <button type="button" class="icons__button" id="btnPasskeyAuth" title="Entrar com Biometria / WebAuthn Passkey" data-i18n-title="auth_playstation" style="background-color: #18181B; border: 1px solid #10B981;">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10"/>
               <path d="M5 12c0-3.87 3.13-7 7-7s7 3.13 7 7"/>
@@ -367,7 +372,7 @@
 
       <div class="wrapper">
         <!-- Botão Principal de Login -->
-        <button type="button" class="login__button" id="loginSubmitBtn" disabled aria-label="Confirmar login">
+        <button type="button" class="login__button" id="loginSubmitBtn" disabled aria-label="Confirmar login" data-i18n-aria="signin_aria">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path d="M438.6 278.6l-160 160C272.4 444.9 264.2 448 256 448s-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L338.8 288H32C14.33 288 .0016 273.7 .0016 256S14.33 224 32 224h306.8l-105.4-105.4c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160C451.1 245.9 451.1 266.1 438.6 278.6z"/>
           </svg>
@@ -376,18 +381,20 @@
         <div class="sub-links-group">
           <a href="#" class="login__link" id="linkForgotPassword" data-i18n="cantSignIn">não consegue iniciar sessão?</a>
           <a href="#" class="login__link" id="linkRegister" data-i18n="createAccount">criar conta</a>
-          <a href="#" class="login__link" id="linkSecurityTest" style="font-size: 0.76em; color: #10B981; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">🛡️ Testar Desafio Captcha</a>
+          <a href="#" class="login__link" id="linkSecurityTest" style="font-size: 0.76em; color: #10B981; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">
+            <span>🛡️</span> <span data-i18n="captcha_title">Verificação de Segurança</span>
+          </a>
           <a href="account-settings.html" class="login__link" style="color: var(--primary, #EB0029); font-weight: 700; font-size: 0.78em; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-            <span>Configurações de Conta Riot ⚙️</span>
+            <span data-i18n="settings_title">Configurações da Conta</span> <span>⚙️</span>
           </a>
           <a href="trembolona.html" class="login__link" style="color: #10B981; font-size: 0.75em; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px;">
             <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#10B981; box-shadow:0 0 6px #10B981;"></span>
-            Status dos Serviços & Ping Riot →
+            <span data-i18n="server_status_title">Status dos Servidores Riot</span> →
           </a>
-          <a href="../bodyfit/index.html" class="login__link" style="color: #00FF88; font-size: 0.75em; font-weight: 600;">⚡ Bodyfit Esports Lab →</a>
+          <a href="../bodyfit/index.html" class="login__link" style="color: #00FF88; font-size: 0.75em; font-weight: 600;" data-i18n="view_bodyfit">⚡ Bodyfit Esports Lab →</a>
         </div>
 
-        <span class="status-badge">v2.5.0-production • Riot Client Engine</span>
+        <span class="status-badge" data-i18n="client_version">v2.5.0-production • Riot Client Engine</span>
       </div>
     </section>
 
@@ -398,11 +405,11 @@
   <!-- Modal: Recuperação de Senha -->
   <div class="modal-overlay" id="modalRecover" role="dialog" aria-modal="true" aria-labelledby="recoverTitle">
     <div class="modal-box">
-      <button class="modal-close-btn" id="closeRecoverBtn" aria-label="Fechar">&times;</button>
+      <button class="modal-close-btn" id="closeRecoverBtn" aria-label="Fechar" data-i18n-aria="close_aria">&times;</button>
       <h2 id="recoverTitle" data-i18n="recoverTitle">Recuperar Conta</h2>
       <p data-i18n="recoverDesc">Insira seu e-mail cadastrado ou nome de usuário para enviarmos as instruções de redefinição.</p>
       
-      <input type="text" class="input" id="recoverInput" placeholder="nome@exemplo.com ou Usuário" style="margin-bottom: 15px;">
+      <input type="text" class="input" id="recoverInput" placeholder="nome@exemplo.com ou Usuário" data-i18n-placeholder="recover_placeholder" style="margin-bottom: 15px;">
       
       <div class="modal-actions">
         <button type="button" class="btn-action-primary" id="btnSendRecovery" data-i18n="sendInstructions">Enviar Instruções</button>
@@ -413,19 +420,19 @@
   <!-- Modal: Criar Conta -->
   <div class="modal-overlay" id="modalRegister" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
     <div class="modal-box">
-      <button class="modal-close-btn" id="closeRegisterBtn" aria-label="Fechar">&times;</button>
+      <button class="modal-close-btn" id="closeRegisterBtn" aria-label="Fechar" data-i18n-aria="close_aria">&times;</button>
       <h2 id="registerTitle" data-i18n="registerTitle">Criar Riot ID</h2>
       <p data-i18n="registerDesc">Crie sua conta para jogar League of Legends, Valorant, TFT e muito mais.</p>
       
-      <input type="email" class="input" id="regEmail" placeholder="E-mail" style="margin-bottom: 12px;">
+      <input type="email" class="input" id="regEmail" placeholder="E-mail" data-i18n-placeholder="regEmailPlaceholder" style="margin-bottom: 12px;">
       <div style="position: relative; margin-bottom: 12px;">
-        <input type="text" class="input" id="regUsername" placeholder="Nome de Usuário / Riot ID (ex: Jinx#BR1)" style="margin-bottom: 0;">
+        <input type="text" class="input" id="regUsername" placeholder="Nome de Usuário" data-i18n-placeholder="regUsernamePlaceholder" style="margin-bottom: 0;">
         <button type="button" id="btnRegGenTag" title="Gerar Tagline aleatória (ex: #BR1, #EUW)" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: rgba(235, 0, 41, 0.18); border: 1px solid rgba(235, 0, 41, 0.5); color: #FFF; border-radius: 4px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">
           🎲 #Tag
         </button>
       </div>
       <div id="riotIdRegBadge" style="display:none; margin-bottom: 12px;"></div>
-      <input type="password" class="input" id="regPassword" placeholder="Senha (mínimo 8 caracteres)" style="margin-bottom: 15px;">
+      <input type="password" class="input" id="regPassword" placeholder="Senha (mínimo 8 caracteres)" data-i18n-placeholder="regPasswordPlaceholder" style="margin-bottom: 15px;">
       
       <div class="modal-actions">
         <button type="button" class="btn-action-primary" id="btnSubmitRegister" data-i18n="createMyAccount">Criar Minha Conta</button>
@@ -436,7 +443,7 @@
   <!-- Modal: Autenticação de 2 Fatores (2FA) -->
   <div class="modal-overlay" id="modal2FA" role="dialog" aria-modal="true" aria-labelledby="twoFactorTitle">
     <div class="modal-box" style="text-align: center;">
-      <button class="modal-close-btn" id="close2FABtn" aria-label="Fechar">&times;</button>
+      <button class="modal-close-btn" id="close2FABtn" aria-label="Fechar" data-i18n-aria="close_aria">&times;</button>
       <h2 id="twoFactorTitle" data-i18n="twoFactorTitle">Código de Segurança</h2>
       <p data-i18n="twoFactorDesc">Um código de 6 dígitos foi enviado para o seu e-mail ou autenticador Riot.</p>
       
@@ -451,6 +458,49 @@
       
       <div class="modal-actions">
         <button type="button" class="btn-action-primary" id="btnVerify2FA" data-i18n="verifyCode">Verificar e Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Atalhos de Teclado (Shortcuts HUD) -->
+  <div class="modal-overlay" id="modalShortcuts" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="modal-box" style="max-width: 480px;">
+      <button class="modal-close-btn" id="closeShortcutsBtn" aria-label="Fechar" data-i18n-aria="close_aria">&times;</button>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom: 8px;">
+        <span style="font-size: 1.4rem;">⌨️</span>
+        <h2 id="shortcutsTitle" data-i18n="shortcuts_title" style="margin:0;">Atalhos de Teclado</h2>
+      </div>
+      <p data-i18n="shortcuts_subtitle" style="margin-bottom: 20px;">Navegue pelo Riot Client rapidamente usando atalhos do teclado</p>
+      
+      <div class="shortcuts-list" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_theme" style="font-size:0.86rem; color:#E4E4E7;">Alternar temas visuais (Riot, Valorant, LoL, TFT)</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">Alt</kbd> + <kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">T</kbd></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_lang" style="font-size:0.86rem; color:#E4E4E7;">Alternar idioma da interface ciclicamente</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">Alt</kbd> + <kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">L</kbd></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_audio" style="font-size:0.86rem; color:#E4E4E7;">Ativar ou silenciar efeitos sonoros (SFX)</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">Ctrl</kbd> + <kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">M</kbd></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_fullscreen" style="font-size:0.86rem; color:#E4E4E7;">Entrar ou sair do modo de tela cheia</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">F11</kbd></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); padding:10px 14px; border-radius:6px; border:1px solid rgba(255,255,255,0.08);">
+          <span data-i18n="shortcuts_escape" style="font-size:0.86rem; color:#E4E4E7;">Fechar janelas modais ativas</span>
+          <div style="display:flex; gap:4px;"><kbd style="background:#27272A; border:1px solid #3F3F46; padding:2px 8px; border-radius:4px; font-size:0.78rem; font-weight:700; color:#FFF;">Esc</kbd></div>
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button type="button" class="btn-action-primary" id="btnCloseShortcutsModal" data-i18n="close">Fechar</button>
       </div>
     </div>
   </div>
@@ -516,6 +566,28 @@
         setTimeout(() => {
           window.location.href = 'account-settings.html';
         }, 1200);
+      });
+
+      // Shortcuts HUD Modal Handlers
+      const btnShortcuts = document.getElementById('btnShortcutsHud');
+      const modalShortcuts = document.getElementById('modalShortcuts');
+      const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
+      const btnCloseShortcutsModal = document.getElementById('btnCloseShortcutsModal');
+
+      if (btnShortcuts && modalShortcuts) {
+        btnShortcuts.addEventListener('click', () => {
+          modalShortcuts.classList.add('active');
+          if (window.riotAudio) window.riotAudio.play('click');
+        });
+      }
+
+      [closeShortcutsBtn, btnCloseShortcutsModal].forEach(btn => {
+        if (btn && modalShortcuts) {
+          btn.addEventListener('click', () => {
+            modalShortcuts.classList.remove('active');
+            if (window.riotAudio) window.riotAudio.play('click');
+          });
+        }
       });
 
       // Atualizar indicador da conta no topo se houver sessão ativa
