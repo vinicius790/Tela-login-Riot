@@ -307,8 +307,10 @@
         <h1 class="login__title" id="loginTitle" data-i18n="login">Fazer login</h1>
     
         <!-- Campo Nome de Usuário com Tagline Generator & Validação Riot ID -->
-        <label class="login__label">
-          <span data-i18n="username">nome de usuário / riot id</span>
+        <div class="login__label">
+          <label for="usernameInput" class="login__field-label">
+            <span data-i18n="username">nome de usuário / riot id</span>
+          </label>
           <div style="position: relative; width: 100%;">
             <input type="text" name="username" class="input" id="usernameInput" autocomplete="username" data-i18n-placeholder="username_placeholder" placeholder="Nome de usuário" required>
             <button type="button" id="btnLoginGenTag" title="Gerar Tagline Riot ID aleatória (ex: #BR1, #EUW, #NA1)" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: rgba(235, 0, 41, 0.18); border: 1px solid rgba(235, 0, 41, 0.5); color: #FFF; border-radius: 4px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">
@@ -316,11 +318,13 @@
             </button>
           </div>
           <div id="riotIdLoginBadge" style="display:none;"></div>
-        </label>
+        </div>
   
         <!-- Campo Senha -->
-        <label class="login__label">
-          <span data-i18n="password">senha</span>
+        <div class="login__label">
+          <label for="passwordInput" class="login__field-label">
+            <span data-i18n="password">senha</span>
+          </label>
           <div class="password-container">
             <input type="password" name="password" class="input" id="passwordInput" autocomplete="current-password" data-i18n-placeholder="password_placeholder" placeholder="Senha" required>
             <button type="button" class="password-toggle-btn" id="togglePasswordBtn" aria-label="Mostrar ou ocultar senha" data-i18n-aria="show_password">
@@ -333,7 +337,7 @@
           <div class="caps-warning" id="capsWarning">
             <span>⚠️</span> <span data-i18n="capsWarning">Caps Lock ativado</span>
           </div>
-        </label>
+        </div>
   
         <!-- Botões Sociais com SVGs Nativos -->
         <div class="login__icons" aria-label="Opções de autenticação social" data-i18n-aria="social_login">

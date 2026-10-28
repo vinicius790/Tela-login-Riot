@@ -34,7 +34,20 @@
             this.ambientNodes = null;
             this.noiseBuffer = null;
             this.masterGainNode = null;
+            this.compressor = null;
+            this._crystalWave = null;
+            this._brassWave = null;
             this.unlocked = false;
+
+            // Cross-tab mute synchronization
+            if (typeof window !== 'undefined') {
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'riot_audio_muted') {
+                        this.muted = e.newValue === 'true';
+                        this.updateButtonsUI();
+                    }
+                });
+            }
 
             // Initialize Context on user interaction to comply with autoplay policies
             this.setupAutoplayUnlock();
@@ -87,13 +100,47 @@
                     this.ctx = new AudioCtx();
                     this.masterGainNode = this.ctx.createGain();
                     this.masterGainNode.gain.setValueAtTime(0.85, this.ctx.currentTime);
-                    this.masterGainNode.connect(this.ctx.destination);
+
+                    // Master bus dynamics compression chain
+                    this.compressor = this.ctx.createDynamicsCompressor();
+                    this.compressor.threshold.setValueAtTime(-12, this.ctx.currentTime);
+                    this.compressor.knee.setValueAtTime(8, this.ctx.currentTime);
+                    this.compressor.ratio.setValueAtTime(4, this.ctx.currentTime);
+                    this.compressor.attack.setValueAtTime(0.003, this.ctx.currentTime);
+                    this.compressor.release.setValueAtTime(0.12, this.ctx.currentTime);
+
+                    this.masterGainNode.connect(this.compressor);
+                    this.compressor.connect(this.ctx.destination);
                 }
             }
             if (this.ctx && this.ctx.state === 'suspended') {
                 this.ctx.resume().catch(() => {});
             }
             return this.ctx;
+        }
+
+        /**
+         * Custom PeriodicWave for Crystalline / Hextech magic timbre
+         */
+        getCrystalWave() {
+            if (this._crystalWave) return this._crystalWave;
+            if (!this.ctx) return null;
+            const real = new Float32Array([0, 0, 0, 0, 0, 0, 0, 0]);
+            const imag = new Float32Array([0, 0.9, 0.4, 0.7, 0.2, 0.5, 0.1, 0.3]);
+            this._crystalWave = this.ctx.createPeriodicWave(real, imag, { disableNormalization: false });
+            return this._crystalWave;
+        }
+
+        /**
+         * Custom PeriodicWave for Heroic Brass / Fanfare timbre
+         */
+        getBrassWave() {
+            if (this._brassWave) return this._brassWave;
+            if (!this.ctx) return null;
+            const real = new Float32Array(12).fill(0);
+            const imag = new Float32Array([0, 1.0, 0.75, 0.55, 0.40, 0.28, 0.18, 0.12, 0.08, 0.05, 0.03, 0.01]);
+            this._brassWave = this.ctx.createPeriodicWave(real, imag, { disableNormalization: false });
+            return this._brassWave;
         }
 
         /**
@@ -718,6 +765,240 @@
         }
 
         /**
+         * 'hextech': Crystalline FM sparkle with cascading ascending frequencies and bandpass sweep
+         */
+        playHextechShimmer() {
+            if (this.muted) return;
+            this.initContext();
+            if (!this.ctx) return;
+            const now = this.ctx.currentTime;
+            const dest = this.masterGainNode || this.ctx.destination;
+
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.Q.setValueAtTime(5.5, now);
+            filter.frequency.setValueAtTime(1800, now);
+            filter.frequency.exponentialRampToValueAtTime(7200, now + 0.35);
+
+            const masterShimmerGain = this.ctx.createGain();
+            masterShimmerGain.gain.setValueAtTime(0.001, now);
+            masterShimmerGain.gain.linearRampToValueAtTime(0.14, now + 0.04);
+            masterShimmerGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+
+            const pitches = [1318.5, 1661.2, 1975.5, 2637.0, 2959.9];
+            pitches.forEach((freq, idx) => {
+                const startTime = now + idx * 0.032;
+                const dur = 0.28;
+
+                const carrier = this.ctx.createOscillator();
+                const crystalWave = this.getCrystalWave();
+                if (crystalWave) {
+                    carrier.setPeriodicWave(crystalWave);
+                } else {
+                    carrier.type = 'triangle';
+                }
+                carrier.frequency.setValueAtTime(freq, startTime);
+
+                const mod = this.ctx.createOscillator();
+                mod.type = 'sine';
+                mod.frequency.setValueAtTime(freq * 2.0, startTime);
+
+                const modGain = this.ctx.createGain();
+                modGain.gain.setValueAtTime(freq * 0.4, startTime);
+                modGain.gain.exponentialRampToValueAtTime(1.0, startTime + dur);
+
+                mod.connect(modGain);
+                modGain.connect(carrier.frequency);
+
+                const voiceGain = this.ctx.createGain();
+                voiceGain.gain.setValueAtTime(0.001, startTime);
+                voiceGain.gain.linearRampToValueAtTime(0.08, startTime + 0.008);
+                voiceGain.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
+
+                carrier.connect(voiceGain);
+                voiceGain.connect(filter);
+
+                mod.start(startTime);
+                carrier.start(startTime);
+                mod.stop(startTime + dur);
+                carrier.stop(startTime + dur);
+            });
+
+            filter.connect(masterShimmerGain);
+            masterShimmerGain.connect(dest);
+        }
+
+        /**
+         * 'spikedefuse': Tactical telemetry dual-chirp + rising confirmation stinger & sub impact
+         */
+        playSpikeDefuse() {
+            if (this.muted) return;
+            this.initContext();
+            if (!this.ctx) return;
+            const now = this.ctx.currentTime;
+            const dest = this.masterGainNode || this.ctx.destination;
+
+            // 1. Dual digital chirp (2850Hz / 3300Hz)
+            [0, 0.075].forEach((offset, idx) => {
+                const t = now + offset;
+                const chirpOsc = this.ctx.createOscillator();
+                chirpOsc.type = 'sine';
+                chirpOsc.frequency.setValueAtTime(idx === 0 ? 2850 : 3300, t);
+                chirpOsc.frequency.exponentialRampToValueAtTime(idx === 0 ? 3200 : 3750, t + 0.04);
+
+                const chirpGain = this.ctx.createGain();
+                chirpGain.gain.setValueAtTime(0.001, t);
+                chirpGain.gain.linearRampToValueAtTime(0.15, t + 0.005);
+                chirpGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+
+                chirpOsc.connect(chirpGain);
+                chirpGain.connect(dest);
+                chirpOsc.start(t);
+                chirpOsc.stop(t + 0.05);
+            });
+
+            // 2. Confirmation Stinger
+            const stingerStart = now + 0.16;
+            const stingerOsc = this.ctx.createOscillator();
+            stingerOsc.type = 'sawtooth';
+            stingerOsc.frequency.setValueAtTime(950, stingerStart);
+            stingerOsc.frequency.exponentialRampToValueAtTime(3600, stingerStart + 0.18);
+
+            const stingerFilter = this.ctx.createBiquadFilter();
+            stingerFilter.type = 'bandpass';
+            stingerFilter.Q.setValueAtTime(6.0, stingerStart);
+            stingerFilter.frequency.setValueAtTime(1400, stingerStart);
+            stingerFilter.frequency.exponentialRampToValueAtTime(3600, stingerStart + 0.18);
+
+            const stingerGain = this.ctx.createGain();
+            stingerGain.gain.setValueAtTime(0.001, stingerStart);
+            stingerGain.gain.linearRampToValueAtTime(0.12, stingerStart + 0.02);
+            stingerGain.gain.exponentialRampToValueAtTime(0.0001, stingerStart + 0.22);
+
+            stingerOsc.connect(stingerFilter);
+            stingerFilter.connect(stingerGain);
+            stingerGain.connect(dest);
+            stingerOsc.start(stingerStart);
+            stingerOsc.stop(stingerStart + 0.22);
+
+            // 3. Sub impact
+            const subOsc = this.ctx.createOscillator();
+            subOsc.type = 'sine';
+            subOsc.frequency.setValueAtTime(140, stingerStart);
+            subOsc.frequency.exponentialRampToValueAtTime(45, stingerStart + 0.25);
+
+            const subGain = this.ctx.createGain();
+            subGain.gain.setValueAtTime(0.18, stingerStart);
+            subGain.gain.exponentialRampToValueAtTime(0.0001, stingerStart + 0.28);
+
+            subOsc.connect(subGain);
+            subGain.connect(dest);
+            subOsc.start(stingerStart);
+            subOsc.stop(stingerStart + 0.28);
+        }
+
+        /**
+         * 'lolvictory': Heroic brass progression with dynamic lowpass filter swell
+         */
+        playLoLVictory() {
+            if (this.muted) return;
+            this.initContext();
+            if (!this.ctx) return;
+            const now = this.ctx.currentTime;
+            const dest = this.masterGainNode || this.ctx.destination;
+
+            const brassFilter = this.ctx.createBiquadFilter();
+            brassFilter.type = 'lowpass';
+            brassFilter.Q.setValueAtTime(2.2, now);
+            brassFilter.frequency.setValueAtTime(250, now);
+            brassFilter.frequency.exponentialRampToValueAtTime(4200, now + 0.16);
+            brassFilter.frequency.exponentialRampToValueAtTime(2100, now + 1.1);
+
+            const chordVoicing = [
+                { note: 146.83, delay: 0.00, dur: 1.25, gain: 0.12 }, // D3
+                { note: 220.00, delay: 0.03, dur: 1.20, gain: 0.10 }, // A3
+                { note: 293.66, delay: 0.06, dur: 1.20, gain: 0.11 }, // D4
+                { note: 369.99, delay: 0.09, dur: 1.25, gain: 0.10 }, // F#4
+                { note: 440.00, delay: 0.12, dur: 1.30, gain: 0.09 }, // A4
+                { note: 659.25, delay: 0.16, dur: 1.40, gain: 0.08 }  // E5
+            ];
+
+            const brassWave = this.getBrassWave();
+            chordVoicing.forEach(v => {
+                const t = now + v.delay;
+                const osc = this.ctx.createOscillator();
+                if (brassWave) {
+                    osc.setPeriodicWave(brassWave);
+                } else {
+                    osc.type = 'sawtooth';
+                }
+                osc.frequency.setValueAtTime(v.note, t);
+
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(0.0001, t);
+                gain.gain.linearRampToValueAtTime(v.gain, t + 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.0001, t + v.dur);
+
+                osc.connect(gain);
+                gain.connect(brassFilter);
+                osc.start(t);
+                osc.stop(t + v.dur);
+            });
+
+            brassFilter.connect(dest);
+        }
+
+        /**
+         * 'kdasynth': Detuned supersaw stack with resonant lowpass sweep and sidechain pumping
+         */
+        playKDASynth() {
+            if (this.muted) return;
+            this.initContext();
+            if (!this.ctx) return;
+            const now = this.ctx.currentTime;
+            const dest = this.masterGainNode || this.ctx.destination;
+
+            const chord = [185.00, 277.18, 329.63, 415.30, 554.37];
+            const detuneOffsets = [-18, -7, 0, 7, 18];
+
+            const filter1 = this.ctx.createBiquadFilter();
+            const filter2 = this.ctx.createBiquadFilter();
+            filter1.type = filter2.type = 'lowpass';
+            filter1.Q.setValueAtTime(3.8, now);
+            filter2.Q.setValueAtTime(3.8, now);
+
+            [filter1, filter2].forEach(f => {
+                f.frequency.setValueAtTime(450, now);
+                f.frequency.exponentialRampToValueAtTime(6800, now + 0.06);
+                f.frequency.exponentialRampToValueAtTime(1200, now + 0.75);
+            });
+            filter1.connect(filter2);
+
+            const pumpGain = this.ctx.createGain();
+            pumpGain.gain.setValueAtTime(0.01, now);
+            pumpGain.gain.linearRampToValueAtTime(0.18, now + 0.05);
+            pumpGain.gain.exponentialRampToValueAtTime(0.08, now + 0.18);
+            pumpGain.gain.linearRampToValueAtTime(0.15, now + 0.35);
+            pumpGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+
+            chord.forEach(baseFreq => {
+                detuneOffsets.forEach(cents => {
+                    const osc = this.ctx.createOscillator();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(baseFreq, now);
+                    osc.detune.setValueAtTime(cents, now);
+
+                    osc.connect(filter1);
+                    osc.start(now);
+                    osc.stop(now + 0.85);
+                });
+            });
+
+            filter2.connect(pumpGain);
+            pumpGain.connect(dest);
+        }
+
+        /**
          * Generic dispatcher for synthesized sound effects
          * @param {string} soundName
          */
@@ -745,6 +1026,22 @@
                 case 'lock':
                 case 'boom':
                     return this.playLockin();
+                case 'hextech':
+                case 'hextechshimmer':
+                case 'shimmer':
+                    return this.playHextechShimmer();
+                case 'valorant':
+                case 'spikedefuse':
+                case 'spike':
+                    return this.playSpikeDefuse();
+                case 'lol':
+                case 'lolvictory':
+                case 'victory':
+                    return this.playLoLVictory();
+                case 'kda':
+                case 'kdasynth':
+                case 'synth':
+                    return this.playKDASynth();
                 case 'ambient':
                 case 'drone':
                     return this.toggleAmbient();

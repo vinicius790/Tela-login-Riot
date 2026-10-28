@@ -44,7 +44,6 @@
         OCE:  ['OCE1', 'SYD', 'AUS', 'MEL', 'DIFF', '0001']
     };
 
-    const CRYPTO_SALT = 'RiotSecurity_WebCrypto_Salt_v2_2026';
     const VAULT_STORAGE_KEY = 'riot_encrypted_vault';
     const PASSKEYS_STORAGE_KEY = 'riot_registered_passkeys';
     const SHARD_STORAGE_KEY = 'riot_selected_shard';
@@ -55,13 +54,32 @@
 
     class RiotCryptoStorage {
         constructor() {
-            this.subtle = window.crypto && window.crypto.subtle;
+            this.subtle = typeof window !== 'undefined' && window.crypto && window.crypto.subtle;
+            this.volatileVault = new Map();
+        }
+
+        getOrCreateSalt() {
+            if (typeof window === 'undefined') return new Uint8Array(16);
+            let hexSalt = localStorage.getItem('riot_vault_salt_v3');
+            if (!hexSalt) {
+                const arr = new Uint8Array(16);
+                if (window.crypto && window.crypto.getRandomValues) {
+                    window.crypto.getRandomValues(arr);
+                } else {
+                    for (let i = 0; i < 16; i++) arr[i] = Math.floor(Math.random() * 256);
+                }
+                hexSalt = Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+                try { localStorage.setItem('riot_vault_salt_v3', hexSalt); } catch (e) {}
+            }
+            const match = hexSalt.match(/.{1,2}/g);
+            return new Uint8Array(match ? match.map(byte => parseInt(byte, 16)) : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
         }
 
         async deriveKey(machineSeed = '') {
             if (!this.subtle) return null;
-            const seed = machineSeed || (navigator.userAgent + screen.width + 'x' + screen.height + CRYPTO_SALT);
+            const seed = machineSeed || ((typeof navigator !== 'undefined' ? navigator.userAgent : 'RiotClient') + (typeof screen !== 'undefined' ? screen.width + 'x' + screen.height : '') + 'RiotSecVault');
             const enc = new TextEncoder();
+            const salt = this.getOrCreateSalt();
             const keyMaterial = await this.subtle.importKey(
                 'raw',
                 enc.encode(seed),
@@ -73,7 +91,7 @@
             return await this.subtle.deriveKey(
                 {
                     name: 'PBKDF2',
-                    salt: enc.encode(CRYPTO_SALT),
+                    salt: salt,
                     iterations: 100000,
                     hash: 'SHA-256'
                 },
@@ -86,8 +104,9 @@
 
         async encrypt(dataObj) {
             if (!this.subtle) {
-                // Obfuscated fallback if subtle is unavailable
-                return { fallback: true, payload: btoa(unescape(encodeURIComponent(JSON.stringify(dataObj)))) };
+                const memKey = 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+                this.volatileVault.set(memKey, dataObj);
+                return { fallback: true, volatileId: memKey, timestamp: Date.now() };
             }
             try {
                 const key = await this.deriveKey();
@@ -108,19 +127,20 @@
                     timestamp: Date.now()
                 };
             } catch (err) {
-                console.warn('[RiotSecurity] WebCrypto encrypt failed, fallback used:', err);
-                return { fallback: true, payload: btoa(unescape(encodeURIComponent(JSON.stringify(dataObj)))) };
+                console.warn('[RiotSecurity] WebCrypto encrypt failed, volatile memory fallback used:', err);
+                const memKey = 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+                this.volatileVault.set(memKey, dataObj);
+                return { fallback: true, volatileId: memKey, timestamp: Date.now() };
             }
         }
 
         async decrypt(envelope) {
             if (!envelope) return null;
             if (envelope.fallback) {
-                try {
-                    return JSON.parse(decodeURIComponent(escape(atob(envelope.payload))));
-                } catch {
-                    return null;
+                if (envelope.volatileId && this.volatileVault.has(envelope.volatileId)) {
+                    return this.volatileVault.get(envelope.volatileId);
                 }
+                return null;
             }
             if (!this.subtle) return null;
 
@@ -498,16 +518,20 @@
         }
 
         bindEvents() {
-            const onDragStart = (clientX) => {
+            this.trajectory = [];
+
+            const onDragStart = (clientX, clientY) => {
                 if (this.isVerified) return;
                 this.isDragging = true;
                 this.startX = clientX;
                 this.dragStartTime = Date.now();
+                this.trajectory = [{ x: clientX, y: clientY || 0, t: this.dragStartTime }];
                 this.sliderThumb.style.cursor = 'grabbing';
             };
 
-            const onDragMove = (clientX) => {
+            const onDragMove = (clientX, clientY) => {
                 if (!this.isDragging) return;
+                this.trajectory.push({ x: clientX, y: clientY || 0, t: Date.now() });
                 const rect = this.sliderTrack.getBoundingClientRect();
                 const maxDrag = rect.width - 44;
                 let moveX = clientX - rect.left - 20;
@@ -531,17 +555,17 @@
             };
 
             // Mouse events
-            this.sliderThumb.addEventListener('mousedown', (e) => onDragStart(e.clientX));
-            window.addEventListener('mousemove', (e) => onDragMove(e.clientX));
+            this.sliderThumb.addEventListener('mousedown', (e) => onDragStart(e.clientX, e.clientY));
+            window.addEventListener('mousemove', (e) => onDragMove(e.clientX, e.clientY));
             window.addEventListener('mouseup', onDragEnd);
 
             // Touch events
             this.sliderThumb.addEventListener('touchstart', (e) => {
-                if (e.touches.length > 0) onDragStart(e.touches[0].clientX);
+                if (e.touches.length > 0) onDragStart(e.touches[0].clientX, e.touches[0].clientY);
             }, { passive: true });
 
             window.addEventListener('touchmove', (e) => {
-                if (e.touches.length > 0) onDragMove(e.touches[0].clientX);
+                if (e.touches.length > 0) onDragMove(e.touches[0].clientX, e.touches[0].clientY);
             }, { passive: true });
 
             window.addEventListener('touchend', onDragEnd);
@@ -693,8 +717,10 @@
             const delta = Math.abs(this.currentPieceX - this.targetX);
             const duration = Date.now() - this.dragStartTime;
             const tolerance = 6.5; // pixel tolerance
+            const trajectoryPoints = (this.trajectory && this.trajectory.length) || 0;
+            const isHumanPaced = duration >= 160 && duration <= 15000 && trajectoryPoints >= 3;
 
-            if (delta <= tolerance && duration >= 150) {
+            if (delta <= tolerance && isHumanPaced) {
                 // SUCCESS
                 this.isVerified = true;
                 this.sliderThumb.style.backgroundColor = '#10B981';
@@ -715,6 +741,24 @@
                     this.close(true);
                     if (this.resolveCallback) this.resolveCallback(true);
                 }, 550);
+            } else if (delta <= tolerance && !isHumanPaced) {
+                // Bot jump detected
+                if (window.riotAudio) window.riotAudio.play('error');
+                this.sliderThumb.style.backgroundColor = '#EF4444';
+                this.sliderThumb.style.color = '#FFF';
+                this.sliderThumb.innerHTML = '✕';
+                this.statusText.textContent = 'Movimento não natural detectado. Arraste manualmente.';
+                this.statusText.style.color = '#EF4444';
+
+                const box = this.modal.querySelector('.modal-box');
+                if (box) {
+                    box.classList.add('animate-shake');
+                    setTimeout(() => box.classList.remove('animate-shake'), 400);
+                }
+
+                setTimeout(() => {
+                    this.generatePuzzle();
+                }, 750);
             } else {
                 // FAILURE
                 if (window.riotAudio) window.riotAudio.play('error');

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Floating Labels
   const handleFocus = ({ target }) => {
-    const span = target.previousElementSibling;
+    const span = target.closest('.login__label')?.querySelector('span') || target.previousElementSibling;
     if (span && span.tagName === 'SPAN') {
       span.classList.add('span-active');
     }
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const handleFocusOut = ({ target }) => {
     if (target.value === '') {
-      const span = target.previousElementSibling;
+      const span = target.closest('.login__label')?.querySelector('span') || target.previousElementSibling;
       if (span && span.tagName === 'SPAN') {
         span.classList.remove('span-active');
       }

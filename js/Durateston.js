@@ -17,13 +17,13 @@ const button = document.querySelector('.login__button');
 
 if (inputs.length > 0 && button) {
   const handleFocus = ({ target }) => {
-    const span = target.previousElementSibling;
+    const span = target.closest('.login__label')?.querySelector('span') || target.previousElementSibling;
     if (span) span.classList.add('span-active');
   }
 
   const handleFocusOut = ({ target }) => {
     if (target.value === '') {
-      const span = target.previousElementSibling;
+      const span = target.closest('.login__label')?.querySelector('span') || target.previousElementSibling;
       if (span) span.classList.remove('span-active');
     }
   }

@@ -356,6 +356,9 @@
             this.dpr = Math.min(window.devicePixelRatio || 1, 2);
 
             const rect = this.canvas.parentElement ? this.canvas.parentElement.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
+            const oldW = this.width || rect.width;
+            const oldH = this.height || rect.height;
+
             this.width = rect.width || window.innerWidth;
             this.height = rect.height || window.innerHeight;
 
@@ -366,7 +369,16 @@
                 this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
             }
 
-            this.resetParticles();
+            if (this.particles && this.particles.length > 0 && oldW > 0 && oldH > 0) {
+                const scaleX = this.width / oldW;
+                const scaleY = this.height / oldH;
+                this.particles.forEach(p => {
+                    p.x *= scaleX;
+                    p.y *= scaleY;
+                });
+            } else {
+                this.resetParticles();
+            }
         }
 
         resetParticles() {
@@ -556,28 +568,42 @@
                 // Subtle twinkling opacity
                 p.alpha = Math.max(0.12, Math.min(0.9, p.baseAlpha + Math.sin(this.time * 3 + p.phase) * 0.15));
 
-                // Mouse interaction: Repulsion or Gravitational Vortex Attraction
+                // Mouse interaction: Fast vector projection (Trig-free)
                 if (mouse.x !== -1000 && mouse.y !== -1000) {
                     const dx = p.x - mouse.x;
                     const dy = p.y - mouse.y;
-                    const dist = Math.hypot(dx, dy);
+                    const distSq = dx * dx + dy * dy;
 
-                    if (dist < repulsionRadius && dist > 2) {
-                        const angle = Math.atan2(dy, dx);
+                    if (distSq < repulsionRadius * repulsionRadius && distSq > 4) {
+                        const dist = Math.sqrt(distSq);
+                        const nx = dx / dist;
+                        const ny = dy / dist;
                         const normDist = (repulsionRadius - dist) / repulsionRadius;
 
                         if (mouse.isDown) {
                             // Attraction Vortex Physics (Holding mouse pulls into swirling vortex)
                             const pullForce = normDist * 3.2;
-                            p.vx -= Math.cos(angle) * pullForce + Math.sin(angle) * 1.5;
-                            p.vy -= Math.sin(angle) * pullForce - Math.cos(angle) * 1.5;
+                            p.vx -= (nx * pullForce + ny * 1.5);
+                            p.vy -= (ny * pullForce - nx * 1.5);
                         } else {
-                            // Repulsion Physics (Cursor pushes particles away smoothly)
-                            const pushForce = Math.pow(normDist, 1.4) * 2.8;
-                            p.vx += Math.cos(angle) * pushForce;
-                            p.vy += Math.sin(angle) * pushForce;
+                            // Fast quadratic repulsion
+                            const pushForce = normDist * normDist * 3.0;
+                            p.vx += nx * pushForce;
+                            p.vy += ny * pushForce;
                         }
                     }
+                }
+
+                // Centerpiece Deflector Shield (Organic flow around central emblem)
+                const cdx = p.x - (w * 0.5);
+                const cdy = p.y - (h * 0.5);
+                const cdistSq = cdx * cdx + cdy * cdy;
+                const centerpieceRadius = 85;
+                if (cdistSq < centerpieceRadius * centerpieceRadius && cdistSq > 4) {
+                    const cdist = Math.sqrt(cdistSq);
+                    const cforce = ((centerpieceRadius - cdist) / centerpieceRadius) * 2.2;
+                    p.vx += (cdx / cdist) * cforce;
+                    p.vy += (cdy / cdist) * cforce;
                 }
 
                 // Damping to return to smooth natural drift
