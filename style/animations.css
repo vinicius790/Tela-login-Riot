@@ -48,3 +48,93 @@
 .modal-transition {
   animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ==========================================================================
+ * CYBERNETIC HUD CURSOR & RETICLES
+ * ========================================================================== */
+.riot-hud-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  margin-left: -13px;
+  pointer-events: none;
+  z-index: 99999;
+  transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              margin 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s;
+}
+
+.riot-hud-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: #eb0029;
+  pointer-events: none;
+  z-index: 100000;
+  box-shadow: 0 0 6px #eb0029;
+  transition: opacity 0.2s;
+}
+
+.riot-hud-cursor .hud-bracket {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: rgba(235, 0, 41, 0.7);
+  border-style: solid;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.riot-hud-cursor .hud-bracket.tl {
+  top: 0;
+  left: 0;
+  border-width: 1.5px 0 0 1.5px;
+}
+
+.riot-hud-cursor .hud-bracket.tr {
+  top: 0;
+  right: 0;
+  border-width: 1.5px 1.5px 0 0;
+}
+
+.riot-hud-cursor .hud-bracket.bl {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 1.5px 1.5px;
+}
+
+.riot-hud-cursor .hud-bracket.br {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+/* Hovering interactive elements state */
+.riot-hud-cursor.hovering {
+  width: 38px;
+  height: 38px;
+  margin-top: -19px;
+  margin-left: -19px;
+}
+
+.riot-hud-cursor.hovering .hud-bracket {
+  border-color: #00f0ff;
+}
+
+.riot-hud-cursor.clicking {
+  transform: scale(0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .riot-hud-cursor, .riot-hud-dot, #riotCursorCanvas {
+    display: none !important;
+  }
+}

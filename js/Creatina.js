@@ -13,11 +13,13 @@
 // ==========================================
 let audioCtx = null;
 let soundEnabled = true;
-let soundVolume = parseFloat(localStorage.getItem('riot_bodyfit_volume') || '0.6');
+let soundVolume = parseFloat((typeof localStorage !== 'undefined' ? localStorage.getItem('riot_bodyfit_volume') : null) || '0.6');
 
 function changeSoundVolume(val) {
     soundVolume = Math.max(0, Math.min(1, parseFloat(val) || 0.6));
-    localStorage.setItem('riot_bodyfit_volume', soundVolume);
+    if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('riot_bodyfit_volume', soundVolume);
+    }
 }
 
 function initAudio() {
@@ -188,22 +190,131 @@ function calcularTMB() {
 
 
 // ==========================================
+// 1.8 FITTS'S LAW, MOTOR REACTION & FATIGUE SUITE
+// ==========================================
+
+class FittsBiometricsEngine {
+    /**
+     * Shannon formulation of Fitts's Law Index of Difficulty: ID = log2(D / W + 1)
+     */
+    static calculateIndexDifficulty(distance, targetWidth) {
+        const d = Math.max(1, parseFloat(distance) || 1);
+        const w = Math.max(1, parseFloat(targetWidth) || 1);
+        return Math.log2((d / w) + 1);
+    }
+
+    /**
+     * Throughput (TP) in bits per second: TP = ID / MT
+     */
+    static calculateThroughput(distance, targetWidth, movementTimeSeconds) {
+        const id = this.calculateIndexDifficulty(distance, targetWidth);
+        const mt = Math.max(0.01, parseFloat(movementTimeSeconds) || 0.01);
+        return parseFloat((id / mt).toFixed(2));
+    }
+
+    /**
+     * Radial bivariate hit dispersion: sigma_r = sqrt(sigma_x^2 + sigma_y^2)
+     */
+    static calculateRadialError(points) {
+        if (!points || points.length < 2) return 0;
+        const n = points.length;
+        const meanX = points.reduce((acc, p) => acc + p.x, 0) / n;
+        const meanY = points.reduce((acc, p) => acc + p.y, 0) / n;
+        const varX = points.reduce((acc, p) => acc + Math.pow(p.x - meanX, 2), 0) / (n - 1);
+        const varY = points.reduce((acc, p) => acc + Math.pow(p.y - meanY, 2), 0) / (n - 1);
+        return parseFloat(Math.sqrt(varX + varY).toFixed(2));
+    }
+}
+
+class MotorReactionAnalyzer {
+    /**
+     * Ex-Gaussian parameter decomposition for cognitive & motor latencies (mu, sigma, tau)
+     */
+    static decomposeExGaussian(latenciesMs) {
+        if (!latenciesMs || latenciesMs.length === 0) {
+            return { mu: 0, sigma: 0, tau: 0, mean: 0 };
+        }
+        const n = latenciesMs.length;
+        const mean = latenciesMs.reduce((a, b) => a + b, 0) / n;
+        const variance = latenciesMs.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (n > 1 ? n - 1 : 1);
+        const std = Math.sqrt(variance);
+
+        const m3 = latenciesMs.reduce((a, b) => a + Math.pow(b - mean, 3), 0) / n;
+        let tau = m3 > 0 ? Math.cbrt(m3 / 2) : std * 0.3;
+        tau = Math.min(tau, std * 0.95);
+        const sigma = Math.sqrt(Math.max(1, variance - (tau * tau)));
+        const mu = mean - tau;
+
+        return {
+            mu: Math.round(mu),
+            sigma: Math.round(sigma),
+            tau: Math.round(tau),
+            mean: Math.round(mean)
+        };
+    }
+}
+
+class EnduranceFatigueMonitor {
+    /**
+     * Endurance Index EI = 100 * (finalAPM / initialAPM)
+     */
+    static calculateEnduranceIndex(clickTimestamps, totalDurationSeconds) {
+        if (!clickTimestamps || clickTimestamps.length < 4) return 100;
+        const windowDuration = Math.max(1.5, totalDurationSeconds * 0.3);
+        const startTime = clickTimestamps[0];
+        const endTime = startTime + (totalDurationSeconds * 1000);
+
+        const initialClicks = clickTimestamps.filter(t => (t - startTime) <= (windowDuration * 1000)).length;
+        const finalClicks = clickTimestamps.filter(t => (endTime - t) <= (windowDuration * 1000)).length;
+
+        if (initialClicks === 0) return 100;
+        const initialRate = initialClicks / windowDuration;
+        const finalRate = finalClicks / windowDuration;
+        const ratio = (finalRate / initialRate) * 100;
+        return parseFloat(Math.min(150, Math.max(10, ratio)).toFixed(1));
+    }
+}
+
+// ==========================================
 // 2. APM (ACTIONS PER MINUTE) TRAINER
 // ==========================================
 
-const APM_TEST_DURATION = 10; // seconds
+let apmTestDuration = 10; // seconds: 10 | 30 | 60
+const APM_TEST_DURATION = 10; // backwards compatibility
 let apmState = 'idle'; // 'idle' | 'running' | 'finished'
 let apmClicks = 0;
-let apmTimeRemaining = APM_TEST_DURATION;
+let apmTimeRemaining = 10;
 let apmInterval = null;
 let apmStartTime = null;
 let apmMode = 'speed'; // 'speed' | 'precision'
+let apmClickTimestamps = [];
+let apmClickPositions = [];
+let lastTargetPosition = null;
+
+function setApmDuration(seconds) {
+    if (apmState === 'running') return;
+    apmTestDuration = parseInt(seconds, 10) || 10;
+    if (typeof document !== 'undefined') {
+        document.querySelectorAll('.apm-duration-btn').forEach(btn => {
+            btn.classList.toggle('active', parseInt(btn.dataset.duration, 10) === apmTestDuration);
+        });
+    }
+    resetApmTest();
+}
 
 function initApmTrainer() {
     const bestApm = localStorage.getItem('riot_bodyfit_best_apm');
     const bestEl = document.getElementById('apm-best-val');
     if (bestEl && bestApm) {
         bestEl.innerText = bestApm;
+    }
+
+    if (typeof document !== 'undefined') {
+        document.querySelectorAll('.apm-duration-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setApmDuration(btn.dataset.duration);
+            });
+        });
     }
 }
 
@@ -225,13 +336,15 @@ function handleApmArenaClick(e) {
     }
 
     if (apmState === 'running') {
-        // If precision mode, clicks on arena background might count as misses if target wasn't clicked
         if (apmMode === 'precision') {
-            // Target click handles its own logic, background clicks are counted or ignored
             return;
         }
 
         apmClicks++;
+        apmClickTimestamps.push(performance.now());
+        if (e && e.clientX) {
+            apmClickPositions.push({ x: e.clientX, y: e.clientY });
+        }
         playAudioFx('click');
         createClickRipple(e, document.getElementById('apm-arena'));
         updateApmLiveStats();
@@ -243,6 +356,10 @@ function handleTargetClick(e) {
     if (apmState !== 'running') return;
 
     apmClicks++;
+    apmClickTimestamps.push(performance.now());
+    if (e && e.clientX) {
+        apmClickPositions.push({ x: e.clientX, y: e.clientY });
+    }
     playAudioFx('hit');
     createClickRipple(e, document.getElementById('apm-arena'));
     updateApmLiveStats();
@@ -252,8 +369,10 @@ function handleTargetClick(e) {
 function startApmTest() {
     apmState = 'running';
     apmClicks = 0;
-    apmTimeRemaining = APM_TEST_DURATION;
+    apmTimeRemaining = apmTestDuration;
     apmStartTime = performance.now();
+    apmClickTimestamps = [apmStartTime];
+    apmClickPositions = [];
 
     const arena = document.getElementById('apm-arena');
     if (arena) arena.classList.add('running');
@@ -261,7 +380,7 @@ function startApmTest() {
     const promptText = document.getElementById('apm-prompt-title');
     const promptSub = document.getElementById('apm-prompt-sub');
     if (promptText) promptText.innerText = apmMode === 'precision' ? "CLIQUE NO ALVO HEXTECH!" : "CLIQUE O MAIS RÁPIDO POSSÍVEL!";
-    if (promptSub) promptSub.innerText = "Mantenha o ritmo acelerado!";
+    if (promptSub) promptSub.innerText = `Mantenha o ritmo acelerado (${apmTestDuration}s)!`;
 
     const rankBox = document.getElementById('apm-rank-result');
     if (rankBox) rankBox.style.display = 'none';
@@ -274,14 +393,14 @@ function startApmTest() {
 
     apmInterval = setInterval(() => {
         const elapsed = (performance.now() - apmStartTime) / 1000;
-        apmTimeRemaining = Math.max(0, APM_TEST_DURATION - elapsed);
+        apmTimeRemaining = Math.max(0, apmTestDuration - elapsed);
 
         const timeEl = document.getElementById('apm-time-val');
         if (timeEl) timeEl.innerText = apmTimeRemaining.toFixed(1) + 's';
 
         const fillEl = document.getElementById('apm-timer-fill');
         if (fillEl) {
-            const pct = (apmTimeRemaining / APM_TEST_DURATION) * 100;
+            const pct = (apmTimeRemaining / apmTestDuration) * 100;
             fillEl.style.width = pct + '%';
         }
 
@@ -343,12 +462,17 @@ function finishApmTest() {
         if (oldTarget) oldTarget.remove();
     }
 
-    const finalApm = Math.round((apmClicks / APM_TEST_DURATION) * 60);
+    const duration = apmTestDuration || 10;
+    const finalApm = Math.round((apmClicks / duration) * 60);
     const timeEl = document.getElementById('apm-time-val');
     if (timeEl) timeEl.innerText = '0.0s';
 
     const apmValEl = document.getElementById('apm-current-val');
     if (apmValEl) apmValEl.innerText = finalApm;
+
+    // Advanced Biometrics: Endurance Index & Radial Precision
+    const fatigueEI = EnduranceFatigueMonitor.calculateEnduranceIndex(apmClickTimestamps, duration);
+    const radialError = FittsBiometricsEngine.calculateRadialError(apmClickPositions);
 
     // Evaluate Rank
     let rankName = "Ferro";
@@ -360,7 +484,7 @@ function finishApmTest() {
         rankName = "Challenger / Desafiante";
         rankColor = "rank-challenger";
         rankIcon = "fa-crown";
-        rankDesc = "NÍVEL MONDIAL! Reflexos e velocidade de Faker / Chovy. Mãos prontas para a LCK!";
+        rankDesc = "NÍVEL MUNDIAL! Reflexos e velocidade de Faker / Chovy. Mãos prontas para a LCK!";
         playAudioFx('fanfare');
     } else if (finalApm >= 240) {
         rankName = "Diamante / Mestre";
@@ -399,7 +523,11 @@ function finishApmTest() {
         rankBox.innerHTML = `
             <div class="rank-badge-icon ${rankColor}"><i class="fa-solid ${rankIcon}"></i></div>
             <div class="rank-tier-name ${rankColor}">Rank: ${rankName}</div>
-            <div style="font-size: 1.15rem; font-weight: 700; margin: 4px 0; color: #FFF;">${finalApm} APM (${apmClicks} cliques em 10s)</div>
+            <div style="font-size: 1.15rem; font-weight: 700; margin: 4px 0; color: #FFF;">${finalApm} APM (${apmClicks} cliques em ${duration}s)</div>
+            <div style="font-size: 0.8rem; color: #38BDF8; margin-bottom: 8px;">
+                <span><i class="fa-solid fa-bolt"></i> Retenção de Resistência: <b>${fatigueEI}%</b></span>
+                <span style="margin-left: 12px;"><i class="fa-solid fa-bullseye"></i> Dispersão Radial: <b>${radialError}px</b></span>
+            </div>
             <p style="font-size: 0.85rem; color: #9CA3AF; margin: 6px auto 14px auto; max-width: 450px;">${rankDesc}</p>
             <button class="btn-calc" onclick="resetApmTest()" style="background: var(--neon-green); color: #080B10; max-width: 200px; margin: 0 auto;">
                 <i class="fa-solid fa-rotate-right"></i> Treinar Novamente
@@ -417,10 +545,12 @@ function resetApmTest() {
     clearInterval(apmInterval);
     apmState = 'idle';
     apmClicks = 0;
-    apmTimeRemaining = APM_TEST_DURATION;
+    apmTimeRemaining = apmTestDuration;
+    apmClickTimestamps = [];
+    apmClickPositions = [];
 
     const timeEl = document.getElementById('apm-time-val');
-    if (timeEl) timeEl.innerText = '10.0s';
+    if (timeEl) timeEl.innerText = `${apmTestDuration}.0s`;
 
     const clicksEl = document.getElementById('apm-clicks-val');
     if (clicksEl) clicksEl.innerText = '0';
@@ -601,19 +731,21 @@ function closeErgoModal() {
 }
 
 // Close modal on click outside content
-window.addEventListener('click', (e) => {
-    const modal = document.getElementById('ergo-modal');
-    if (e.target === modal) {
-        closeErgoModal();
-    }
-});
+if (typeof window !== 'undefined') {
+    window.addEventListener('click', (e) => {
+        const modal = typeof document !== 'undefined' ? document.getElementById('ergo-modal') : null;
+        if (e.target === modal) {
+            closeErgoModal();
+        }
+    });
 
-// Close modal on Escape key
-window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeErgoModal();
-    }
-});
+    // Close modal on Escape key
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeErgoModal();
+        }
+    });
+}
 
 
 // ==========================================
@@ -1009,8 +1141,29 @@ async function copyCertificateToClipboard() {
 // ==========================================
 // 7. INITIALIZATION ON DOM READY
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    initApmTrainer();
-    initReflexTimer();
-    updateBreakTimerDisplay();
-});
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        initApmTrainer();
+        initReflexTimer();
+        updateBreakTimerDisplay();
+    });
+}
+
+// Global window exposure
+if (typeof window !== 'undefined') {
+    window.FittsBiometricsEngine = FittsBiometricsEngine;
+    window.MotorReactionAnalyzer = MotorReactionAnalyzer;
+    window.EnduranceFatigueMonitor = EnduranceFatigueMonitor;
+}
+
+// CommonJS Node.js export support
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        FittsBiometricsEngine,
+        MotorReactionAnalyzer,
+        EnduranceFatigueMonitor,
+        calcularIMC,
+        calcularAgua,
+        calcularTMB
+    };
+}

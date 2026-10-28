@@ -106,6 +106,7 @@
 
             // 7. Captcha & Security Challenge
             'captcha_title': 'Verificação de Segurança',
+            'captcha_slider_aria': 'Controle deslizante do quebra-cabeça de verificação',
             'captcha_instruction': 'Por favor, complete a verificação para continuar o acesso à sua conta Riot.',
             'captcha_checkbox': 'Eu sou humano',
             'captcha_verifying': 'Verificando autenticidade...',
@@ -267,6 +268,7 @@
 
             // 7. Captcha & Security Challenge
             'captcha_title': 'Security Verification',
+            'captcha_slider_aria': 'Verification puzzle slider control',
             'captcha_instruction': 'Please complete the verification to continue accessing your Riot account.',
             'captcha_checkbox': 'I am human',
             'captcha_verifying': 'Verifying authenticity...',
@@ -428,6 +430,7 @@
 
             // 7. Captcha & Security Challenge
             'captcha_title': 'Verificación de Seguridad',
+            'captcha_slider_aria': 'Control deslizante del rompecabezas de verificación',
             'captcha_instruction': 'Por favor, completa la verificación para continuar accediendo a tu cuenta.',
             'captcha_checkbox': 'Soy humano',
             'captcha_verifying': 'Verificando autenticidad...',
@@ -589,6 +592,7 @@
 
             // 7. Captcha & Security Challenge
             'captcha_title': 'セキュリティ認証',
+            'captcha_slider_aria': '認証パズルスライダーコントロール',
             'captcha_instruction': 'アカウントにアクセスするには、セキュリティ認証を完了してください。',
             'captcha_checkbox': '私はロボットではありません',
             'captcha_verifying': '認証中...',
@@ -750,6 +754,7 @@
 
             // 7. Captcha & Security Challenge
             'captcha_title': '보안 인증',
+            'captcha_slider_aria': '인증 퍼즐 슬라이더 컨트롤',
             'captcha_instruction': '계정에 접근하려면 보안 인증을 완료해 주세요.',
             'captcha_checkbox': '로봇이 아닙니다',
             'captcha_verifying': '인증 확인 중...',
@@ -911,6 +916,7 @@
 
             // 7. Captcha & Security Challenge
             'captcha_title': 'Sicherheitsüberprüfung',
+            'captcha_slider_aria': 'Verifikations-Puzzle-Schieberegler',
             'captcha_instruction': 'Bitte schließen Sie die Überprüfung ab, um auf Ihr Riot-Konto zuzugreifen.',
             'captcha_checkbox': 'Ich bin ein Mensch',
             'captcha_verifying': 'Authentizität wird überprüft...',

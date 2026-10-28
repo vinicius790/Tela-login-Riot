@@ -484,13 +484,13 @@
                         <div class="captcha-slider-label" data-i18n="captcha_slide_right" style="position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; color: #A1A1AA; pointer-events: none; letter-spacing: 0.5px;">
                             Deslize para a direita ➔
                         </div>
-                        <div class="captcha-slider-thumb" id="captchaSliderThumb" style="position: absolute; left: 2px; top: 2px; width: 40px; height: 40px; background: #FFF; border-radius: 50%; cursor: grab; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); color: #111; font-weight: bold; font-size: 1.1rem; transition: background-color 0.2s, box-shadow 0.2s;">
+                        <div class="captcha-slider-thumb" id="captchaSliderThumb" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Controle deslizante do quebra-cabeça de verificação" data-i18n-aria="captcha_slider_aria" style="position: absolute; left: 2px; top: 2px; width: 40px; height: 40px; background: #FFF; border-radius: 50%; cursor: grab; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); color: #111; font-weight: bold; font-size: 1.1rem; transition: background-color 0.2s, box-shadow 0.2s; outline-offset: 2px;">
                             ➔
                         </div>
                     </div>
 
                     <!-- Status Feedback Text -->
-                    <div id="captchaStatusMsg" data-i18n="captcha_infrastructure_msg" style="margin-top: 12px; font-size: 0.78rem; min-height: 18px; color: #A1A1AA; font-weight: 600;">
+                    <div id="captchaStatusMsg" aria-live="polite" data-i18n="captcha_infrastructure_msg" style="margin-top: 12px; font-size: 0.78rem; min-height: 18px; color: #A1A1AA; font-weight: 600;">
                         Segurança protegida pela infraestrutura Riot Games.
                     </div>
                 </div>
@@ -569,6 +569,46 @@
             }, { passive: true });
 
             window.addEventListener('touchend', onDragEnd);
+
+            // WCAG AAA Keyboard Slider Navigation
+            this.sliderThumb.addEventListener('keydown', (e) => {
+                if (this.isVerified) return;
+                const maxDrag = 276;
+                let currentVal = parseFloat(this.sliderThumb.getAttribute('aria-valuenow') || '0');
+                let step = 5;
+
+                if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    currentVal = Math.min(100, currentVal + step);
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    currentVal = Math.max(0, currentVal - step);
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    currentVal = 0;
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    currentVal = 100;
+                } else if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.isDragging = false;
+                    this.checkVerification();
+                    return;
+                } else {
+                    return;
+                }
+
+                this.sliderThumb.setAttribute('aria-valuenow', Math.round(currentVal));
+                const moveX = (currentVal / 100) * maxDrag;
+                this.sliderThumb.style.left = `${moveX + 2}px`;
+
+                const progress = this.modal.querySelector('#captchaSliderProgress');
+                if (progress) progress.style.width = `${moveX + 22}px`;
+
+                const maxPieceShift = this.canvasW - this.pieceSize - 20;
+                this.currentPieceX = (moveX / maxDrag) * maxPieceShift;
+                this.renderPiece(this.currentPieceX, this.targetY);
+            });
         }
 
         drawJigsawPath(ctx, x, y, size, tab) {

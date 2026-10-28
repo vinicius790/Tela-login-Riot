@@ -35,7 +35,8 @@ const PRECACHE_ASSETS = [
   './js/riot-security.js',
   './js/shortcuts.js',
   './js/theme-switcher.js',
-  './js/Creatina.js'
+  './js/Creatina.js',
+  './js/riot-cursor.js'
 ];
 
 // External hostnames to runtime-cache for complete offline immersion

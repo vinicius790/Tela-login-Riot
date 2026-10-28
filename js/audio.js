@@ -161,6 +161,98 @@
         }
 
         /**
+         * Procedural Stereo Impulse Response for Stadium / Hextech Hall Reverb
+         */
+        createProceduralImpulseResponse(duration = 2.0, decay = 2.0, reverse = false) {
+            if (!this.ctx) return null;
+            const sampleRate = this.ctx.sampleRate;
+            const length = Math.floor(sampleRate * duration);
+            const impulse = this.ctx.createBuffer(2, length, sampleRate);
+            const left = impulse.getChannelData(0);
+            const right = impulse.getChannelData(1);
+
+            for (let i = 0; i < length; i++) {
+                const n = reverse ? length - i : i;
+                const envelope = Math.pow(1 - n / length, decay);
+                left[i] = (Math.random() * 2 - 1) * envelope;
+                right[i] = (Math.random() * 2 - 1) * envelope;
+            }
+            return impulse;
+        }
+
+        getReverbNode() {
+            if (this.reverbNode) return this.reverbNode;
+            if (!this.ctx) return null;
+            try {
+                this.reverbNode = this.ctx.createConvolver();
+                this.reverbNode.buffer = this.createProceduralImpulseResponse(1.8, 2.5);
+                return this.reverbNode;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        /**
+         * Multi-layered Match Found / Champion Select Soundscape
+         */
+        playMatchFound() {
+            if (this.muted) return;
+            this.initContext();
+            if (!this.ctx) return;
+
+            const now = this.ctx.currentTime;
+
+            // Layer 1: Sub-bass sonic boom
+            const subOsc = this.ctx.createOscillator();
+            const subGain = this.ctx.createGain();
+            subOsc.type = 'sine';
+            subOsc.frequency.setValueAtTime(140, now);
+            subOsc.frequency.exponentialRampToValueAtTime(35, now + 0.8);
+            subGain.gain.setValueAtTime(0.5, now);
+            subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+            subOsc.connect(subGain);
+            subGain.connect(this.masterGainNode);
+            subOsc.start(now);
+            subOsc.stop(now + 0.8);
+
+            // Layer 2: Heroic brass triad chord
+            const brassWave = this.getBrassWave();
+            const notes = [261.63, 329.63, 392.00, 523.25];
+            notes.forEach((freq, idx) => {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                if (brassWave) {
+                    osc.setPeriodicWave(brassWave);
+                } else {
+                    osc.type = 'triangle';
+                }
+                osc.frequency.setValueAtTime(freq, now + 0.05);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.25 / (idx + 1), now + 0.12);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+                osc.connect(gain);
+                gain.connect(this.masterGainNode);
+                osc.start(now);
+                osc.stop(now + 1.25);
+            });
+
+            // Layer 3: High shimmer crystal reverb
+            const crystal = this.getCrystalWave();
+            if (crystal) {
+                const shimmer = this.ctx.createOscillator();
+                const sGain = this.ctx.createGain();
+                shimmer.setPeriodicWave(crystal);
+                shimmer.frequency.setValueAtTime(1046.5, now + 0.1);
+                sGain.gain.setValueAtTime(0.08, now + 0.1);
+                sGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.5);
+                shimmer.connect(sGain);
+                sGain.connect(this.masterGainNode);
+                shimmer.start(now + 0.1);
+                shimmer.stop(now + 1.5);
+            }
+        }
+
+        /**
          * Returns whether audio is currently muted
          * @returns {boolean}
          */
@@ -1308,6 +1400,11 @@
     }
 
     // Expose Global Singleton instance as required
-    window.riotAudio = new RiotAudioEngine();
+    if (typeof window !== 'undefined') {
+        window.riotAudio = new RiotAudioEngine();
+    }
 
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = { RiotAudioEngine };
+    }
 })();

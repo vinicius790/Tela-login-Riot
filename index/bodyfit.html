@@ -124,13 +124,20 @@
                                 Sprint de 10 segundos • Cálculo dinâmico de Ações Por Minuto
                             </p>
                         </div>
-                        <div style="display: flex; gap: 6px;">
-                            <button id="btn-mode-speed" class="sound-toggle-btn apm-mode-btn active" onclick="setApmMode('speed')" title="Cliques Brutos Rápidos">
-                                <i class="fa-solid fa-bolt"></i> Burst
-                            </button>
-                            <button id="btn-mode-precision" class="sound-toggle-btn apm-mode-btn" onclick="setApmMode('precision')" title="Alvos Hextech Aleatórios">
-                                <i class="fa-solid fa-bullseye"></i> Precisão
-                            </button>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+                            <div style="display: flex; gap: 4px;">
+                                <button type="button" class="sound-toggle-btn apm-duration-btn active" data-duration="10" onclick="setApmDuration(10)" title="Duração 10 segundos">10s</button>
+                                <button type="button" class="sound-toggle-btn apm-duration-btn" data-duration="30" onclick="setApmDuration(30)" title="Duração 30 segundos">30s</button>
+                                <button type="button" class="sound-toggle-btn apm-duration-btn" data-duration="60" onclick="setApmDuration(60)" title="Duração 60 segundos">60s</button>
+                            </div>
+                            <div style="display: flex; gap: 4px;">
+                                <button id="btn-mode-speed" class="sound-toggle-btn apm-mode-btn active" onclick="setApmMode('speed')" title="Cliques Brutos Rápidos">
+                                    <i class="fa-solid fa-bolt"></i> Burst
+                                </button>
+                                <button id="btn-mode-precision" class="sound-toggle-btn apm-mode-btn" onclick="setApmMode('precision')" title="Alvos Hextech Aleatórios">
+                                    <i class="fa-solid fa-bullseye"></i> Precisão
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -580,5 +587,6 @@
 
     <!-- Scripts do Sistema -->
     <script src="../js/Creatina.js"></script>
+    <script src="../js/riot-cursor.js"></script>
 </body>
 </html>
