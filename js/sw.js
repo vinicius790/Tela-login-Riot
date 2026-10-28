@@ -9,34 +9,33 @@ const CACHE_NAME = 'riot-portal-v2';
 
 const PRECACHE_ASSETS = [
   './',
-  './index.html',
-  './trembolona.html',
+  './index/index.html',
+  './index/trembolona.html',
+  './index/account-settings.html',
+  './index/bodyfit.html',
   './manifest.json',
-  './GH.css',
-  './styles/GH.css',
-  './styles/animations.css',
-  './styles/themes.css',
-  './styles/account-settings.css',
-  './assets/icons.js',
+  './style/GH.css',
+  './style/animations.css',
+  './style/themes.css',
+  './style/account-settings.css',
+  './style/Termogenico.css',
+  './assets/Logo.png',
   './assets/icon-192.png',
   './assets/icon-512.png',
   './assets/icon-maskable.png',
   './assets/icon.svg',
+  './js/icons.js',
   './js/audio.js',
   './js/auth.js',
   './js/confetti.js',
   './js/Durateston.js',
-  './Durateston.js',
   './js/i18n.js',
   './js/mock-auth.js',
   './js/particles.js',
   './js/riot-security.js',
   './js/shortcuts.js',
   './js/theme-switcher.js',
-  './bodyfit/index.html',
-  './bodyfit/Creatina.js',
-  './bodyfit/Termogenico.css',
-  './bodyfit/Logo.png'
+  './js/Creatina.js'
 ];
 
 // External hostnames to runtime-cache for complete offline immersion
@@ -147,7 +146,7 @@ self.addEventListener('fetch', (event) => {
         .catch(() => {
           // Offline fallback for HTML navigation
           if (request.mode === 'navigate' || (request.headers.get('accept') && request.headers.get('accept').includes('text/html'))) {
-            return caches.match('./index.html');
+            return caches.match('./index/index.html');
           }
         });
     })

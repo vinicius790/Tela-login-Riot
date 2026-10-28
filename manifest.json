@@ -2,7 +2,7 @@
   "name": "Riot Games — Portal de Autenticação",
   "short_name": "Riot Client",
   "description": "Portal de Autenticação Oficial da Riot Games (LoL, Valorant, TFT, Wild Rift). Experiência PWA offline com temas dinâmicos e Web Audio.",
-  "start_url": "./index.html",
+  "start_url": "./index/index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
@@ -41,15 +41,15 @@
       "name": "Portal de Login",
       "short_name": "Login",
       "description": "Acesso direto à autenticação Riot Games",
-      "url": "./index.html",
+      "url": "./index/index.html",
       "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Bodyfit Esports Lab",
       "short_name": "Bodyfit",
       "description": "Calculadoras biométricas e treino de APM & reflexos",
-      "url": "./bodyfit/index.html",
-      "icons": [{ "src": "bodyfit/Logo.png", "sizes": "192x192" }]
+      "url": "./index/bodyfit.html",
+      "icons": [{ "src": "assets/Logo.png", "sizes": "192x192" }]
     }
   ]
 }

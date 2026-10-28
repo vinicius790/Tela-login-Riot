@@ -248,19 +248,36 @@ body {
     transform: translateY(-2px);
 }
 
-/* Sound control toggle */
+/* Sound control wrapper & slider */
+.sound-control-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(18, 22, 34, 0.85);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.sound-control-wrapper:hover {
+    border-color: rgba(0, 255, 136, 0.35);
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.15);
+}
+
 .sound-toggle-btn {
     background: #1A1D2B;
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: var(--text-secondary);
     border-radius: 8px;
-    padding: 8px 12px;
+    padding: 6px 12px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     transition: all 0.2s;
+    user-select: none;
 }
 
 .sound-toggle-btn:hover {
@@ -272,6 +289,66 @@ body {
     border-color: var(--neon-green);
     color: var(--neon-green);
     background: rgba(0, 255, 136, 0.1);
+}
+
+.sound-slider-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding-left: 4px;
+}
+
+.volume-icon-hint {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.sound-volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 68px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.sound-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
+    border: 2px solid #080A10;
+    transition: transform 0.15s, background-color 0.2s;
+}
+
+.sound-volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+    background: #FFFFFF;
+}
+
+.sound-volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
+    border: 2px solid #080A10;
+}
+
+.volume-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--hextech-cyan);
+    min-width: 28px;
+    font-family: 'Rajdhani', sans-serif;
 }
 
 /* Section Header Styling */
@@ -1125,4 +1202,235 @@ body {
 
 .animate-fade-in {
     animation: fadeIn 0.3s ease-out;
+}
+
+/* ====================================================
+   ESPORTS CERTIFICATE BANNER & CANVAS MODAL STYLES
+   ==================================================== */
+
+.cert-banner-card {
+    background: linear-gradient(135deg, rgba(20, 24, 38, 0.95), rgba(11, 14, 23, 0.98));
+    border: 1px solid rgba(200, 170, 110, 0.35);
+    border-radius: 14px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 26px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), inset 0 0 25px rgba(200, 170, 110, 0.05);
+}
+
+.cert-banner-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--hextech-gold), var(--neon-green));
+}
+
+.cert-banner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--hextech-gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.cert-banner-card h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.35rem;
+    color: #FFFFFF;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.cert-banner-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    max-width: 680px;
+    line-height: 1.48;
+}
+
+.btn-cert-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 26px;
+    background: linear-gradient(135deg, #C8AA6E 0%, #8C6A24 100%);
+    color: #07090E;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: 1px solid #F0E6D2;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(200, 170, 110, 0.45);
+    white-space: nowrap;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.btn-cert-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 26px rgba(200, 170, 110, 0.75);
+    filter: brightness(1.15);
+}
+
+.btn-cert-quick {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    background: linear-gradient(135deg, rgba(200, 170, 110, 0.15), rgba(0, 255, 136, 0.15));
+    border: 1px solid rgba(200, 170, 110, 0.5);
+    color: var(--hextech-gold-bright);
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.btn-cert-quick:hover {
+    background: linear-gradient(135deg, rgba(200, 170, 110, 0.35), rgba(0, 255, 136, 0.35));
+    box-shadow: 0 0 14px rgba(200, 170, 110, 0.4);
+    color: #FFFFFF;
+    border-color: var(--hextech-gold-bright);
+}
+
+/* Certificate Modal Overlay & Dialog */
+.cert-modal-content {
+    max-width: 980px;
+    background: #0E111C;
+    border: 1px solid rgba(200, 170, 110, 0.35);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(200, 170, 110, 0.12);
+}
+
+.cert-form-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 12px;
+    background: rgba(18, 22, 34, 0.75);
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 16px;
+}
+
+.cert-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cert-input-group label {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cert-input-group input,
+.cert-input-group select {
+    background: #090B12;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    outline: none;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.cert-input-group input:focus,
+.cert-input-group select:focus {
+    border-color: var(--hextech-gold);
+    box-shadow: 0 0 10px rgba(200, 170, 110, 0.35);
+}
+
+.cert-canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #06070B;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(200, 170, 110, 0.25);
+    margin-bottom: 18px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
+}
+
+#cert-canvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    display: block;
+}
+
+.cert-modal-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cert-action-btns {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .cert-banner-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 18px;
+    }
+
+    .btn-cert-cta {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cert-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cert-modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cert-action-btns {
+        flex-direction: column;
+    }
+
+    .cert-action-btns button {
+        width: 100% !important;
+        justify-content: center;
+    }
 }

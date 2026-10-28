@@ -6,7 +6,7 @@
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-ZERO%20(Pure%20Vanilla)-brightgreen?style=for-the-badge)](package.json)
 [![Web Audio API](https://img.shields.io/badge/Audio-Web%20Audio%20API%20Synthesized-blueviolet?style=for-the-badge)](js/audio.js)
 [![Web Crypto API](https://img.shields.io/badge/Security-SHA--256%20%2B%20AES--256--GCM-blue?style=for-the-badge)](js/mock-auth.js)
-[![Themes](https://img.shields.io/badge/Themes-6%20Gaming%20Universes-red?style=for-the-badge)](styles/themes.css)
+[![Themes](https://img.shields.io/badge/Themes-6%20Gaming%20Universes-red?style=for-the-badge)](style/themes.css)
 [![Languages](https://img.shields.io/badge/i18n-5%20Languages-yellow?style=for-the-badge)](js/i18n.js)
 
 ---
@@ -73,44 +73,38 @@ O sistema opera sob uma arquitetura desacoplada e baseada em eventos (`CustomEve
 
 ```text
 Tela-login-Riot/
-├── index.html                   # Portal principal de autenticação de alta fidelidade
-├── trembolona.html              # Interface de login retrô de alta performance
-├── index/                       # Portal modular de autenticação e gerenciamento de conta
+├── index/                       # Todos os arquivos HTML do projeto
 │   ├── index.html               # Portal Riot Client com tema dinâmico, 2FA e Web Audio
 │   ├── account-settings.html    # Central de Configurações da Conta Riot (Riot ID, Cooldown, 2FA, Sessões)
-│   └── trembolona.html          # Portal de monitoramento de status de servidores e shards
-├── manifest.json                # Manifesto PWA completo (ícones 192px, 512px, maskable, shortcuts)
-├── sw.js                        # Service Worker raiz (delega para js/sw.js com escopo global)
-├── GH.css                       # Folha de estilos legada mantida para retrocompatibilidade
-├── Durateston.js                # Controlador legado para compatibilidade com scripts antigos
-├── assets/
-│   ├── icons.js                 # Biblioteca de vetores SVG (Riot Fist, Google, Apple, Xbox, PS, etc.)
-│   ├── icon.svg                 # Vetor mestre com o brasão e punho estilizado da Riot Games
-│   ├── icon-192.png             # Ícone PWA 192x192 gerado em alta definição
-│   ├── icon-512.png             # Ícone PWA 512x512 para splash screen
-│   └── icon-maskable.png        # Ícone PWA 512x512 adaptativo com área segura (maskable)
-├── js/
+│   ├── trembolona.html          # Portal de monitoramento de status de servidores e shards
+│   └── bodyfit.html             # Suite Biomecânica & Laboratório de Treino de Reflexos Esports
+├── js/                          # Todos os arquivos JavaScript do ecossistema
 │   ├── audio.js                 # Motor sintetizador de som procedural (Web Audio API)
 │   ├── auth.js                  # Controladores de input flutuante, validações e detecção de Caps Lock
 │   ├── confetti.js              # Canhão procedural de partículas de confete para celebração de login
+│   ├── Creatina.js              # Engine JavaScript de latência motora, APM, IMC, TMB e Áudio
 │   ├── Durateston.js            # Módulo modularizado de compatibilidade do formulário
 │   ├── i18n.js                  # Engine de internacionalização nativa de alta precisão (6 idiomas: PT, EN, ES, JA, KO, DE)
+│   ├── icons.js                 # Biblioteca de vetores SVG (Riot Fist, Google, Apple, Xbox, PS, etc.)
 │   ├── mock-auth.js             # Autenticação segura com WebCrypto SHA-256, 2FA OTP e sessão
 │   ├── particles.js             # Motor Canvas VFX 60fps com 6 emblemas dinâmicos e física vetorial
 │   ├── riot-security.js         # Módulo de segurança: Captcha deslizante, Passkeys WebAuthn e Shards
 │   ├── shortcuts.js             # Gerenciador global de atalhos de teclado e notificações HUD Toast
 │   ├── sw.js                    # Service Worker modular com versionamento 'riot-portal-v2'
 │   └── theme-switcher.js        # Alternador dinâmico de 6 temas com persistência em localStorage
-├── styles/
+├── style/                       # Folhas de estilo CSS do cliente Riot
 │   ├── account-settings.css     # Estilos modernos para a central de configurações e segurança
 │   ├── animations.css           # Keyframes de micro-interações, pulso, rotações e transições
 │   ├── GH.css                   # Folha de estilo base do cliente com variáveis CSS integradas
-│   └── themes.css               # Especificação visual, gradientes e paletas dos 6 universos
-├── bodyfit/                     # Suite Biomecânica & Laboratório de Treino de Reflexos Esports
-│   ├── index.html               # Aplicação web completa: APM Trainer, Reflexômetro e Calculadoras
-│   ├── Creatina.js              # Engine JavaScript de latência motora, APM, IMC, TMB e Áudio
 │   ├── Termogenico.css          # Estilização Dark Cyberpunk / Neon Green para alta performance
-│   └── Logo.png                 # Logotipo oficial da Bodyfit Esports Lab
+│   └── themes.css               # Especificação visual, gradientes e paletas dos 6 universos
+├── assets/                      # Ícones PWA, logos e vetores visuais
+│   ├── Logo.png                 # Logotipo oficial da Bodyfit Esports Lab
+│   ├── icon.svg                 # Vetor mestre com o brasão e punho estilizado da Riot Games
+│   ├── icon-192.png             # Ícone PWA 192x192 gerado em alta definição
+│   ├── icon-512.png             # Ícone PWA 512x512 para splash screen
+│   └── icon-maskable.png        # Ícone PWA 512x512 adaptativo com área segura (maskable)
+├── manifest.json                # Manifesto PWA completo (ícones 192px, 512px, maskable, shortcuts)
 └── .github/
     └── workflows/
         └── deploy.yml           # Pipeline CI/CD automático para deploy no GitHub Pages
@@ -247,7 +241,7 @@ Acessível em [`index/account-settings.html`](index/account-settings.html) e int
 
 ### 8. Treinador de Reflexos APM & Suite Bodyfit Esports
 
-Acessível em [`bodyfit/index.html`](bodyfit/index.html) ou pelo atalho no portal:
+Acessível em [`index/bodyfit.html`](index/bodyfit.html) ou pelo atalho no portal:
 
 1. **APM Reflex & Click Speed Trainer (10 Segundos)**:
    * **Modo Velocidade**: Medição contínua de cliques brutos por minuto.
@@ -398,44 +392,38 @@ The application leverages an event-driven decoupled architecture (`CustomEvent` 
 
 ```text
 Tela-login-Riot/
-├── index.html                   # Master login portal with complete animations and HUD
-├── trembolona.html              # High-performance lightweight retro login UI
-├── index/                       # Modular portal authentication and account management
+├── index/                       # All HTML application files
 │   ├── index.html               # Full client portal with dynamic themes, 2FA and Web Audio
 │   ├── account-settings.html    # Riot Account Settings Center (Riot ID, Cooldown, 2FA, Sessions)
-│   └── trembolona.html          # Server status, shard telemetry and ping monitor
-├── manifest.json                # PWA manifest (192px, 512px, maskable icons & shortcuts)
-├── sw.js                        # Root Service Worker forwarder with global scope
-├── GH.css                       # Root base stylesheet for backward compatibility
-├── Durateston.js                # Legacy form interaction script for compatibility
-├── assets/
-│   ├── icons.js                 # High-precision SVG vectors (Riot Fist, Google, Apple, etc.)
-│   ├── icon.svg                 # Scalable master SVG with official Riot fist geometry
-│   ├── icon-192.png             # Crisp 192x192 PWA home screen icon
-│   ├── icon-512.png             # High-DPI 512x512 splash screen icon
-│   └── icon-maskable.png        # Adaptive 512x512 maskable icon with safe zone
-├── js/
+│   ├── trembolona.html          # Server status, shard telemetry and ping monitor
+│   └── bodyfit.html             # Biomechanics Suite & Esports Reflex Training Lab
+├── js/                          # All JavaScript ecosystem modules
 │   ├── audio.js                 # Procedural sound synthesizer engine (Web Audio API)
 │   ├── auth.js                  # Floating labels, Caps Lock detector & validation logic
 │   ├── confetti.js              # Canvas confetti cannon for successful authentications
+│   ├── Creatina.js              # High-precision engine for APM, Reaction Time, BMI & BMR
 │   ├── Durateston.js            # Modular form listener module
 │   ├── i18n.js                  # Dynamic client-side internationalization (6 languages: PT, EN, ES, JA, KO, DE)
+│   ├── icons.js                 # High-precision SVG vectors (Riot Fist, Google, Apple, etc.)
 │   ├── mock-auth.js             # WebCrypto SHA-256 hashing, 2FA OTP, and session manager
 │   ├── particles.js             # Canvas 60fps VFX engine with 6 dynamic centerpieces
 │   ├── riot-security.js         # Sliding puzzle captcha, WebAuthn Passkeys & Shard selector
 │   ├── shortcuts.js             # Global keyboard shortcuts dispatcher & HUD Toast manager
 │   ├── sw.js                    # Modular Service Worker with 'riot-portal-v2' cache strategy
 │   └── theme-switcher.js        # Dynamic 6-theme switcher with localStorage persistence
-├── styles/
+├── style/                       # CSS stylesheets and design tokens
 │   ├── account-settings.css     # Modern styling for security and account management
 │   ├── animations.css           # Micro-interaction keyframes, pulses, and transitions
 │   ├── GH.css                   # Core client stylesheet with dynamic CSS custom properties
-│   └── themes.css               # Visual tokens, gradients, and palettes for all 6 universes
-├── bodyfit/                     # Biomechanics Suite & Esports Reflex Training Lab
-│   ├── index.html               # Dedicated web app: APM Trainer, Latency Timer & Calculators
-│   ├── Creatina.js              # High-precision engine for APM, Reaction Time, BMI & BMR
 │   ├── Termogenico.css          # Dark Cyberpunk / Neon Green aesthetic stylesheet
-│   └── Logo.png                 # Official Bodyfit Esports Lab insignia
+│   └── themes.css               # Visual tokens, gradients, and palettes for all 6 universes
+├── assets/                      # PWA icons, logos and visual vectors
+│   ├── Logo.png                 # Official Bodyfit Esports Lab insignia
+│   ├── icon.svg                 # Scalable master SVG with official Riot fist geometry
+│   ├── icon-192.png             # Crisp 192x192 PWA home screen icon
+│   ├── icon-512.png             # High-DPI 512x512 splash screen icon
+│   └── icon-maskable.png        # Adaptive 512x512 maskable icon with safe zone
+├── manifest.json                # PWA manifest (192px, 512px, maskable icons & shortcuts)
 └── .github/
     └── workflows/
         └── deploy.yml           # Automated CI/CD pipeline for GitHub Pages static hosting
@@ -572,7 +560,7 @@ Accessible at [`index/account-settings.html`](index/account-settings.html) and i
 
 ### 8. APM Reflex Trainer & Bodyfit Esports Suite
 
-Available directly in [`bodyfit/index.html`](bodyfit/index.html):
+Available directly in [`index/bodyfit.html`](index/bodyfit.html):
 
 1. **APM Reflex & Precision Trainer (10-Second Challenge)**:
    * **Speed Mode**: Raw click frequency tester measuring actions per minute.

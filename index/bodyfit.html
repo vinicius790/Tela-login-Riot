@@ -7,7 +7,7 @@
     <title>Bodyfit — Riot Esports Performance & Training Lab</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%2300FF88' d='M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 5.57 14.14 14.14 5.57 17.71 9.14 16.29 10.57 17.71 12l2.86 2.86z'/></svg>">
-    <link rel="stylesheet" href="Termogenico.css">
+    <link rel="stylesheet" href="../style/Termogenico.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
     <!-- Header & Navegação Superior -->
     <header class="header">
         <a href="#" class="logo-container">
-            <img class="logo" src="Logo.png" alt="Bodyfit Logo"> 
+            <img class="logo" src="../assets/Logo.png" alt="Bodyfit Logo"> 
             <div class="header-brand">
                 <h1>Bodyfit <span>Esports</span></h1>
                 <span class="header-tagline">Performance &amp; Biometrics Lab</span>
@@ -29,10 +29,17 @@
             <button type="button" class="nav-link nav-btn-highlight" onclick="openErgoModal()">
                 <i class="fa-solid fa-person-walking"></i> Ergonomia &amp; Postura
             </button>
-            <button type="button" id="sound-toggle" class="sound-toggle-btn active" onclick="toggleSound()">
-                <i class="fa-solid fa-volume-high"></i> Áudio: ON
-            </button>
-            <a href="../index/index.html" class="nav-link-back">
+            <div class="sound-control-wrapper">
+                <button type="button" id="sound-toggle" class="sound-toggle-btn active" onclick="toggleSound()" title="Ativar/Desativar Efeitos Sonoros">
+                    <i id="sound-icon" class="fa-solid fa-volume-high"></i> <span id="sound-text">Áudio: ON</span>
+                </button>
+                <div class="sound-slider-container" title="Volume dos Efeitos Sonoros">
+                    <i class="fa-solid fa-volume-low volume-icon-hint"></i>
+                    <input type="range" id="sound-volume-slider" class="sound-volume-slider" min="0" max="1" step="0.05" value="0.6" oninput="changeSoundVolume(this.value)">
+                    <span id="sound-volume-label" class="volume-label">60%</span>
+                </div>
+            </div>
+            <a href="index.html" class="nav-link-back">
                 <i class="fa-solid fa-arrow-left"></i> Riot Client
             </a>
         </nav>
@@ -236,8 +243,26 @@
                         </div>
                     </div>
 
+                    <button type="button" class="btn-cert-quick" style="width: 100%; justify-content: center; margin-top: 14px;" onclick="openCertificateModal('reflex')">
+                        <i class="fa-solid fa-certificate"></i> Gerar Certificado Gamer (Reflexos)
+                    </button>
+
                 </div>
 
+            </div>
+
+            <!-- Banner de Certificação Oficial Riot Esports -->
+            <div class="cert-banner-card">
+                <div class="cert-banner-left">
+                    <div class="cert-banner-badge"><i class="fa-solid fa-award"></i> Riot Games Esports Division • 2026</div>
+                    <h3>Certificação Oficial de Performance &amp; Biometria Gamer</h3>
+                    <p>Valide suas métricas de APM e Latência Neuromuscular. Emita seu Certificado Oficial chancelado pela bancada de alta performance da Riot Games em alta resolução HD com Rank Competitivo (Challenger, Diamond, Gold, Silver ou Iron).</p>
+                </div>
+                <div class="cert-banner-right">
+                    <button type="button" class="btn-cert-cta" onclick="openCertificateModal()">
+                        <i class="fa-solid fa-file-shield"></i> Gerar Certificado Gamer
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -469,6 +494,77 @@
     </div>
 
 
+    <!-- ========================================================== -->
+    <!-- MODAL: CERTIFICADO RIOT ESPORTS COM HTML5 CANVAS          -->
+    <!-- ========================================================== -->
+    <div id="cert-modal" class="modal-overlay">
+        <div class="modal-content cert-modal-content animate-fade-in">
+            <div class="modal-header">
+                <h2>
+                    <i class="fa-solid fa-certificate" style="color: var(--hextech-gold);"></i> Certificado Riot Esports • Biometria &amp; Performance
+                </h2>
+                <button type="button" class="modal-close-btn" onclick="closeCertModal()" title="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0; margin-bottom: 14px;">
+                Personalize seu nickname e confira os dados biomecânicos validados antes de gerar o arquivo oficial de alta resolução (.png).
+            </p>
+
+            <!-- Formulário de Customização do Certificado -->
+            <div class="cert-form-grid">
+                <div class="cert-input-group">
+                    <label for="cert-player-name"><i class="fa-solid fa-user-tag"></i> Nickname do Atleta</label>
+                    <input type="text" id="cert-player-name" placeholder="Ex: Faker#LCK ou SeuNick#BR1" maxlength="24" oninput="renderCertificate()">
+                </div>
+                <div class="cert-input-group">
+                    <label for="cert-apm-val"><i class="fa-solid fa-computer-mouse"></i> Ações/Min (APM)</label>
+                    <input type="number" id="cert-apm-val" min="10" max="999" placeholder="280" oninput="handleCertMetricChange()">
+                </div>
+                <div class="cert-input-group">
+                    <label for="cert-reflex-val"><i class="fa-solid fa-stopwatch"></i> Latência (ms)</label>
+                    <input type="number" id="cert-reflex-val" min="50" max="999" placeholder="165" oninput="handleCertMetricChange()">
+                </div>
+                <div class="cert-input-group">
+                    <label for="cert-rank-select"><i class="fa-solid fa-shield-halved"></i> Rank Certificado</label>
+                    <select id="cert-rank-select" onchange="renderCertificate()">
+                        <option value="auto">⚡ Auto (Calculado)</option>
+                        <option value="challenger">👑 Challenger (Desafiante)</option>
+                        <option value="diamond">💎 Diamond (Diamante)</option>
+                        <option value="gold">🥇 Gold (Ouro)</option>
+                        <option value="silver">🥈 Silver (Prata)</option>
+                        <option value="iron">🛡️ Iron (Ferro)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Container do Canvas de Renderização -->
+            <div class="cert-canvas-container">
+                <canvas id="cert-canvas" width="1200" height="675"></canvas>
+            </div>
+
+            <!-- Ações do Modal -->
+            <div class="cert-modal-actions">
+                <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--neon-green);"></i> Resolução Ultra HD 1200×675 • Autenticado pela Riot Games Division
+                </div>
+                <div class="cert-action-btns">
+                    <button type="button" class="btn-calc" onclick="downloadCertificate()" style="background: var(--neon-green); color: #080A10; font-weight: 700; width: auto; padding: 10px 22px;">
+                        <i class="fa-solid fa-download"></i> Baixar Certificado (.png)
+                    </button>
+                    <button type="button" class="sound-toggle-btn" onclick="copyCertificateToClipboard()" title="Copiar para a Área de Transferência">
+                        <i class="fa-solid fa-copy"></i> <span id="copy-btn-text">Copiar Imagem</span>
+                    </button>
+                    <button type="button" class="sound-toggle-btn" onclick="closeCertModal()">
+                        <i class="fa-solid fa-xmark"></i> Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Rodapé -->
     <footer class="footer">
         <div class="footer-links">
@@ -476,13 +572,13 @@
             <a href="#calc">Calculadoras</a>
             <a href="#planos">Planos Pro</a>
             <a href="javascript:void(0)" onclick="openErgoModal()">Ergonomia &amp; Postura</a>
-            <a href="../index/index.html">Riot Client</a>
-            <a href="../index/account-settings.html">Conta Riot ⚙️</a>
+            <a href="index.html">Riot Client</a>
+            <a href="account-settings.html">Conta Riot ⚙️</a>
         </div>
         <p>&copy; 2026 Bodyfit Health Systems • Riot Esports Performance &amp; Training Suite</p>
     </footer>
 
     <!-- Scripts do Sistema -->
-    <script src="Creatina.js"></script>
+    <script src="../js/Creatina.js"></script>
 </body>
 </html>
