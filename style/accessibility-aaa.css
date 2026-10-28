@@ -1,0 +1,139 @@
+/* ==========================================================================
+   Riot Games Design System — WCAG 2.2 AAA & Screen Reader Accessibility Suite
+   ========================================================================== */
+
+:root {
+  /* WCAG 2.2 AAA Core Tokens (All text colors >= 7:1 on dark canvas) */
+  --aaa-bg-canvas: #08090D;
+  --aaa-bg-surface: #12151D;
+  --aaa-text-primary: #FFFFFF;
+  --aaa-text-high: #F1F5F9;
+  --aaa-text-secondary: #CBD5E1;
+  --aaa-text-muted: #D1D5DB;
+  --aaa-accent-red: #FF6680;
+  --aaa-accent-cyan: #00F0FF;
+  --aaa-accent-green: #00FF88;
+  --aaa-accent-gold: #F4E2B2;
+  --aaa-accent-amber: #FCD34D;
+  --aaa-accent-violet: #D8B4FE;
+  
+  /* Double-Ring High Contrast Focus Indicator */
+  --aaa-focus-outline: #00F0FF;
+  --aaa-focus-shadow: #000000;
+}
+
+/* 1. Skip-to-Content Link (WCAG 2.4.1 Bypass Blocks) */
+.riot-skip-link {
+  position: fixed;
+  top: -120px;
+  left: 16px;
+  background: #000000;
+  color: #00F0FF !important;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-decoration: none;
+  padding: 12px 24px;
+  border: 2px solid #00F0FF;
+  border-radius: 6px;
+  z-index: 999999;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+  transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.riot-skip-link:focus,
+.riot-skip-link:focus-visible {
+  top: 16px;
+  outline: 3px solid #FFFFFF;
+  outline-offset: 3px;
+}
+
+/* 2. WCAG 2.2 AAA Focus Appearance (Criterion 2.4.13) */
+:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--aaa-focus-outline) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 5px var(--aaa-focus-shadow), 0 0 14px rgba(0, 240, 255, 0.8) !important;
+}
+
+/* 3. Screen Reader Only Utility Class (WCAG 4.1.2) */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* 4. AAA Text Contrast Overrides for Dark Backgrounds */
+.login__link,
+.subservice-row span,
+.stat-pill-label,
+.uptime-bar-label,
+.cooldown-title,
+.privacy-info p,
+.session-item__details p,
+.modal-box p,
+.hero-subtitle {
+  color: var(--aaa-text-secondary) !important;
+}
+
+.caps-warning {
+  color: var(--aaa-accent-amber) !important;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+/* 5. Accessible Form Controls & States */
+.input:focus,
+.custom-input:focus,
+.modal-input:focus {
+  border-color: var(--aaa-accent-cyan) !important;
+  box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.3) !important;
+}
+
+/* 6. High Contrast Mode Preference (@media prefers-contrast: more) */
+@media (prefers-contrast: more) {
+  :root {
+    --aaa-text-secondary: #FFFFFF;
+    --aaa-bg-canvas: #000000;
+    --aaa-bg-surface: #0A0A0A;
+  }
+  
+  .modal-box,
+  .esports-card,
+  .calc-card,
+  .game-card,
+  .section-panel {
+    border: 2px solid #FFFFFF !important;
+    background: #000000 !important;
+  }
+  
+  .btn-action-primary,
+  .btn-riot-primary,
+  .login__button {
+    border: 2px solid #FFFFFF !important;
+  }
+}
+
+/* 7. Reduced Motion Support (WCAG 2.3.3 Animation from Interactions) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

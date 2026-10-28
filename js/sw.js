@@ -19,6 +19,7 @@ const PRECACHE_ASSETS = [
   './style/themes.css',
   './style/account-settings.css',
   './style/Termogenico.css',
+  './style/accessibility-aaa.css',
   './assets/Logo.png',
   './assets/icon-192.png',
   './assets/icon-512.png',
@@ -36,7 +37,12 @@ const PRECACHE_ASSETS = [
   './js/shortcuts.js',
   './js/theme-switcher.js',
   './js/Creatina.js',
-  './js/riot-cursor.js'
+  './js/riot-cursor.js',
+  './js/riot-webgl.js',
+  './js/riot-rating.js',
+  './js/riot-store.js',
+  './js/riot-a11y.js',
+  './js/pwa-engine.js'
 ];
 
 // External hostnames to runtime-cache for complete offline immersion
